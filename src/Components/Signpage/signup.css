@@ -1,0 +1,255 @@
+/* ===== Signup Page Container ===== */
+.signup-page {
+  background: linear-gradient(135deg, #5a60ffc8, #41ebeb);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Role Section Container ===== */
+.signup-role-wrapper {
+  background: #ffffffcc;
+  width: 420px;
+  margin: 40px auto;
+  padding: 30px 35px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  text-align: left;
+}
+
+.signup-role-wrapper:hover {
+  transform: translateY(-4px);
+}
+
+/* ===== Role Select Row ===== */
+.signup-role-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.signup-role-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.signup-role-dropdown {
+  width: 180px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.signup-role-dropdown:focus {
+  border-color: #5a60ff;
+  box-shadow: 0 0 5px rgba(90, 96, 255, 0.3);
+}
+
+/* ===== Role Specific Fields ===== */
+.signup-role-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* Input fields */
+.signup-input-text,
+.signup-input-email,
+.signup-input-number,
+.signup-input-file {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.signup-input-text:focus,
+.signup-input-email:focus,
+.signup-input-number:focus,
+.signup-input-file:focus {
+  border-color: #5a60ff;
+  box-shadow: 0 0 0 3px rgba(90, 96, 255, 0.2);
+}
+
+/* File Inputs */
+.signup-input-file {
+  background: #f8f8f8;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+}
+
+.signup-input-file:hover {
+  border-color: #5a60ff;
+  background: #eef2ff;
+}
+
+/* Labels for uploads */
+.signup-role-fields label,
+.signup-photo-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* ===== Photo Upload Inline ===== */
+.signup-photo-upload {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.signup-photo-label {
+  font-weight: 600;
+  color: #fff;
+  font-size: 16px;
+}
+
+input[type="file"][name="photo"] {
+  display: inline-block;
+  vertical-align: middle;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="file"][name="photo"]:hover {
+  border-color: #5a60ff;
+  box-shadow: 0 0 4px rgba(90, 96, 255, 0.4);
+}
+
+/* ===== User Info Container ===== */
+.signup-wrapper {
+  background: #fff;
+  width: 380px;
+  padding: 40px 35px;
+  margin: 0 auto 30px auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.signup-wrapper:hover {
+  transform: translateY(-5px);
+}
+
+/* Inputs inside wrapper */
+.signup-name,
+.signup-email,
+.signup-pass {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.signup-name:focus,
+.signup-email:focus,
+.signup-pass:focus {
+  border-color: #5a60ff;
+  box-shadow: 0 0 0 3px rgba(90, 96, 255, 0.2);
+}
+
+/* Button */
+.signup-button-container {
+  margin-top: 10px;
+}
+
+.signup-button {
+  background: linear-gradient(135deg, #5a60ff, #4adede);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.signup-button:hover {
+  background: linear-gradient(135deg, #4adede, #5a60ff);
+  box-shadow: 0 5px 15px rgba(90, 96, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Signin redirect */
+.signup-redirect {
+  margin-top: 15px;
+}
+
+.signup-redirect a {
+  text-decoration: none;
+  color: #5a60ff;
+  font-weight: 500;
+}
+
+.signup-redirect a:hover {
+  text-decoration: underline;
+}
+
+/* Placeholders */
+::placeholder {
+  color: #999;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .signup-wrapper,
+  .signup-role-wrapper {
+    width: 90%;
+    padding: 25px 20px;
+  }
+
+  .signup-role-select {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .signup-role-dropdown {
+    width: 100%;
+  }
+
+  .signup-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .signup-photo-upload {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
+.field-info {
+  display: block;
+  font-size: 12px;
+  color: #555;
+  margin-top: 2px;
+  margin-bottom: 5px;
+}

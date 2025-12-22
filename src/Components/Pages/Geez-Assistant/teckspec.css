@@ -1,0 +1,134 @@
+.width1 {
+    width: 700px;
+    height: 500px;
+    padding-left: 300px;
+}
+.one h2 {
+    padding-top: 20px;
+}
+.one1 {
+    padding-left: 300px;
+    gap: 5px;
+}
+.Description {
+    padding-top: 40px;
+     background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+       background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: flex;
+}
+.teckimg img {
+    width: 400px;
+    height: 200px;
+}
+.Description h2 {
+     padding-left: 60px;
+    padding-top: 10px;
+    font-size: 40px;
+}
+.Description p {
+    font-size: 18px;
+    padding-left: 20px;
+}
+
+.Description2 {
+     
+     background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+       background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: flex;
+}
+.techdisc {
+   padding-left: 200px;
+}
+.teckimg2 img{
+    padding-left: 50px;
+    width: 200px;
+    height: 200px;
+}
+.Description2 h2 {
+     padding-left: 60px;
+    padding-top: 10px;
+    font-size: 40px;
+}
+.Description2 p {
+    font-size: 18px;
+    padding-left: 20px;
+}
+.Description2 ul li {
+    padding-left: 30px;
+}
+
+   /* Section styling */
+    .part22 {
+      height: 100vh;
+      width: 100%;
+      background: radial-gradient(circle at bottom, #19ced1 0%, #fff 0%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding-right: 30px;
+      position: relative;
+     overflow-x: hidden;
+    }
+
+.part22 h2 {
+      font-size: 50px;
+      line-height: 1.4;
+      background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: gradientShift 5s ease infinite;
+      background-size: 300%;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeUp 2.5s ease forwards;
+    }
+
+    /* Delay animations for each h2 */
+    .part22 h2:nth-child(2) {
+      animation-delay: 1.5s;
+    }
+    .part22 h2:nth-child(3) {
+      animation-delay: 2.5s;
+    }
+
+    /* Glow effect (subtle) */
+    .part22 h2::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 50%;
+      margin: 10px auto 0;
+      background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066);
+      opacity: 0.4;
+      filter: blur(2px);
+      border-radius: 2px;
+    }
+
+    /* Gradient movement animation */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Smooth fade-up animation */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(50px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Make text responsive */
+    @media (max-width: 768px) {
+      .part22 h2 {
+        font-size: 1.6rem;
+      }
+    }

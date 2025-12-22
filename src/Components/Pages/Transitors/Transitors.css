@@ -1,0 +1,176 @@
+/* Container - Ultra-narrow side padding like Taxworkers */
+.transitor-container {
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+/* Title - Gradient Style */
+.transitor-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1565c0, #5e35b1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.transitor-subtitle {
+  font-size: 1.1rem;
+  color: #37474f;
+  margin-bottom: 2rem;
+}
+
+/* Grid Layout - Narrow Distance Between Cards */
+.transitor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem; 
+  justify-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Card Style */
+.transitor-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.2rem;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.transitor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(74, 144, 226, 0.2);
+  z-index: 10;
+}
+
+/* Header Section */
+.transitor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.transitor-photo, 
+.transitor-photo-fallback {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 3px solid #5e35b1;
+  flex-shrink: 0;
+}
+
+.transitor-photo {
+  object-fit: cover;
+}
+
+.transitor-photo-fallback {
+  background-color: #f0f4f8;
+  color: #5e35b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.transitor-header-info h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.transitor-email-text {
+  margin: 2px 0;
+  color: #607d8b;
+  font-size: 0.8rem;
+}
+
+.rating {
+  color: #ffb400;
+  font-size: 0.9rem;
+}
+
+/* Data Row Content */
+.transitor-body-content {
+  margin-bottom: 1.2rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.8rem;
+  flex: 1;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #546e7a;
+}
+
+.info-value {
+  color: #263238;
+  text-align: right;
+  padding-left: 8px;
+}
+
+/* Actions & Buttons */
+.transitor-actions {
+  margin-top: auto;
+}
+
+.btn-action {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.connect-btn {
+  background: linear-gradient(90deg, #42a5f5, #7e57c2);
+  color: white;
+}
+
+.connect-btn:hover {
+  background: linear-gradient(90deg, #7e57c2, #42a5f5);
+  transform: scale(1.02);
+}
+
+.connected-btn {
+  background-color: #28a745;
+  color: white;
+  cursor: not-allowed;
+}
+
+.pending-btn {
+  background-color: #ffc107;
+  color: #212529;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .transitor-grid {
+    grid-template-columns: 1fr;
+  }
+}

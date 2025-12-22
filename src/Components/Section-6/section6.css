@@ -1,0 +1,474 @@
+.sec6-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  padding-top: 5px;
+  padding-bottom: 30px;
+  background-color: #ffffff79;
+}
+.sec6-wrapper a {
+  text-decoration: none;
+}
+
+/* Horizontal track */
+.inner-wrapper {
+  display: inline-flex;
+  gap: 15px;
+  padding: 0 15px;
+}
+
+/* card-fitness  */
+.card-fitness {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: #1c1c1e;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.fitness-img {
+  height: 100%;
+}
+.card-content1 {
+  position: absolute;
+  display: flex;
+  bottom: 10px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.973);
+  gap: 60px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.title1 {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.subtitle1 {
+  font-size: 15px;
+  font-weight: 400;
+}
+/* Overlay to dim image */
+.card-fitness .overlay1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-fitness:hover .overlay1 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-fitness:hover .watch-btn1 {
+  opacity: 1;
+}
+/* card-fitness  */
+
+/* card-podcast */
+.card-podcast {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: black;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.card-content2 {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.973);
+  gap: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.card-podcast img {
+  width: 200px;
+  height: 200px;
+  bottom: 10px;
+  left: 10px;
+  border-radius: 10px;
+}
+.title2 {
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 60px;
+}
+.subtitle2 {
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 200px;
+  margin-right: 40px;
+}
+/* Overlay to dim image */
+.card-podcast .overlay2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-podcast:hover .overlay2 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-podcast:hover .watch-btn2 {
+  opacity: 1;
+}
+/* card-podcast */
+
+/* pro golf */
+.card-teck {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: #1c1c1e;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.teck-img {
+  height: 100%;
+}
+.card-content3 {
+  position: absolute;
+  display: flex;
+  bottom: 10px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.973);
+  gap: 200px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.title3 {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.subtitle3 {
+  font-size: 15px;
+  font-weight: 400;
+}
+/* Overlay to dim image */
+.card-teck .overlay3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-teck:hover .overlay3 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-teck:hover .watch-btn3 {
+  opacity: 1;
+}
+
+/* pro golf */
+
+/* strength with Gregg  */
+.card-dream {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: #1c1c1e;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.Dream-img {
+  height: 100%;
+}
+.card-content4 {
+  position: absolute;
+  display: flex;
+  bottom: 10px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.973);
+  gap: 200px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.title4 {
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.subtitle4 {
+  font-size: 15px;
+  font-weight: 400;
+}
+/* Overlay to dim image */
+.card-dream .overlay4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-dream:hover .overlay4 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn4 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-dream:hover .watch-btn4 {
+  opacity: 1;
+}
+/* strength with Gregg  */
+
+/* music-part */
+.card-music {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: rgb(223, 55, 206);
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.card-content5 {
+  position: absolute;
+  display: flex;
+  bottom: 20px;
+  left: 10px;
+  color: black;
+  gap: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.card-music img {
+  width: 200px;
+  height: 200px;
+  bottom: 10px;
+  left: 10px;
+  border-radius: 10px;
+}
+.title5 {
+  font-size: 15px;
+  font-weight: 400;
+  margin-top: 100px;
+}
+.subtitle5 {
+  font-size: 15px;
+  font-weight: 400;
+  margin-top: 200px;
+  margin-right: 100px;
+}
+/* Overlay to dim image */
+.card-music .overlay5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-musict:hover .overlay5 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn5 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-music:hover .watch-btn5 {
+  opacity: 1;
+}
+/* music-part */
+
+/* Balatro-part */
+.card-fancy {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 250px;
+  overflow: hidden;
+  background-color: #1c1c1e;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+.fancy-img {
+  height: 100%;
+  max-width: 100%;
+}
+.card-content6 {
+  position: absolute;
+  display: flex;
+  bottom: 10px;
+  left: 10px;
+  color: rgba(255, 255, 255, 0.973);
+  gap: 280px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.title6 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.subtitle6 {
+  font-size: 15px;
+  font-weight: 600;
+}
+/* Overlay to dim image */
+.card-fancy.overlay6 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* transparent by default */
+  transition: background 0.4s ease;
+}
+/* Dim on hover */
+.card-fancy:hover .overlay6 {
+  background: rgba(0, 0, 0, 0.4); /* darkens the image */
+}
+.watch-btn6 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  color: black;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.card-fancy:hover .watch-btn6 {
+  opacity: 1;
+}
+/* Balatro-part */
+
+
+/* to move the elemnts from right to the left */
+.sec6-wrapper {
+  overflow: hidden;
+  --speed: 20s; /* default speed */
+}
+
+.inner-wrapper {
+  display: flex;
+  gap: 20px;
+  animation: slideLeft var(--speed) linear infinite;
+}
+
+.inner-wrapper > div {
+  flex: 0 0 auto;
+}
+
+/* Hover → slower speed */
+.sec6-wrapper:hover {
+  --speed: 40s; /* slower movement on hover */
+}
+
+/* Keyframes */
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+/* to move the elemnts from right to the left */

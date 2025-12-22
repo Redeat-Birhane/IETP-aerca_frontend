@@ -1,0 +1,181 @@
+/* Container - Matches the platform theme */
+.search-container {
+  min-height: 100vh;
+  padding: 3rem 0.25rem;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+.search-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1565c0, #5e35b1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.search-subtitle {
+  font-size: 1rem;
+  color: #37474f;
+  margin-bottom: 2rem;
+}
+
+/* Search Box Area */
+.search-box-wrapper {
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 50px; /* Pill shape */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.search-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.search-controls select {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #eee;
+  border-radius: 25px;
+  background: #f8fafc;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.search-btn {
+  background: linear-gradient(90deg, #42a5f5, #7e57c2);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.search-btn:hover { transform: scale(1.05); }
+
+/* Results Grid - Ultra narrow spacing */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.25rem; 
+  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Result Card - Same as Taxworkers */
+.result-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.2rem;
+  text-align: left;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Card Header */
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.result-photo, .result-photo-fallback {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #5e35b1;
+  flex-shrink: 0;
+}
+
+.result-photo-fallback {
+  background: #f0f4f8;
+  color: #5e35b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.result-header-info h3 { margin: 0; font-size: 1rem; color: #1e293b; }
+.result-sub-text { margin: 2px 0; font-size: 0.8rem; color: #64748b; }
+
+/* Body Content */
+.result-body {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.label { font-weight: 600; color: #546e7a; }
+.val { color: #263238; }
+.price-text { color: #2e7d32; font-weight: 700; }
+.stars { color: #f1c40f; }
+
+.desc-text {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+.no-results {
+  padding: 4rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .search-controls { flex-direction: column; }
+  .search-box-wrapper { border-radius: 15px; }
+  .results-grid { grid-template-columns: 1fr; }
+}/* ... (Previous container and title styles remain) ... */
+
+.result-photo-letter {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #f0f4f8; /* Light professional grey-blue */
+  color: #5e35b1; /* Deep purple text */
+  border: 2px solid #5e35b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Ensure the grid spacing is ultra-narrow as requested */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.25rem; 
+  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ... (Remaining card styles for info-row, labels, and price) ... */

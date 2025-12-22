@@ -1,0 +1,698 @@
+* {
+  padding: 0%;
+  margin: 0%;
+}
+img {
+  max-width: 100%;
+}
+
+
+.wrapper {
+  background-color: rgba(0, 0, 0, 0.957);
+   z-index: 9999;
+}
+
+.list-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 48px;
+}
+.list-wrapper li {
+  color: #fff;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  cursor: pointer;
+}
+.list-wrapper li:hover {
+  color: #999; /* subtle grey on hover */
+}
+.list-wrapper li a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+/* ✅ FIX: Keep dropdown open while hovering inside it */
+.list-wrapper li:hover > div,
+.list-wrapper li > div:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+/* Geez image */
+
+.Geezimg {
+  width: 50px;   /* or any size you like */
+  height: 50px;   /* keeps aspect ratio */
+  border-radius: 50px; /* optional: rounded corners */
+}
+
+/* Geez image */
+
+
+
+
+/* store */
+
+
+
+/* 🔹 Dropdown container */
+.store_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+/* 🔹 Show dropdown on hover */
+li:hover > .store_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+/* 🔹 Dropdown links */
+.store_dropdown .wrap1 p {
+  display: block;
+  gap: 40px;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.store_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Section titles */
+.store_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.wrap1 p {
+  padding-left: 100px;
+}
+
+.Discrip1 {
+  width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+/* store */
+
+
+
+/* mac */
+/* 🔹 Dropdown container */
+.mac_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .mac_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.mac_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.mac_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.mac_dropdown .mac_one a {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+   padding-left: 100px;
+}
+
+/* 🔹 Section titles */
+.mac_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.Discrip2{
+  width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+/* mac */
+
+
+/* ipad */
+  /* 🔹 Dropdown container */
+.ipad_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .ipad_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.ipad_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.ipad_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.ipad_dropdown .ipad_one a {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+    padding-left: 100px;
+}
+
+/* 🔹 Section titles */
+.ipad_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.Discrip3 {
+    width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+/* ipad */
+
+
+/* iphone */
+     /* 🔹 Dropdown container */
+.iphone_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .iphone_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.iphone_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.iphone_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.iphone_dropdown .iphone_one a {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  padding-left: 100px;
+}
+
+/* 🔹 Section titles */
+.iphone_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.Discrip4 {
+    width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+
+/* iphone */
+
+
+/* watch */
+ /* 🔹 Dropdown container */
+.Watch_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .Watch_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.Watch_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.Watch_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.Watch_dropdown .Watch_one a {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  padding-left: 100px;
+}
+
+/* 🔹 Section titles */
+.Watch_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.Discrip5 {
+    width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+/* watch */
+
+
+/* vision */
+/* 🔹 Dropdown container */
+.Vision_dropdown {
+  position: fixed;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .Vision_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.Vision_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.Vision_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.Vision_dropdown .Vision_one a {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+   padding-left: 100px;
+}
+
+/* 🔹 Section titles */
+.Vision_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.Discrip6 {
+    width: 600px;
+  text-align: center;
+  padding-left: 300px;
+}
+/* vision */
+
+
+/* support */
+ /* 🔹 Dropdown container */
+.Support_dropdown {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  display: flex;
+  gap: 40px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .Support_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.Support_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.Support_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.Support_dropdown .mac {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+/* 🔹 Section titles */
+.Support_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.Support_one {
+  padding-left: 100px;
+}
+.Support_one a {
+  font-size: 18px;
+}
+/* support */
+
+
+
+/* search */
+  .Search_dropdown {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  padding-left: 300px;
+  gap: 40px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .Search_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.sear_butt {
+   height: 40px;
+   width: 500px;
+   cursor: pointer;
+   background: black;
+   border-radius: 30px;
+}
+.sear_butt input {
+  border: none;
+  font-size: 20px;
+  padding-top: 12px;
+  padding-left: 5px;
+  height: 27px;
+  margin-left: 20px;
+  background-color: #222;      /* dark background */
+  color: white; 
+  width: 500px;
+  border-radius: 30px;
+  border-color: #000;
+
+}
+/* 🔹 Dropdown links */
+.Search_dropdown a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.Search_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.Search_dropdown .mac {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+/* 🔹 Section titles */
+.Search_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+/* search */
+
+
+
+/* cart */
+.cart_dropdown {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw; /* Full width */
+  background-color: #000;
+  border-top: 1px solid #333;
+  padding-top: 60px;
+  gap: 40px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+  padding-left: 100px;
+}
+
+/* 🔹 Show dropdown on hover */
+li:hover > .cart_dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 🔹 Dropdown links */
+.cart_two a {
+  display: block;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+/* 🔹 Optional subtle divider for columns */
+.cart_dropdown li {
+  list-style: none;
+}
+
+/* 🔹 Columns inside dropdown */
+.cart_dropdown .mac {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+}
+
+/* 🔹 Section titles */
+.cart_dropdown p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.cart_one p a {
+  color: #0d79e6;
+}
+/* cart */
+
+
+
+
+.list-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  list-style: none;
+}
+
+.list-wrapper li {
+  position: relative;
+}
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 10px;
+  padding: 10px 0;
+  min-width: 180px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.dropdown li a {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown li a:hover {
+  background-color: #f5f5f7;
+}
+
+/* Slide down on hover */
+.has-dropdown:hover .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+
+/* 🔹 Common dropdown container */
+.store_dropdown,
+.mac_dropdown,
+.ipad_dropdown,
+.iphone_dropdown,
+.Watch_dropdown,
+.Vision_dropdown,
+.Airpods_dropdown,
+.TvHome_dropdown,
+.Entertainment_dropdown,
+.Accessories_dropdown,
+.Support_dropdown,
+.Search_dropdown,
+.cart_dropdown {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.8); /* semi-transparent background */
+  backdrop-filter: blur(15px);           /* smooth blur effect */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  transition: all 0.4s ease-in-out; /* smooth animation */
+  
+}

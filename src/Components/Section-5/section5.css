@@ -1,0 +1,64 @@
+.sec5-wrapper {
+  width: 100%;
+  overflow: hidden; /* important to remove horizontal scroll */
+  background: rgba(255, 255, 255, 0.733);
+}
+
+.image-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  height: 450px;
+
+  /* make the content wide enough for smooth loop */
+  width: max-content;
+
+  /* infinite scroll animation */
+  animation: slide-right 15s linear infinite;
+}
+
+.image-wrapper img {
+  height: 100%;
+  width: auto;
+  object-fit: cover;
+}
+
+/* Smooth left-to-right animation */
+@keyframes slide-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+
+/* dots-part */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* spacing between dots */
+  padding: 20px 0;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #a8a8a8; /* light gray (Apple-like) */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+/* active (black) dot */
+.dot.active {
+  background-color: #333;
+  transform: scale(1.2);
+}
+
+/* hover effect */
+.dot:hover {
+  background-color: #555;
+}
+/* dots-part */

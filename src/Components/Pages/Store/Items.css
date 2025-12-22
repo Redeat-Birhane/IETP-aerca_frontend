@@ -1,0 +1,173 @@
+/* Container - Reduced side padding */
+.item-container {
+  min-height: 100vh;
+  padding: 3rem 1rem; /* Reduced from 2rem to 1rem for tighter side margins */
+  background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
+  font-family: "Poppins", sans-serif;
+}
+
+/* Header */
+.item-title {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.item-subtitle {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* Stats */
+.item-stats-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.item-stat-pill {
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4f46e5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e7ff;
+}
+
+/* --- GRID EXPANSION --- */
+.item-grid {
+  display: grid;
+  /* Narrower card logic */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+  gap: 1.2rem;
+  /* Increased max-width to use more of the screen width */
+  max-width: 95%; 
+  margin: 0 auto;
+  /* Ensures it sits closer to the left but stays centered */
+  padding: 0 10px; 
+}
+
+/* --- SMALLER CARDS --- */
+.item-card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.12);
+}
+
+.item-card-image {
+  width: 100%;
+  height: 140px; /* Slimmer image */
+  object-fit: cover;
+}
+
+.item-no-photo {
+  height: 140px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd5e1;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.item-card-body {
+  padding: 1rem; /* Tighter internal padding */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.item-info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.item-card h2 {
+  font-size: 1rem;
+  color: #1e293b;
+  font-weight: 700;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-price-tag {
+  background: #f0fdf4;
+  color: #16a34a;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+.item-summary {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #64748b;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Only 2 lines now for maximum compactness */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+}
+
+.item-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.item-category-tag {
+  color: #6366f1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.item-action-btn {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Mobile Tweak */
+@media (max-width: 480px) {
+  .item-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.8rem;
+    padding: 0;
+  }
+  .item-container {
+    padding: 2rem 0.5rem;
+  }
+}

@@ -1,0 +1,459 @@
+/* ✅ Reset only inside Overview page */
+.overview * {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* ✅ Top navigation wrapper */
+.overview-wrapper {
+  height: 60px;
+  background-color: rgba(169, 169, 169, 0.199);
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
+
+.overview-inner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 100%;
+}
+
+.overview-title {
+  padding-left: 20px;
+  padding-top: 15px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.overview-teck {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.overview-teck a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.overview-teck a:hover {
+  color: #0071e3;
+}
+
+/* ✅ Payment Section Styles */
+.overview-button {
+  display: flex;
+  align-items: center;
+}
+
+.overview-payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 300px;
+}
+
+.payment-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.payment-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+}
+
+.overview-butp {
+  background-color: #0071e3;
+  color: white;
+  border: 1px solid #0071e3;
+  padding: 6px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 35px;
+  min-width: 60px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.overview-butp:hover:not(:disabled) {
+  background-color: #0051a8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 113, 227, 0.2);
+}
+
+.overview-butp:disabled {
+  background-color: #cccccc;
+  border-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.receipt-upload {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f8f9fa;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.receipt-upload:hover {
+  border-color: #0071e3;
+  background-color: #f0f7ff;
+}
+
+.upload-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #495057;
+  white-space: nowrap;
+}
+
+.receipt-input {
+  display: none;
+}
+
+.custom-file-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.custom-file-button:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.file-name {
+  font-size: 12px;
+  color: #6c757d;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 8px;
+  border-left: 1px solid #dee2e6;
+}
+
+/* ✅ Pod image area */
+.overview-podimg {
+  width: 100vw;
+  height: 100vh;
+}
+
+.overview-podimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ✅ General Info Section */
+.overview-general {
+  text-align: center;
+  height: 500px;
+  overflow: hidden;
+  background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.overview-general h2 {
+  padding-left: 60px;
+  padding-top: 10px;
+}
+
+.overview-general p {
+  font-size: 18px;
+}
+
+.overview-general .img1 {
+  width: 60px;
+  height: 60px;
+  padding-left: 20px;
+}
+
+.overview-general .img2 {
+  width: 60px;
+  height: 60px;
+}
+
+/* ✅ Voice Commands Section */
+.overview-part2 {
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(circle at bottom, #19ced1 0%, #fff 0%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-right: 30px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.overview-part2 h2 {
+  font-size: 50px;
+  line-height: 1.4;
+  background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradientShift 5s ease infinite;
+  background-size: 300%;
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeUp 2.5s ease forwards;
+}
+
+.overview-part2 h2:nth-child(2) {
+  animation-delay: 1.5s;
+}
+.overview-part2 h2:nth-child(3) {
+  animation-delay: 2.5s;
+}
+
+/* ✅ Advantages Section */
+.overview-part3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  padding: 100px 8%;
+  background: linear-gradient(135deg, #ffffffe8);
+  background-size: 200% 200%;
+  animation: backgroundShift 12s ease infinite;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.overview-part3 img {
+  padding-top: 50px;
+  width: 45%;
+  max-width: 500px;
+  border-radius: 20px;
+  object-fit: cover;
+  transform: translateX(-60px);
+  opacity: 0;
+  animation: slideInLeft 1.5s ease forwards;
+}
+
+.overview-Adva {
+  width: 45%;
+  transform: translateX(60px);
+  opacity: 0;
+  animation: slideInRight 1.5s ease forwards;
+  animation-delay: 1s;
+  text-align: center;
+}
+
+.overview-Adva h2 {
+  font-size: 2.2rem;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, #00ffff, #ff00ff, #ff0066, #00ffff);
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s ease infinite;
+}
+
+.overview-Adva ul {
+  list-style: none;
+}
+
+.overview-Adva li {
+  font-size: 1.2rem;
+  margin: 10px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease forwards;
+}
+
+.overview-Adva li:nth-child(1) { animation-delay: 1.2s; }
+.overview-Adva li:nth-child(2) { animation-delay: 1.4s; }
+.overview-Adva li:nth-child(3) { animation-delay: 1.6s; }
+.overview-Adva li:nth-child(4) { animation-delay: 1.8s; }
+.overview-Adva li:nth-child(5) { animation-delay: 2s; }
+
+.overview-Adva li:hover {
+  color: #00ffff;
+  text-shadow: 0 0 8px #040b0b;
+  transition: 0.3s ease;
+}
+
+/* ✅ Animations */
+@keyframes slideInLeft {
+  0% { transform: translateX(-60px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(60px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes backgroundShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ✅ Responsive */
+@media (max-width: 1024px) {
+  .overview-inner-wrapper {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px;
+  }
+  
+  .overview-title {
+    padding-left: 10px;
+    padding-top: 5px;
+  }
+  
+  .overview-teck {
+    padding-left: 20px;
+    padding-top: 5px;
+    margin-right: 10px;
+  }
+  
+  .overview-payment-info {
+    min-width: 250px;
+    margin-top: 10px;
+    order: 3;
+    width: 100%;
+  }
+  
+  .payment-controls {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .overview-part2 h2 {
+    font-size: 1.6rem;
+  }
+
+  .overview-part3 {
+    flex-direction: column;
+    text-align: center;
+    padding: 60px 5%;
+  }
+
+  .overview-part3 img {
+    width: 80%;
+    animation-delay: 1.5s;
+  }
+
+  .overview-Adva {
+    width: 100%;
+    animation-delay: 2s;
+  }
+
+  .overview-Adva h2 {
+    font-size: 1.8rem;
+  }
+  
+  .overview-inner-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .overview-title,
+  .overview-teck,
+  .overview-button {
+    width: 100%;
+    justify-content: center;
+    padding: 5px 0;
+  }
+  
+  .overview-teck {
+    padding-left: 0;
+    justify-content: center;
+  }
+  
+  .payment-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .receipt-upload {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .overview-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  .overview-teck {
+    gap: 10px;
+  }
+  
+  .overview-payment-info {
+    min-width: 100%;
+  }
+  
+  .payment-text {
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .receipt-upload {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .upload-text {
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+  }
+  
+  .file-name {
+    max-width: 100px;
+    font-size: 11px;
+  }
+}

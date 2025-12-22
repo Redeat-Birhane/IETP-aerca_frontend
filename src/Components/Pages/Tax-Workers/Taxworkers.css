@@ -1,0 +1,196 @@
+/* Whole page - ORIGINAL COLORS */
+/* Container - Slightly reduced padding to allow cards to sit closer to edges */
+.taxworkers-container {
+  min-height: 100vh;
+  padding: 3rem 1rem; /* Reduced horizontal padding from 2rem to 1rem */
+  background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+/* Grid Layout - MINIMIZED GAP */
+.taxworkers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem; /* Reduced from 2rem to 1rem for a tighter look */
+  justify-items: center;
+  max-width: 1400px; /* Increased max-width to allow more cards per row */
+  margin: 0 auto;
+}
+
+/* Rest of your CSS remains exactly the same... */
+
+/* Title - ORIGINAL GRADIENT */
+.taxworkers-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1565c0, #5e35b1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.taxworkers-subtitle {
+  font-size: 1.1rem;
+  color: #37474f;
+  margin-bottom: 2rem;
+}
+
+
+
+/* Worker Card - ORIGINAL STYLE */
+.taxworker-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #ddd;
+}
+
+.taxworker-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(74, 144, 226, 0.25);
+}
+
+/* Header - ORIGINAL STYLE */
+.taxworker-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.taxworker-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #5e35b1;
+  object-fit: cover;
+}
+
+.taxworker-info h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.worker-email {
+  margin: 2px 0;
+  color: #607d8b;
+  font-size: 0.85rem;
+}
+
+.rating {
+  color: #ffb400;
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+/* --- NEW PRETTY CONTENT ALIGNMENT --- */
+.taxworker-body-content {
+  margin-bottom: 1.5rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #546e7a;
+}
+
+.info-value {
+  color: #263238;
+  text-align: right;
+  padding-left: 10px;
+}
+
+.worker-fee-row {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed #ccc;
+}
+
+.worker-fee-row .info-value {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+/* ORIGINAL BUTTONS AND BOXES */
+.taxworker-receipt-box {
+  background: linear-gradient(90deg, #42a5f5, #7e57c2);
+  color: white;
+  border-radius: 10px;
+  padding: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.taxworker-receipt-box:hover {
+  background: linear-gradient(90deg, #7e57c2, #42a5f5);
+  transform: scale(1.02);
+}
+
+.taxworker-ask-box input,
+.taxworker-ask-box textarea {
+  width: 100%;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.submit-btn {
+  background-color: #42a5f5;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #eee;
+  color: #333;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .taxworkers-title { font-size: 2rem; }
+  .taxworkers-grid { grid-template-columns: 1fr; }
+}
+/* Add this to your existing CSS file */
+
+.taxworker-photo-fallback {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid #5e35b1;
+  background-color: #f0f4f8; /* Soft background */
+  color: #5e35b1; /* Match border color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}

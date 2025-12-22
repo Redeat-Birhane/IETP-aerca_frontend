@@ -1,0 +1,105 @@
+.sec4-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  height: 100vh;
+}
+.Transitor {
+  background-image: url("./images-4/27.jpg");
+  background-position: center; /* center the image */
+  background-position: center; /* center the image */
+  background-repeat: no-repeat; /* prevent repeating */
+  text-align: center; /* center text horizontally */
+  align-items: center; /* center the image */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  justify-content: center;
+  background-size: cover;
+  width: 660px;
+  height: 100%;
+  margin-top: 0px;
+  margin-left: 0px;
+  max-width: 100%;
+}
+.Transitor h3 {
+  font-size: 40px;
+  margin-top: 50px;
+}
+.Transitor p {
+  font-size: 20px;
+  margin-top: 10px;
+}
+.sec4-wrapper .button5 button {
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 20px;
+  margin-top: 20px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sec4-wrapper .button5 button:hover {
+  background-color: #0d79e6;
+  color: #fff;
+}
+.but10 {
+  border: none;
+  background-color: #0071e3;
+  color: #fff;
+}
+.but11 {
+  color: #0071e3;
+  border-color: #0071e3;
+}
+
+.Law {
+  background-image: url("./images-4/271.jpg");
+  background-position: center; /* center the image */
+  background-position: center; /* center the image */
+  background-repeat: no-repeat; /* prevent repeating */
+  text-align: center; /* center text horizontally */
+  align-items: center; /* center the image */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  justify-content: center;
+  background-size: cover;
+  width: 700px;
+  height: 100%;
+  margin-top: 0px;
+  margin-left: 0px;
+  max-width: 100%;
+  color: #fff;
+}
+.Law h3 {
+  font-size: 40px;
+  margin-top: 50px;
+}
+.Law p {
+  font-size: 20px;
+  color: white;
+  margin-top: 10px;
+}
+.sec4-wrapper .button55 button {
+  padding: 10px 20px;
+  margin: 10px;
+  margin-top: 20px;
+  border-radius: 20px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sec4-wrapper .button55 button:hover {
+  background-color: #0d79e6;
+  color: #fff;
+}
+.but101 {
+  border: none;
+  background-color: #0071e3;
+  color: #fff;
+}
+.but111 {
+  color: #0071e3;
+  border-color: #0071e3;
+}

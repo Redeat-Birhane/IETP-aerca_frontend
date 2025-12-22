@@ -1,0 +1,235 @@
+/* Container - Matches Taxworkers */
+.community-container {
+  min-height: 100vh;
+  padding: 3rem 0.25rem;
+  background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+.community-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1565c0, #5e35b1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.community-subtitle {
+  font-size: 1.1rem;
+  color: #37474f;
+  margin-bottom: 2rem;
+}
+
+/* Ask Question Toggle Button */
+.ask-toggle-btn {
+  background: linear-gradient(90deg, #42a5f5, #7e57c2);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ask-toggle-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Ask Box Styling */
+.ask-box-container {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  text-align: left;
+}
+
+.ask-box-container input, 
+.ask-box-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.btn-submit {
+  background-color: #1565c0;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Grid Layout - Narrow gap */
+.questions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.25rem;
+  justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card Styling - Matches Taxworkers */
+.question-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  text-align: left;
+  transition: transform 0.3s ease;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.question-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(74, 144, 226, 0.2);
+}
+
+/* Header with Avatar Fallback */
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.user-avatar-fallback {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #f0f4f8;
+  color: #5e35b1;
+  border: 2px solid #5e35b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.question-meta h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e293b;
+}
+
+.asked-by-text {
+  margin: 2px 0;
+  font-size: 0.8rem;
+  color: #607d8b;
+}
+
+/* Body Content */
+.question-body-content {
+  flex: 1;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.question-text {
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.answers-section {
+  margin-top: 1rem;
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.answers-label {
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #1565c0;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.answer-item {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 5px 0;
+}
+
+.answer-item:last-child { border-bottom: none; }
+
+.answer-item p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.answer-item small {
+  color: #64748b;
+}
+
+/* Action Buttons */
+.btn-answer-trigger {
+  width: 100%;
+  padding: 0.7rem;
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  color: #475569;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-answer-trigger:hover {
+  background: #e2e8f0;
+}
+
+.answer-input-area textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 8px;
+}
+
+.action-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-submit-small {
+  background: #1565c0;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cancel-small {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .questions-grid { grid-template-columns: 1fr; }
+}
