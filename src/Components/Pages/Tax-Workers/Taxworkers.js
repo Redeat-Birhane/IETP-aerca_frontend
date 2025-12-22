@@ -40,20 +40,24 @@ export default function TaxWorkers() {
         if (!res.ok) throw new Error("Failed to fetch tax workers");
 
         const data = await res.json();
-        const mappedWorkers = (data.tax_workers || []).map((w) => ({
-          username: w.username,
-          email: w.email,
-          job_title: w.job_title,
-          organization_name: w.organization_name,
-          work_email: w.work_email,
-          phone_number: w.phone_number,
-          location: w.location,
-          photo: w.photo,
-          clients_served: w.clients_served,
-          rating: w.rating,
-          years_of_experience: w.years_of_experience,
-          fee: w.fee,
-        }));
+        const currentUserEmail = getCookie("user_email"); // get logged-in user's email
+
+        const mappedWorkers = (data.tax_workers || [])
+          .filter((w) => w.email !== currentUserEmail) // exclude current user
+          .map((w) => ({
+            username: w.username,
+            email: w.email,
+            job_title: w.job_title,
+            organization_name: w.organization_name,
+            work_email: w.work_email,
+            phone_number: w.phone_number,
+            location: w.location,
+            photo: w.photo,
+            clients_served: w.clients_served,
+            rating: w.rating,
+            years_of_experience: w.years_of_experience,
+            fee: w.fee,
+          }));
 
         setWorkers(mappedWorkers);
         setLoading(false);
@@ -143,19 +147,12 @@ export default function TaxWorkers() {
 
               {!worker.photo && (
                 <div className="taxworker-photo-fallback">
-                  {worker.username
-                    ? worker.username.charAt(0).toUpperCase()
-                    : "?"}
+                  {worker.username ? worker.username.charAt(0).toUpperCase() : "?"}
                 </div>
               )}
 
-              <div
-                className="taxworker-photo-fallback"
-                style={{ display: "none" }}
-              >
-                {worker.username
-                  ? worker.username.charAt(0).toUpperCase()
-                  : "?"}
+              <div className="taxworker-photo-fallback" style={{ display: "none" }}>
+                {worker.username ? worker.username.charAt(0).toUpperCase() : "?"}
               </div>
 
               <div className="taxworker-info">
@@ -171,45 +168,31 @@ export default function TaxWorkers() {
             <div className="taxworker-body-content">
               <div className="info-row">
                 <span className="info-label">Job Title:</span>
-                <span className="info-value">
-                  {worker.job_title || "N/A"}
-                </span>
+                <span className="info-value">{worker.job_title || "N/A"}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Organization:</span>
-                <span className="info-value">
-                  {worker.organization_name || "N/A"}
-                </span>
+                <span className="info-value">{worker.organization_name || "N/A"}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Work Email:</span>
-                <span className="info-value">
-                  {worker.work_email || "N/A"}
-                </span>
+                <span className="info-value">{worker.work_email || "N/A"}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Phone:</span>
-                <span className="info-value">
-                  {worker.phone_number || "N/A"}
-                </span>
+                <span className="info-value">{worker.phone_number || "N/A"}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Location:</span>
-                <span className="info-value">
-                  {worker.location || "N/A"}
-                </span>
+                <span className="info-value">{worker.location || "N/A"}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Clients Served:</span>
-                <span className="info-value">
-                  {worker.clients_served || 0}
-                </span>
+                <span className="info-value">{worker.clients_served || 0}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Experience:</span>
-                <span className="info-value">
-                  {worker.years_of_experience || 0} yrs
-                </span>
+                <span className="info-value">{worker.years_of_experience || 0} yrs</span>
               </div>
               {worker.fee && (
                 <div className="info-row worker-fee-row">
@@ -231,24 +214,15 @@ export default function TaxWorkers() {
                   value={messageText}
                   onChange={(e) => setMessageText(e.target.value)}
                 />
-                <button
-                  className="btn submit-btn"
-                  onClick={() => handleSubmit(worker.email)}
-                >
+                <button className="btn submit-btn" onClick={() => handleSubmit(worker.email)}>
                   Submit
                 </button>
-                <button
-                  className="btn cancel-btn"
-                  onClick={() => setOpenBox(null)}
-                >
+                <button className="btn cancel-btn" onClick={() => setOpenBox(null)}>
                   Cancel
                 </button>
               </div>
             ) : (
-              <div
-                className="taxworker-receipt-box"
-                onClick={() => handleOpenBox(worker.email)}
-              >
+              <div className="taxworker-receipt-box" onClick={() => handleOpenBox(worker.email)}>
                 📎 Add your paid receipt & send a message to this worker
               </div>
             )}
