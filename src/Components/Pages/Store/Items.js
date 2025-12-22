@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Items.css";
 
-const API_BASE = "https://ietp-aerca-backend.onrender.com";
+const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Items() {
   const [items, setItems] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
-
+const API_BASE = process.env.REACT_APP_API_BASE;
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const Login = () => {
 
     try {
       const res = await fetch(
-        "https://ietp-aerca-backend.onrender.com/users/login/",
+        `${API_BASE}/users/login/`,
         {
           method: "POST",
           headers: {

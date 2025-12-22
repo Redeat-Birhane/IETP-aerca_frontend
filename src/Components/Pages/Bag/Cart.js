@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../../context/CartContext";
 import "./Cart.css";
 
-const API_BASE = "https://ietp-aerca-backend.onrender.com";
+const API_BASE = process.env.REACT_APP_API_BASE;
 
 function Cart() {
   const { cartItems, setCartItems, removeItem } = useContext(CartContext);

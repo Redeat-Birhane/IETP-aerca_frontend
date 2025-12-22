@@ -7,7 +7,7 @@ import Second from "./Images-Geez/10103.png";
 import Third from "./Images-Geez/10104.png";
 import Fourth from "./Images-Geez/10195.jpg";
 
-const API_BASE = "https://ietp-aerca-backend.onrender.com";
+const API_BASE = process.env.REACT_APP_API_BASE;
 const FIXED_PRICE = 123;
 
 export default function Overview() {

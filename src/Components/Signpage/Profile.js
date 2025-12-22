@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./Profile.css";
 
-
+const API_BASE = process.env.REACT_APP_API_BASE;
 
 
 
@@ -205,7 +205,7 @@ const TaxWorkerProfile = ({ data }) => {
 
                             try {
                               const res = await fetch(
-                                "https://ietp-aerca-backend.onrender.com/users/answer/",
+                                `${API_BASE}/users/answer/`,
                                 {
                                   method: "POST",
                                   credentials: "include",
@@ -346,7 +346,7 @@ const TaxWorkerProfile = ({ data }) => {
                       onSubmit={async () => {
                         if (selectedRating === 0) return;
                         try {
-                          const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_transitor/", {
+                          const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
                             method: "POST",
                             credentials: "include",
                             headers: { "Content-Type": "application/json" },
@@ -413,7 +413,7 @@ const TaxWorkerProfile = ({ data }) => {
                     onSubmit={async () => {
                       if (selectedRating === 0) return;
                       try {
-                        const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_instructor/", {
+                        const res = await fetch(`${API_BASE}/users/rate_instructor/`, {
                           method: "POST",
                           credentials: "include",
                           headers: { "Content-Type": "application/json" },
@@ -566,7 +566,7 @@ const InstructorProfile = ({ data }) => {
                     onSubmit={async () => {
                       if (selectedRating === 0) return;
                       try {
-                        const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_instructor/", {
+                        const res = await fetch(`${API_BASE}/users/rate_instructor/`, {
                           method: "POST",
                           credentials: "include",
                           headers: { "Content-Type": "application/json" },
@@ -708,7 +708,7 @@ const TransitorProfile = ({ data }) => {
 
 const handleTransitorAction = async (request, action) => {
     try {
-      const res = await fetch("https://ietp-aerca-backend.onrender.com/users/respond_to_transitor_request/", {
+      const res = await fetch(`${API_BASE}/users/respond_to_transitor_request/`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -791,7 +791,7 @@ const handleTransitorAction = async (request, action) => {
                     onSubmit={async () => {
                       if (selectedRating === 0) return;
                       try {
-                        const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_instructor/", {
+                        const res = await fetch(`${API_BASE}/users/rate_instructor/`, {
                           method: "POST",
                           credentials: "include",
                           headers: { "Content-Type": "application/json" },
@@ -969,7 +969,7 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
 
 const handleTransitorAction = async (request, action) => {
     try {
-      const res = await fetch("https://ietp-aerca-backend.onrender.com/users/respond_to_transitor_request/", {
+      const res = await fetch(`${API_BASE}/users/respond_to_transitor_request/`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -1029,7 +1029,7 @@ const handleTransitorAction = async (request, action) => {
           onClick={async () => {
             try {
               const res = await fetch(
-                "https://ietp-aerca-backend.onrender.com/users/respond_to_transitor_request/",
+                `${API_BASE}/users/respond_to_transitor_request/`,
                 {
                   method: "POST",
                   credentials: "include",
@@ -1076,7 +1076,7 @@ const handleTransitorAction = async (request, action) => {
                   onSubmit={async () => {
                     if (selectedRating === 0) return;
                     try {
-                      const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_transitor/", {
+                      const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
                         method: "POST",
                         credentials: "include",
                         headers: { "Content-Type": "application/json" },
@@ -1140,7 +1140,7 @@ const handleTransitorAction = async (request, action) => {
                     onSubmit={async () => {
                       if (selectedRating === 0) return;
                       try {
-                        const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_tax_worker/", {
+                        const res = await fetch(`${API_BASE}/users/rate_tax_worker/`, {
                           method: "POST",
                           credentials: "include",
                           headers: { "Content-Type": "application/json" },
@@ -1201,7 +1201,7 @@ const handleTransitorAction = async (request, action) => {
                   onSubmit={async () => {
                     if (selectedRating === 0) return;
                     try {
-                      const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_transitor/", {
+                      const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
                         method: "POST",
                         credentials: "include",
                         headers: { "Content-Type": "application/json" },
@@ -1275,7 +1275,7 @@ const handleTransitorAction = async (request, action) => {
                     onSubmit={async () => {
                       if (selectedRating === 0) return;
                       try {
-                        const res = await fetch("https://ietp-aerca-backend.onrender.com/users/rate_instructor/", {
+                        const res = await fetch(`${API_BASE}/users/rate_instructor/`, {
                           method: "POST",
                           credentials: "include",
                           headers: { "Content-Type": "application/json" },
@@ -1388,7 +1388,7 @@ const Profile = () => {
     console.log("Fetching user profile...");
     try {
       const response = await fetch(
-        "https://ietp-aerca-backend.onrender.com/users/profile/",
+        `${API_BASE}/users/profile/`,
         { credentials: "include" }
       );
 
@@ -1419,7 +1419,7 @@ const Profile = () => {
     console.log("Logging out...");
     try {
       const res = await fetch(
-        "https://ietp-aerca-backend.onrender.com/users/logout/",
+        `${API_BASE}/users/logout/`,
         {
           method: "POST",
           credentials: "include",

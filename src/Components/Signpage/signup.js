@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./signup.css";
-
+const API_BASE = process.env.REACT_APP_API_BASE;
 // 🔹 Get CSRF Token helper
 function getCookie(name) {
   let cookieValue = null;
@@ -61,7 +61,7 @@ const Signup = () => {
 
     try {
       const res = await fetch(
-        "https://ietp-aerca-backend.onrender.com/users/signup/",
+        `${API_BASE}/users/signup/`,
         {
           method: "POST",
           body: data,
