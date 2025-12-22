@@ -1,9 +1,14 @@
-import React, { useEffect,userData, setUserData, useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+
 import "./Profile.css";
 
+
+
+
+
 // =====================
-// StarRating Component
+// StarRating Components
 // =====================
 const StarRating = ({ rating, onRatingChange, onSubmit, onCancel }) => {
   return (
@@ -391,24 +396,6 @@ const TaxWorkerProfile = ({ data }) => {
           ))}
         </StatCard>
 
-        <StatCard title="Sent Questions" value={sentQuestions}>
-          {data.sent_questions?.map((q, i) => (
-            <div key={i} className="activity-item">
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <span className="activity-title">Question: {q.question}</span>
-                <small style={{ color: "#4a5568" }}>
-                  Receiver: {q.receiver_email}
-                </small>
-                <small style={{ color: "#4a5568" }}>
-                  Status: {q.status}
-                </small>
-                <small style={{ color: "#4a5568" }}>
-                  Created At: {new Date(q.created_at).toLocaleDateString()}
-                </small>
-              </div>
-            </div>
-          ))}
-        </StatCard>
 
         <StatCard title="Purchased Courses" value={purchasedCourses} cardType="instructor" showRatingFor={showRatingFor}>
           {data.purchased_courses?.map((course, i) => (
@@ -625,7 +612,7 @@ const InstructorProfile = ({ data }) => {
           ))}
         </StatCard>
 
--, [12/19/2025 2:45 PM]
+
 
 
         <StatCard title="AI Purchases" value={aiPurchases}>
@@ -960,7 +947,7 @@ const handleTransitorAction = async (request, action) => {
 // =====================
 // NormalUserProfile Component
 // =====================
-const NormalUserProfile = ({ data }) => {
+const NormalUserProfile = ({ data, userData, setUserData }) => {
   console.log("Rendering NormalUserProfile with data:", data);
 
   const [ratedTaxWorkers, setRatedTaxWorkers] = useState(() => loadRatedUsers(data.email, 'TaxWorkers'));
@@ -1500,8 +1487,12 @@ The paid amount will be refunded to the payer if the request is not accepted or 
               <TransitorProfile data={userData} />
             )}
             {userData.role === "normal" && (
-              <NormalUserProfile data={userData} />
-            )}
+            <NormalUserProfile 
+                data={userData} 
+                userData={userData} 
+                setUserData={setUserData} 
+            />
+          )}
           </div>
         </div>
       </div>
