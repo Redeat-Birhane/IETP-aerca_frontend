@@ -18,6 +18,7 @@ import Transitors from "./Components/Pages/Transitors/Transitors";
 import Signin from "./Components/Signpage/Login";
 import Signup from "./Components/Signpage/signup";
 import Profile from "./Components/Signpage/Profile";
+import Coursespage from "./Components/Section-2/Course.js";
 import TaxWorkers from "./Components/Pages/Tax-Workers/Taxworkers.js";
 import Law from "./Components/Pages/Law&Authority/Law.js";
 import Overview from "./Components/Pages/Geez-Assistant/overview";
@@ -57,6 +58,7 @@ function Layout() {
         <Route path="/Signin" element={<Signin />} />
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Profile" element={<Profile />} />
+        <Route path="/Coursespage" element={<Coursespage />} />
         <Route path="/Overview" element={<Overview />} />
         <Route path="/Teckspec" element={<Teckspec />} />
         <Route path="/TaxWorkers" element={<TaxWorkers />} />

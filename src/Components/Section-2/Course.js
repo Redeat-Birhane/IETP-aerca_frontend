@@ -1,56 +1,82 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Course.css";
-
-const courses = [
-  {
-    id: 1,
-    title: "Beginner’s Guide to Forex Trading",
-    description:
-      "Learn the basics of Forex markets, currency pairs, risk management, and trading psychology.",
-    link: "https://www.investopedia.com/articles/forex/06/forexbasics.asp",
-  },
-  {
-    id: 2,
-    title: "Crypto Trading Fundamentals",
-    description:
-      "Understand cryptocurrency markets, technical analysis, and strategies for crypto trading.",
-    link: "https://www.binance.com/en/academy/crypto-trading",
-  },
-  {
-    id: 3,
-    title: "Stock Market Trading for Beginners",
-    description:
-      "Get introduced to stock trading, chart patterns, and key indicators for stock analysis.",
-    link: "https://www.investopedia.com/stock-trading-4427698",
-  },
-];
-
-function CourseCard({ title, description, link }) {
-  return (
-    <div className="courseCard">
-      <h3>{title}</h3>
-      <p>{description}</p>
-      <a href={link} target="_blank" rel="noopener noreferrer">
-        Learn More
-      </a>
-    </div>
-  );
-}
 
 export default function Course() {
   return (
     <div className="coursePage">
-      <h1>Online Trading Courses</h1>
-      <div className="courseList">
-        {courses.map((course) => (
-          <CourseCard
-            key={course.id}
-            title={course.title}
-            description={course.description}
-            link={course.link}
-          />
-        ))}
-      </div>
+      <header className="introSection">
+        <h1>Learn Online Trading</h1>
+        <p>
+          Online trading allows you to buy and sell financial assets like
+          stocks, forex, and cryptocurrencies using internet platforms.
+          Understanding how trading works helps you make smarter investment
+          decisions and manage risk effectively.
+        </p>
+
+        <h2>How to Start Learning:</h2>
+        <ul>
+          <li>✔ Learn the basics of how markets work and what moves prices.</li>
+          <li>
+            ✔ Understand trading tools like charts, indicators, and trends.
+          </li>
+          <li>
+            ✔ Practice using a demo trading account before using real money.
+          </li>
+          <li>✔ Choose a trading course to build your skills step by step.</li>
+        </ul>
+      </header>
+
+      <section className="courseSection">
+        <h2>Recommended Online Trading Courses</h2>
+
+        <div className="courseList">
+          <div className="courseCard">
+            <h3>Beginner’s Guide to Forex Trading</h3>
+            <p>
+              Learn the basics of Forex markets, currency pairs, risk
+              management, and trading psychology.
+            </p>
+            <Link to="/Signin">
+              <p>Buy</p>
+            </Link>
+          </div>
+
+          <div className="courseCard">
+            <h3>Crypto Trading Fundamentals</h3>
+            <p>
+              Understand cryptocurrency markets, technical analysis, and
+              strategies for crypto trading.
+            </p>
+            <Link to="/Signin">
+              <p>Buy</p>
+            </Link>
+          </div>
+
+          <div className="courseCard">
+            <h3>Stock Market Trading for Beginners</h3>
+            <p>
+              Get introduced to stock trading, chart patterns, and key
+              indicators for stock analysis.
+            </p>
+            <Link to="/Signin">
+              <p>Buy</p>
+            </Link>
+          </div>
+
+          <div className="courseCard">
+            <h3> Import & Export for Beginners</h3>
+            <p>
+              Get introduced to import & Export, chart patterns, and key
+              indicators for Market analysis.
+            </p>
+            <Link to="/Signin">
+              <p>Buy</p>
+            </Link>
+          </div>
+
+        </div>
+      </section>
     </div>
   );
 }
