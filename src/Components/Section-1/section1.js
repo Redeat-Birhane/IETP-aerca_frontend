@@ -16,7 +16,7 @@ export default function section1() {
             </Link>
           </button>
           <button class="but2">
-            <Link className="no-underline" to="/Signup">
+            <Link className="no-underline" to="/Signin">
               Buy
             </Link>
             {/* <a>Buy</a> */}
