@@ -19,9 +19,25 @@ export const CartProvider = ({ children }) => {
     setCartItems((prev) => [...prev, item]);
   };
 
-  const removeItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
+  const removeItem = async (cart_item_id) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/remove/`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart_item_id }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to remove item");
+
+    // Update context state
+    setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
+  } catch (err) {
+    alert(err.message || "Network error while removing item");
+  }
+};
+
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 

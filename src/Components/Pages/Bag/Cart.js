@@ -119,7 +119,7 @@ function Cart() {
                       />
                     </label>
                     <label>
-                      Delivery location:
+                      Delivery location(optional):
                       <input
                         type="text"
                         placeholder="Enter address..."

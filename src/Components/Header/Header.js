@@ -160,6 +160,7 @@ export default function Header() {
         {/* Support */}
         <li>
           <a href="#">Support</a>
+          <div className="iphone_dropdown">
           <div className="Support_dropdown">
             <div className="Support_one">
               <Link to="/Community">
@@ -168,6 +169,7 @@ export default function Header() {
               <Link to="/Center">
                 <p>Contact Center</p>
               </Link>
+            </div>
             </div>
           </div>
         </li>

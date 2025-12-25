@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Items.css";
+import { CartContext } from "../../../context/CartContext";
+
+const { addItem } = useContext(CartContext);
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -38,6 +41,7 @@ export default function Items() {
       });
       const data = await res.json();
       if (res.ok) {
+        addItem({ id: itemId, quantity: 1, name: it.name, price: it.price, photo: it.photo });
         alert(data.message || "Unit added to deployment");
       } else {
         alert(data.message || "Failed to add unit");
