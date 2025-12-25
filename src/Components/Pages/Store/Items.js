@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Items.css";
 import { CartContext } from "../../../context/CartContext";
-
-const { addItem } = useContext(CartContext);
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Items() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { addItem } = useContext(CartContext); // ✅ Inside component
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -18,12 +17,10 @@ export default function Items() {
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
     if (!isAuth) {
-      // Redirect to login and remember the current page
       navigate("/Signin", { state: { from: location.pathname } });
       return;
     }
 
-    // Fetch items if authenticated
     fetch(`${API_BASE}/users/items/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setItems(data.store_items || []))
@@ -31,17 +28,18 @@ export default function Items() {
       .finally(() => setLoading(false));
   }, [navigate, location]);
 
-  const addToCart = async (itemId) => {
+  const addToCartHandler = async (item) => {
     try {
       const res = await fetch(`${API_BASE}/users/add/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ item_id: itemId, quantity: 1 }),
+        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
       });
+
       const data = await res.json();
       if (res.ok) {
-        addItem({ id: itemId, quantity: 1, name: it.name, price: it.price, photo: it.photo });
+        addItem({ id: item.id, quantity: 1, name: item.name, price: item.price, photo: item.photo });
         alert(data.message || "Unit added to deployment");
       } else {
         alert(data.message || "Failed to add unit");
@@ -59,7 +57,6 @@ export default function Items() {
       <h1 className="item-title">Technical Inventory</h1>
       <p className="item-subtitle">High-performance hardware optimized for mission-critical fieldwork.</p>
 
-      {/* Stats Section Styled like Law Controls */}
       <div className="item-stats-wrapper">
         <div className="item-stat-pill">🔄 Rapid Sync</div>
         <div className="item-stat-pill">⚒️ Field-Ready</div>
@@ -98,7 +95,7 @@ export default function Items() {
 
                 <div className="item-card-footer">
                   <span className="item-category-tag">📍 {it.location}</span>
-                  <button className="item-action-btn" onClick={() => addToCart(it.id)}>
+                  <button className="item-action-btn" onClick={() => addToCartHandler(it)}>
                     Add to cart
                   </button>
                 </div>
