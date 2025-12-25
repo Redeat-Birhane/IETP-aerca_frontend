@@ -1,13 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
-
+const API_BASE = process.env.REACT_APP_API_BASE;
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   // Fetch cart items when app loads
   useEffect(() => {
-    fetch("https://ietp-aerca-backend.onrender.com/users/view/", {
+    fetch(`${API_BASE}/users/view/`, {
       credentials: "include",
     })
       .then((res) => res.json())
