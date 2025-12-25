@@ -75,7 +75,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       );
  const result = await res.json();
       if (!res.ok) {
-        const err = await res.json(result);
         alert("Signup failed: " + JSON.stringify(result));
         setIsSubmitting(false); 
     return;

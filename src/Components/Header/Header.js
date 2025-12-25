@@ -178,11 +178,6 @@ export default function Header() {
             <img src={search} alt="Search" />
           </a>
           <div className="Search_dropdown">
-            <br />
-            <div className="sear_butt">
-              <input type="text" placeholder="Geez AI.com " />
-            </div>
-            <br />
             <div className="Search_one">
               <Link to="/Search">
                 <p>Quick Search</p>
