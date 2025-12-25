@@ -33,23 +33,30 @@ export default function Courses() {
   }, [navigate]);
 
   useEffect(() => {
-    const fetchInstructors = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/users/instructors/`, {
-          method: "GET",
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to fetch instructors");
-        const data = await res.json();
-        const filtered = data.instructors.filter((i) => i.role === "instructor");
-setInstructors(filtered);
+   const fetchInstructors = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/users/instructors/`, {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!res.ok) throw new Error("Failed to fetch instructors");
+    const data = await res.json();
 
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        navigate("/Signin");
-      }
-    };
+    let filtered = data.instructors;
+
+    // Filter based on current user role
+    if (userRole === "instructor") {
+      filtered = filtered.filter((i) => i.email !== userEmail);
+    }
+
+    setInstructors(filtered);
+    setLoading(false);
+  } catch (err) {
+    console.error(err);
+    navigate("/Signin");
+  }
+};
+
     fetchInstructors();
   }, [navigate, userEmail]);
 
@@ -94,7 +101,6 @@ setInstructors(filtered);
   };
 
   if (loading) return <p style={{ textAlign: "center", padding: "50px" }}>Loading courses...</p>;
-  
 
   return (
     <div className="courses-container">
