@@ -999,7 +999,7 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
         <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
           {data.sent_requests?.map((r, i) => (
             <div key={i} className="activity-item">
-              <span>To: {r.transitor_email}</span>|
+              <span>To: {r.transitor_email}</span> |
               <span>Status: {r.status}</span> |
               <span>Connected: {r.connected ? "Yes" : "No"}</span>
 
