@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./login.css";
+
 const API_BASE = process.env.REACT_APP_API_BASE;
+
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,29 +27,23 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${API_BASE}/users/login/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-          credentials: "include", // includes cookies for CSRF/session auth
-        }
-      );
+      const res = await fetch(`${API_BASE}/users/login/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
 
-      // Check if server is reachable
       if (!res.ok) {
         if (res.status === 401) throw new Error("Invalid email or password.");
         if (res.status === 404) throw new Error("Login endpoint not found.");
         throw new Error("Server error during login.");
       }
 
-      // Parse the response
       const result = await res.json();
 
-      // Store user info locally
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userRole", result.role);
       localStorage.setItem("userEmail", formData.email);
@@ -54,7 +53,9 @@ const Login = () => {
       }
 
       alert(`✅ Welcome back! You are logged in as: ${result.role}`);
-      navigate("/");
+
+      // 🔴 ONLY CHANGE IS HERE
+      navigate(from, { replace: true });
     } catch (err) {
       console.error("Login Error:", err);
       if (err.message.includes("Failed to fetch")) {
@@ -78,7 +79,6 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Email Field */}
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
@@ -92,7 +92,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Field */}
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -106,27 +105,25 @@ const Login = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button type="submit" className="login-btn" disabled={loading}>
             {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
-        {/* Footer Links */}
         <div className="login-footer">
           <p>
             Don't have an account? <Link to="/signup">Sign up here</Link>
           </p>
           <p className="login-help">
-          Need help?{" "}
-          <button
-            type="button"
-            className="login-help-btn"
-            onClick={() => navigate("/Center")}
-          >
-            Contact support
-          </button>
-        </p>
+            Need help?{" "}
+            <button
+              type="button"
+              className="login-help-btn"
+              onClick={() => navigate("/Center")}
+            >
+              Contact support
+            </button>
+          </p>
         </div>
       </div>
     </div>

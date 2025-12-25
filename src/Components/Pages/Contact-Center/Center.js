@@ -100,7 +100,7 @@ export default function Center() {
       <p className="center-subtitle">Need help? Submit a question and our team will get back to you shortly.</p>
 
       <button className="ticket-toggle-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
-        {isFormOpen ? "✖ Close Form" : "＋ Create New Ticket"}
+        {isFormOpen ? "✖ Close Form" : "＋ Ask a Question"}
       </button>
 
       {isFormOpen && (

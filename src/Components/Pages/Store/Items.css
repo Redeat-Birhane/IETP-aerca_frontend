@@ -1,26 +1,24 @@
 /* Container - Reduced side padding */
 .item-container {
   min-height: 100vh;
-  padding: 3rem 1rem; /* Reduced from 2rem to 1rem for tighter side margins */
+  padding: 3rem 1rem;
   background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
   font-family: "Poppins", sans-serif;
+  text-align: center;
 }
-
 /* Header */
 .item-title {
-  text-align: center;
-  font-size: 2.4rem;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #1565c0, #5e35b1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 900;
+  margin-bottom: 0.5rem;
 }
 
 .item-subtitle {
-  text-align: center;
-  color: #64748b;
-  font-size: 0.9rem;
+  font-size: 1.1rem;
+  color: #37474f;
   margin-bottom: 2rem;
 }
 
@@ -46,24 +44,25 @@
 /* --- GRID EXPANSION --- */
 .item-grid {
   display: grid;
-  /* Narrower card logic */
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-  gap: 1.2rem;
-  /* Increased max-width to use more of the screen width */
-  max-width: 95%; 
-  margin: 0 auto;
-  /* Ensures it sits closer to the left but stays centered */
-  padding: 0 10px; 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem; 
+  justify-items: center;
+  max-width: 100%;
+  margin: 0 auto; 
 }
 
 /* --- SMALLER CARDS --- */
 .item-card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
+background: #ffffff;
+  width: 100%;
+  max-width: 320px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1.2rem;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
