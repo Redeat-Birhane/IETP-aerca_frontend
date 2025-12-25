@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Taxworkers.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
@@ -21,6 +21,7 @@ function getCookie(name) {
 
 export default function TaxWorkers() {
   const navigate = useNavigate();
+  const location = useLocation(); // Added to pass current page to login
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openBox, setOpenBox] = useState(null);
@@ -36,7 +37,7 @@ export default function TaxWorkers() {
         });
 
         if (profileRes.status === 403 || profileRes.status === 401) {
-          navigate("/Signin");
+          navigate("/Signin", { state: { from: location.pathname } }); // pass current page
           return;
         }
         if (!profileRes.ok) throw new Error("Failed to fetch profile");
@@ -44,13 +45,14 @@ export default function TaxWorkers() {
         const profileData = await profileRes.json();
         const currentUserRole = profileData.role;
         const currentUserEmail = profileData.email;
+
         const res = await fetch(`${API_BASE}/users/tax_workers/`, {
           method: "GET",
           credentials: "include",
         });
 
         if (res.status === 403 || res.status === 401) {
-          navigate("/Signin");
+          navigate("/Signin", { state: { from: location.pathname } }); // pass current page
           return;
         }
         if (!res.ok) throw new Error("Failed to fetch tax workers");
@@ -62,7 +64,7 @@ export default function TaxWorkers() {
             if (currentUserRole === "tax_worker") {
               return w.email !== currentUserEmail;
             }
-            return true; 
+            return true;
           })
           .map((w) => ({
             username: w.username,
@@ -83,12 +85,12 @@ export default function TaxWorkers() {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching tax workers:", err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } }); // pass current page
       }
     };
 
     fetchWorkers();
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   const handleOpenBox = (email) => {
     setOpenBox(email);

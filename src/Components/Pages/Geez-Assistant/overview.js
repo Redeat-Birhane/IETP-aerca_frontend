@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import "./overview.css";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import First from "./Images-Geez/10215.png";
 import Second from "./Images-Geez/10103.png";
 import Third from "./Images-Geez/10104.png";
@@ -15,17 +15,16 @@ export default function Overview() {
   const [receipt, setReceipt] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Check authentication on page load
-  useEffect(() => {
-    const isAuth = localStorage.getItem("isAuthenticated");
-    if (!isAuth) {
-      navigate("/Signin");
-    }
-  }, [navigate]);
-
   const handleBuy = async () => {
-    const isAuth = localStorage.getItem("isAuthenticated");
-    if (!isAuth) return navigate("/Signin");
+    const isAuth = localStorage.getItem("isAuthenticated") === "true";
+
+    if (!isAuth) {
+      const wantsToLogin = window.confirm(
+        "You need to login to purchase Geez AI. Press OK to login or Cancel to stay on this page."
+      );
+      if (!wantsToLogin) return; // user chose not to login, stay on Overview
+      return navigate("/Signin", { state: { from: "/Overview" } }); // redirect to login
+    }
 
     if (!receipt) return alert("Please upload a receipt to proceed with the purchase");
 

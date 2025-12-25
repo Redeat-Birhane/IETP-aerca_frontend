@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Courses.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Courses() {
   const navigate = useNavigate();
+  const location = useLocation(); // Added to track current page
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [purchasedCourses, setPurchasedCourses] = useState([]);
@@ -20,17 +21,23 @@ export default function Courses() {
           method: "GET",
           credentials: "include",
         });
+
+        if (res.status === 401 || res.status === 403) {
+          navigate("/Signin", { state: { from: location.pathname } });
+          return;
+        }
+
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setPurchasedCourses(data.purchased_courses || []);
         setUserRole(data.role);
       } catch (err) {
         console.error(err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
     fetchProfile();
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   useEffect(() => {
     if (!userRole) return; // wait until userRole is set
@@ -41,6 +48,12 @@ export default function Courses() {
           method: "GET",
           credentials: "include",
         });
+
+        if (res.status === 401 || res.status === 403) {
+          navigate("/Signin", { state: { from: location.pathname } });
+          return;
+        }
+
         if (!res.ok) throw new Error("Failed to fetch instructors");
         const data = await res.json();
 
@@ -55,12 +68,12 @@ export default function Courses() {
         setLoading(false);
       } catch (err) {
         console.error(err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
 
     fetchInstructors();
-  }, [userRole, navigate, userEmail]);
+  }, [userRole, navigate, userEmail, location.pathname]);
 
   const handleBuyCourse = (instructorEmail) => {
     const alreadyPurchased = purchasedCourses.find(
@@ -91,6 +104,7 @@ export default function Courses() {
           credentials: "include",
           body: formData,
         });
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || data.message);
 

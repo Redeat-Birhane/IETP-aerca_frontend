@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Community.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Community() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,11 +19,12 @@ export default function Community() {
   const username = localStorage.getItem("username");
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
 
+  // Redirect to signin if not authenticated, with return path
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/Signin");
+      navigate("/Signin", { state: { from: location.pathname } });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -41,12 +43,12 @@ export default function Community() {
         setLoading(false);
       } catch (err) {
         console.error(err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
 
     fetchQuestions();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location]);
 
   const handleAskQuestion = async () => {
     if (!newTitle.trim() || !newBody.trim()) {

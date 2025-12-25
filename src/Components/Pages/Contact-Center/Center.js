@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Center.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Center() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,11 +17,12 @@ export default function Center() {
 
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
 
+  // Redirect to Signin if not authenticated, with return path
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/Signin");
+      navigate("/Signin", { state: { from: location.pathname } });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -39,12 +41,12 @@ export default function Center() {
         setLoading(false);
       } catch (err) {
         console.error(err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
 
     fetchTickets();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location]);
 
   const handleSubmitTicket = async () => {
     if (!subject.trim() || !message.trim()) {
@@ -95,7 +97,7 @@ export default function Center() {
   return (
     <div className="center-container">
       <h1 className="center-title">Support Center</h1>
-      <p className="center-subtitle">Need help? Submit a ticket and our team will get back to you shortly.</p>
+      <p className="center-subtitle">Need help? Submit a question and our team will get back to you shortly.</p>
 
       <button className="ticket-toggle-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
         {isFormOpen ? "✖ Close Form" : "＋ Create New Ticket"}
@@ -126,7 +128,7 @@ export default function Center() {
       )}
 
       <div className="tickets-grid">
-        {tickets.length === 0 && <p className="no-tickets">No tickets submitted yet.</p>}
+        {tickets.length === 0 && <p className="no-tickets">No questions submitted yet.</p>}
         
         {tickets.map((t) => (
           <div className="ticket-card" key={t.id}>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Transitors.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function TransitorPage() {
   const navigate = useNavigate();
+  const location = useLocation(); // Added for passing current path
   const [transitors, setTransitors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connectionRequests, setConnectionRequests] = useState({});
@@ -38,7 +39,8 @@ export default function TransitorPage() {
         });
 
         if (resTransitors.status === 401 || resTransitors.status === 403) {
-          navigate("/Signin");
+          // Pass current location to Signin
+          navigate("/Signin", { state: { from: location.pathname } });
           return;
         }
 
@@ -53,7 +55,8 @@ export default function TransitorPage() {
         });
 
         if (resProfile.status === 401 || resProfile.status === 403) {
-          navigate("/Signin");
+          // Pass current location to Signin
+          navigate("/Signin", { state: { from: location.pathname } });
           return;
         }
 
@@ -73,12 +76,12 @@ export default function TransitorPage() {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching transitors or profile:", err);
-        navigate("/Signin");
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
 
     fetchTransitors();
-  }, [navigate, userEmail]);
+  }, [navigate, location.pathname, userEmail]);
 
   const handleSendRequest = (transitorEmail, transitorId) => {
     const currentStatus = connectionRequests[transitorId];

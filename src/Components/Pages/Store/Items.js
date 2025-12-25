@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Items.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export default function Items() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // 🔹 Check authentication on page load
   useEffect(() => {
-    fetch(`${API_BASE}/users/items/`, {
-      credentials: "include",
-    })
+    const isAuth = localStorage.getItem("isAuthenticated");
+    if (!isAuth) {
+      // Redirect to login and remember the current page
+      navigate("/Signin", { state: { from: location.pathname } });
+      return;
+    }
+
+    // Fetch items if authenticated
+    fetch(`${API_BASE}/users/items/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setItems(data.store_items || []))
       .catch(() => setError("Failed to synchronize inventory"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [navigate, location]);
 
   const addToCart = async (itemId) => {
     try {
@@ -43,7 +53,6 @@ export default function Items() {
   return (
     <div className="item-container">
       <h1 className="item-title">Technical Inventory</h1>
-      
       <p className="item-subtitle">High-performance hardware optimized for mission-critical fieldwork.</p>
 
       {/* Stats Section Styled like Law Controls */}
@@ -66,7 +75,7 @@ export default function Items() {
                     alt={it.name}
                     className="item-card-image"
                     onError={(e) => {
-                      e.target.onerror = null; 
+                      e.target.onerror = null;
                       e.target.src = "/fallback.png";
                     }}
                   />
@@ -74,15 +83,15 @@ export default function Items() {
                   <div className="item-no-photo">NO IMAGE</div>
                 )}
               </div>
-              
+
               <div className="item-card-body">
                 <div className="item-info-top">
                   <h2>{it.name}</h2>
                   <span className="item-price-tag">${it.price}</span>
                 </div>
-                
+
                 <p className="item-summary">{it.description}</p>
-                
+
                 <div className="item-card-footer">
                   <span className="item-category-tag">📍 {it.location}</span>
                   <button className="item-action-btn" onClick={() => addToCart(it.id)}>
