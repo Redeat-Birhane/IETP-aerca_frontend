@@ -35,7 +35,7 @@ export default function Tax() {
           our verified tax workers who can help you complete your filing
           efficiently.
         </p>
-        <Link to="/Signin" className="connectButton">
+        <Link to="/Taxworkers" className="connectButton">
           Connect Now
         </Link>
       </section>

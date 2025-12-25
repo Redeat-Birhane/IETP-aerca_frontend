@@ -38,7 +38,7 @@ export default function Transitorconnect() {
           connect with a verified transitor and make your import process simple
           and worry-free.
         </p>
-        <Link to="/Signin" className="connectButton">
+        <Link to="/Transitors" className="connectButton">
           Connect Now
         </Link>
       </section>

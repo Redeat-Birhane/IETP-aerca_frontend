@@ -16,7 +16,7 @@ export default function section3() {
           </button>
 
           <button className="but6">
-            <Link className="no-underline3" to="/Taxconnect">
+            <Link className="no-underline3" to="/Taxworkers">
               Connect
             </Link>
           </button>

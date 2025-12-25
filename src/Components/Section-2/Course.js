@@ -37,7 +37,7 @@ export default function Course() {
               Learn the basics of Forex markets, currency pairs, risk
               management, and trading psychology.
             </p>
-            <Link to="/Signin">
+            <Link to="/Courses">
               <p>Buy</p>
             </Link>
           </div>
@@ -48,7 +48,7 @@ export default function Course() {
               Understand cryptocurrency markets, technical analysis, and
               strategies for crypto trading.
             </p>
-            <Link to="/Signin">
+            <Link to="/Courses">
               <p>Buy</p>
             </Link>
           </div>
@@ -59,7 +59,7 @@ export default function Course() {
               Get introduced to stock trading, chart patterns, and key
               indicators for stock analysis.
             </p>
-            <Link to="/Signin">
+            <Link to="/Courses">
               <p>Buy</p>
             </Link>
           </div>
@@ -70,7 +70,7 @@ export default function Course() {
               Get introduced to import & Export, chart patterns, and key
               indicators for Market analysis.
             </p>
-            <Link to="/Signin">
+            <Link to="/Courses">
               <p>Buy</p>
             </Link>
           </div>

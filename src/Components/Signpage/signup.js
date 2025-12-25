@@ -21,6 +21,7 @@ function getCookie(name) {
 const Signup = () => {
   const [role, setRole] = useState("normal");
   const [formData, setFormData] = useState({
+    role: "normal",
     username: "",
     email: "",
     password1: "",
@@ -49,9 +50,10 @@ const Signup = () => {
     setRole(e.target.value);
     setFormData({ ...formData, role: e.target.value });
   };
-
+const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+     setIsSubmitting(true);
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== null && value !== "") data.append(key, value);
@@ -71,19 +73,21 @@ const Signup = () => {
           },
         }
       );
-
+ const result = await res.json();
       if (!res.ok) {
         const err = await res.json();
-        alert("Signup failed: " + JSON.stringify(err));
-        return;
+        alert("Signup failed: " + JSON.stringify(result));
+        setIsSubmitting(false); 
+    return;
       }
 
-      const result = await res.json();
+      
       alert("Signup successful! Role: " + result.role);
-      console.log(result);
+      setIsSubmitting(false);
     } catch (err) {
       alert("Network error: " + err.message);
       console.error(err);
+      setIsSubmitting(false);
     }
   };
 
@@ -116,7 +120,7 @@ const Signup = () => {
           {role === "transitor" && (
             <div className="signup-role-fields">
               <label className="transitor_license">
-                Upload Your Transitor License
+                UUpload Your Transitor License <span className="required">*</span>
               </label>
               <input
                 className="signup-input-file"
@@ -125,6 +129,9 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
+               <label>
+      Job Title <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -134,7 +141,9 @@ const Signup = () => {
                 required
               />
 
-              <small className="field-info">Max 50 characters recommended</small><label className="business_card">Upload Your Business Card</label>
+              <small className="field-info">Max 50 characters recommended</small>
+              <label className="business_card">Upload Your Business Card<span className="required">*</span>
+              </label>
               <input
                 className="signup-input-file"
                 type="file"
@@ -152,6 +161,9 @@ const Signup = () => {
                 name="company_id_card"
                 onChange={handleChange}
               />
+               <label>
+      TIN/VAT Number <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -166,6 +178,9 @@ const Signup = () => {
 
           {role === "instructor" && (
             <div className="signup-role-fields">
+                <label>
+      Job Title <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -175,6 +190,9 @@ const Signup = () => {
                 required
               />
 <small className="field-info">Max 50 characters recommended</small>
+<label>
+      Upload Your Certificate <span className="required">*</span>
+    </label>
               <label className="certificate">Upload Your Certificate </label>
               <input
                 className="signup-input-file"
@@ -183,6 +201,9 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
+              <label>
+      Years of Experience <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-number"
                 type="number"
@@ -192,6 +213,9 @@ const Signup = () => {
                 required
               />
               <small className="field-info">Max 50 characters recommended</small>
+              <label>
+      Course Title <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -233,7 +257,7 @@ const Signup = () => {
                 required
               />
                <small className="field-info">Max 50 characters recommended</small><label className="company_id_card">
-                Upload Your Company Id Card
+                Upload Your Company Id Card<span className="required">*</span>
               </label>
               <input
                 className="signup-input-file"
@@ -242,6 +266,9 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
+              <label>
+      Phone Number
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -250,6 +277,9 @@ const Signup = () => {
                 onChange={handleChange}
               />
                <small className="field-info">Only digits, max 15 characters</small>
+                 <label>
+      Years of Experience <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-number"
                 type="number"
@@ -259,6 +289,9 @@ const Signup = () => {
                 required
               />
               <small className="field-info">Enter a realistic number</small>
+               <label>
+      Location <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -325,9 +358,10 @@ const Signup = () => {
           />
 
           <div className="signup-button-container">
-            <button className="signup-button" type="submit">
-              Sign Up
-            </button>
+            <button className="signup-button" type="submit" disabled={isSubmitting}>
+  {isSubmitting ? "Signing up..." : "Sign Up"}
+</button>
+
           </div>
           <br />
           <div className="signnn">

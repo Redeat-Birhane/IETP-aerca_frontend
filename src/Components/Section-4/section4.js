@@ -20,7 +20,7 @@ export default function section4() {
               </Link>
             </button>
             <button className="but11">
-              <Link className="no-underline4" to="/Signin">
+              <Link className="no-underline4" to="/Transitors">
                 Connect
               </Link>
             </button>
@@ -37,7 +37,7 @@ export default function section4() {
             </button>
             <button className="but111">
               
-              <Link className="no-underline4" to="/Signin">
+              <Link className="no-underline4" to="/Law">
                 Watch
               </Link>
             </button>

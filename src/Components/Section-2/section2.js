@@ -16,7 +16,7 @@ export default function section2() {
             </Link>
           </button>
           <button className="but4">
-            <Link className="no-underline2" to="/Signin">
+            <Link className="no-underline2" to="/Courses">
               Buy
             </Link>
           </button>
