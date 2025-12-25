@@ -27,9 +27,9 @@
 
 /* Grid Layout - NARROW DISTANCE BETWEEN CARDS */
 .courses-grid {
-  display: grid;
+   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 0.1rem; /* Minimized space between cards */
+  gap: 1rem; 
   justify-items: center;
   max-width: 100%;
   margin: 0 auto;

@@ -2,7 +2,7 @@
 /* Container - Slightly reduced padding to allow cards to sit closer to edges */
 .taxworkers-container {
   min-height: 100vh;
-  padding: 3rem 1rem; /* Reduced horizontal padding from 2rem to 1rem */
+  padding: 3rem 1rem;
   background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 50%, #ede7f6 100%);
   font-family: "Poppins", sans-serif;
   text-align: center;
@@ -10,11 +10,11 @@
 
 /* Grid Layout - MINIMIZED GAP */
 .taxworkers-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1rem; /* Reduced from 2rem to 1rem for a tighter look */
+   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem; 
   justify-items: center;
-  max-width: 1400px; /* Increased max-width to allow more cards per row */
+  max-width: 100%;
   margin: 0 auto;
 }
 
