@@ -40,10 +40,13 @@ export default function TaxWorkers() {
         if (!res.ok) throw new Error("Failed to fetch tax workers");
 
         const data = await res.json();
-        const currentUserEmail = getCookie("user_email"); // get logged-in user's email
+        const currentUserEmail = getCookie("user_email"); 
 
         const mappedWorkers = (data.tax_workers || [])
-          .filter((w) => w.email !== currentUserEmail) // exclude current user
+          .filter(
+            (w) =>
+              w.email !== currentUserEmail && !w.is_current_user 
+          )
           .map((w) => ({
             username: w.username,
             email: w.email,
