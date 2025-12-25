@@ -33,38 +33,41 @@ export default function Courses() {
   }, [navigate]);
 
   useEffect(() => {
-   const fetchInstructors = async () => {
-  try {
-    const res = await fetch(`${API_BASE}/users/instructors/`, {
-      method: "GET",
-      credentials: "include",
-    });
-    if (!res.ok) throw new Error("Failed to fetch instructors");
-    const data = await res.json();
+    if (!userRole) return; // wait until userRole is set
 
-    let filtered = data.instructors;
+    const fetchInstructors = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/users/instructors/`, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Failed to fetch instructors");
+        const data = await res.json();
 
-    // Filter based on current user role
-    if (userRole === "instructor") {
-      filtered = filtered.filter((i) => i.email !== userEmail);
-    }
+        let filtered = data.instructors;
 
-    setInstructors(filtered);
-    setLoading(false);
-  } catch (err) {
-    console.error(err);
-    navigate("/Signin");
-  }
-};
+        // Filter out current user if they are an instructor
+        if (userRole === "instructor") {
+          filtered = filtered.filter((i) => i.email !== userEmail);
+        }
+
+        setInstructors(filtered);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        navigate("/Signin");
+      }
+    };
 
     fetchInstructors();
-  }, [navigate, userEmail]);
+  }, [userRole, navigate, userEmail]);
 
   const handleBuyCourse = (instructorEmail) => {
-    const alreadyPurchased = purchasedCourses.find((c) => c.instructor_email === instructorEmail);
+    const alreadyPurchased = purchasedCourses.find(
+      (c) => c.instructor_email === instructorEmail
+    );
     if (alreadyPurchased) return alert("You already purchased this course.");
 
-    // ADDED: Fixed price instruction
     const confirmPayment = window.confirm(
       "To purchase this course, please pay the fixed price of $50 and upload your receipt."
     );
@@ -92,7 +95,10 @@ export default function Courses() {
         if (!res.ok) throw new Error(data.error || data.message);
 
         alert("Course purchased successfully!");
-        setPurchasedCourses([...purchasedCourses, { instructor_email: instructorEmail }]);
+        setPurchasedCourses([
+          ...purchasedCourses,
+          { instructor_email: instructorEmail },
+        ]);
       } catch (err) {
         alert(err.message || "Failed to purchase course");
       }
@@ -100,19 +106,23 @@ export default function Courses() {
     input.click();
   };
 
-  if (loading) return <p style={{ textAlign: "center", padding: "50px" }}>Loading courses...</p>;
+  if (loading)
+    return (
+      <p style={{ textAlign: "center", padding: "50px" }}>Loading courses...</p>
+    );
 
   return (
     <div className="courses-container">
       <h1 className="courses-title">Available Courses</h1>
-      {/* UPDATED: Subtitle with price instruction */}
       <p className="courses-subtitle">
         Elevate your skills for a fixed price of <b>$50</b> per course. Gain expert mentorship and professional training.
       </p>
 
       <div className="courses-grid">
         {instructors.map((inst) => {
-          const purchased = purchasedCourses.some((c) => c.instructor_email === inst.email);
+          const purchased = purchasedCourses.some(
+            (c) => c.instructor_email === inst.email
+          );
 
           return (
             <div className="course-card" key={inst.email}>
@@ -123,18 +133,18 @@ export default function Courses() {
                     alt={inst.username}
                     className="course-photo"
                     onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "flex";
                     }}
                   />
                 ) : null}
-                
+
                 {!inst.photo && (
                   <div className="course-photo-fallback">
                     {inst.username ? inst.username.charAt(0).toUpperCase() : "?"}
                   </div>
                 )}
-                <div className="course-photo-fallback" style={{ display: 'none' }}>
+                <div className="course-photo-fallback" style={{ display: "none" }}>
                   {inst.username ? inst.username.charAt(0).toUpperCase() : "?"}
                 </div>
 
