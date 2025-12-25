@@ -33,11 +33,11 @@ export default function Header() {
             </div>
             <br />
             <div className="Discrip1">
-                  <p>
-                    Here you will find full finished product with different sizes, prices, 
-                    and modifications that you can buy, integrate with the website, 
-                    and get updates easily.
-                 </p>
+              <p>
+                Here you will find full finished product with different sizes,
+                prices, and modifications that you can buy, integrate with the
+                website, and get updates easily.
+              </p>
             </div>
           </div>
         </li>
@@ -54,8 +54,8 @@ export default function Header() {
             <br />
             <div className="Discrip2">
               <p>
-                Geez Assistant is an intelligent voice-activated system
-                designed to make government services smarter, faster, and more
+                Geez Assistant is an intelligent voice-activated system designed
+                to make government services smarter, faster, and more
                 accessible. Built as part of the AERCA platform, it connects
                 with the Ethiopian Revenues and Customs Authority’s online
                 database to deliver real-time updates about tax regulations,
@@ -78,12 +78,11 @@ export default function Header() {
             <br />
             <div className="Discrip3">
               <p>
-                Transitors are expert consultants who help importers and
-                traders calculate and manage the amount of tax and customs
-                duties on imported products. They play a vital role in
-                ensuring that goods comply with Ethiopian trade regulations,
-                providing accurate cost assessments and smooth customs
-                clearance.
+                Transitors are expert consultants who help importers and traders
+                calculate and manage the amount of tax and customs duties on
+                imported products. They play a vital role in ensuring that goods
+                comply with Ethiopian trade regulations, providing accurate cost
+                assessments and smooth customs clearance.
               </p>
             </div>
           </div>
@@ -103,10 +102,10 @@ export default function Header() {
               <p>
                 These are the dedicated professionals who manage, process, and
                 verify tax payments within the AERCA system. They ensure that
-                taxpayers’ information is accurate, transactions are secure,
-                and all updates are synchronized between the central database
-                and local offices. Supporting transparent, efficient, and
-                reliable tax operations for everyone.
+                taxpayers’ information is accurate, transactions are secure, and
+                all updates are synchronized between the central database and
+                local offices. Supporting transparent, efficient, and reliable
+                tax operations for everyone.
               </p>
             </div>
           </div>
@@ -126,10 +125,10 @@ export default function Header() {
               <p>
                 This page provides the latest legal updates, tax regulations,
                 and official announcements from the Ethiopian Revenues and
-                Customs Authority. It helps users stay informed about new
-                laws, policy changes, and administrative directives that guide
-                trade and taxation processes. Stay updated with trusted and
-                verified information from official sources.
+                Customs Authority. It helps users stay informed about new laws,
+                policy changes, and administrative directives that guide trade
+                and taxation processes. Stay updated with trusted and verified
+                information from official sources.
               </p>
             </div>
           </div>
@@ -147,13 +146,12 @@ export default function Header() {
             <br />
             <div className="Discrip6">
               <p>
-                Learn the fundamentals of import, export, taxation, and
-                customs management through interactive training materials.
-                These courses are designed to help students, entrepreneurs,
-                and government workers build the knowledge and skills needed
-                to succeed in Ethiopia’s growing trade sector. Empowering
-                learners with practical skills for smarter and more efficient
-                trading.
+                Learn the fundamentals of import, export, taxation, and customs
+                management through interactive training materials. These courses
+                are designed to help students, entrepreneurs, and government
+                workers build the knowledge and skills needed to succeed in
+                Ethiopia’s growing trade sector. Empowering learners with
+                practical skills for smarter and more efficient trading.
               </p>
             </div>
           </div>
@@ -164,15 +162,13 @@ export default function Header() {
           <a href="#">Support</a>
           <div className="Support_dropdown">
             <div className="Support_one">
-               <Link to="/Community">
+              <Link to="/Community">
                 <p>Community</p>
               </Link>
-               <Link to="/Center">
+              <Link to="/Center">
                 <p>Contact Center</p>
               </Link>
             </div>
-           
-             
           </div>
         </li>
 
@@ -199,9 +195,7 @@ export default function Header() {
         <li style={{ position: "relative" }}>
           <a onClick={() => navigate("/Cart")}>
             <img src={cartIcon} alt="Cart" style={{ width: "30px" }} />
-            {totalItems > 0 && (
-              <span className="cart-count">{totalItems}</span>
-            )}
+            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
           </a>
           <div className="Vision_dropdown">
             <div className="Vision_one">
@@ -219,21 +213,26 @@ export default function Header() {
           </div>
         </li>
 
-        {/* Signin/Signup */}
-<li className="has-dropdown">
-   <Link to="/Signin">
-      <p>Signin/signup</p>
-    </Link>
-  
-</li>
+        {/* Signup*/}
+        <li className="has-dropdown">
+          <Link to="/Signup">
+            <p>Signup</p>
+          </Link>
+        </li>
 
-{/* Profile */}
-<li className="has-dropdown">
-  <Link to="/Profile">
-      <p>Profile</p>
-    </Link>
-</li>
+        {/* Signin */}
+        <li className="has-dropdown">
+          <Link to="/Signin">
+            <p>Signin</p>
+          </Link>
+        </li>
 
+        {/* Profile */}
+        <li className="has-dropdown">
+          <Link to="/Profile">
+            <p>Profile</p>
+          </Link>
+        </li>
       </ul>
     </div>
   );

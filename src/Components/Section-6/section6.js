@@ -63,7 +63,7 @@ export default function section6() {
             <img class="Dream-img" src={Dreamimg} />
             <button class=" watch-btn4 ">
               <a href="https://www.youtube.com/watch?v=pBxSTCocHns">
-                Watch now{" "}
+                Watch now
               </a>
             </button>
             <div class="overlay4 "></div>
@@ -81,7 +81,7 @@ export default function section6() {
             </div>
             <div class="overlay5"></div>
             <button class="watch-btn5">
-              {" "}
+            
               <a href="https://www.youtube.com/watch?v=LVbUNRwpXzw&list=RDLVbUNRwpXzw&start_radio=1">
                 Listen now
               </a>
@@ -96,7 +96,7 @@ export default function section6() {
             </div>
             <div class="overlay6"></div>
             <button class="watch-btn6">
-              {" "}
+              
               <a href="https://www.youtube.com/watch?v=Ad9fF-vbEZw">
                 Play now
               </a>

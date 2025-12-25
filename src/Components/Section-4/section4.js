@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import "./section4.css";
 
 
@@ -14,10 +15,14 @@ export default function section4() {
           </p>
           <div className="button5">
             <button className="but10">
-              <a>Learn more</a>
+              <Link className="no-underline4" to="/Transistorconnect">
+                Learn more
+              </Link>
             </button>
             <button className="but11">
-              <a>Buy</a>
+              <Link className="no-underline4" to="/Signin">
+                Connect
+              </Link>
             </button>
           </div>
         </div>
@@ -26,10 +31,15 @@ export default function section4() {
           <p>Update timely and Accuratly.</p>
           <div className="button55">
             <button className="but101">
-              <a>Learn more</a>
+              <Link className="no-underline4" to="/Lawpost">
+                Learn more
+              </Link>
             </button>
             <button className="but111">
-              <a>Buy</a>
+              
+              <Link className="no-underline4" to="/Signin">
+                Watch
+              </Link>
             </button>
           </div>
         </div>

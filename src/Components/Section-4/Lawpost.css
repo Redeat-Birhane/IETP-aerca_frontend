@@ -1,0 +1,77 @@
+.lawpostPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe 0%, #fefce8 50%, #f0f9ff 100%);
+  /* Soft blue & cream gradient */
+  color: #1e293b;
+  font-family: "Poppins", sans-serif;
+  padding: 80px 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lawpostIntro {
+  max-width: 900px;
+  background: #ffffffcc; /* subtle transparency */
+  border-radius: 20px;
+  text-align: center;
+  padding: 40px 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 60px;
+}
+
+.lawpostIntro h1 {
+  font-size: 2.3rem;
+  color: #0f172a;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.lawpostIntro p {
+  font-size: 1.1rem;
+  color: #334155;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.lawpostSection {
+  text-align: center;
+  background: #ffffffb3;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.lawpostSection h2 {
+  color: #0369a1;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.lawpostSection p {
+  color: #334155;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  margin-bottom: 30px;
+}
+
+.watchButton {
+  display: inline-block;
+  background: linear-gradient(90deg, #38bdf8, #facc15);
+  color: #1e293b;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 14px 36px;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.watchButton:hover {
+  background: linear-gradient(90deg, #fbbf24, #38bdf8);
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+}

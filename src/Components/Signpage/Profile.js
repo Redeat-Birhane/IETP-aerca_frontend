@@ -1319,7 +1319,7 @@ const Profile = () => {
 
       if (response.status === 401) {
         console.warn("User not authenticated, redirecting to login.");
-        return navigate("/login");
+        return navigate("/Signin");
       }
 
       const data = await response.json();
@@ -1327,7 +1327,7 @@ const Profile = () => {
       setUserData(data);
     } catch (err) {
       console.error("Error fetching profile:", err);
-      navigate("/login");
+      navigate("/Signin");
     } finally {
       setLoading(false);
       console.log("Profile fetch completed.");
@@ -1355,7 +1355,7 @@ const Profile = () => {
       localStorage.clear();
       setUserData(null);
       alert("You have been logged out successfully.");
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       console.error("Logout error:", err);
       alert("Error logging out: " + err.message);
