@@ -290,11 +290,12 @@ const Signup = () => {
 
         {/* ===== User Info Fields ===== */}
         <div className="signup-wrapper">
+          <small className="field-info">Don't use space</small>
           <input
             className="signup-name"
             type="text"
             name="username"
-            placeholder="Full Name"
+            placeholder="FullName"
             value={formData.username}
             onChange={handleChange}
             required
