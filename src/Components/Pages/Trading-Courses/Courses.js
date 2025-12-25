@@ -41,8 +41,9 @@ export default function Courses() {
         });
         if (!res.ok) throw new Error("Failed to fetch instructors");
         const data = await res.json();
-        const filtered = data.instructors.filter((i) => i.email !== userEmail);
-        setInstructors(filtered);
+        const filtered = data.instructors.filter((i) => i.role === "instructor");
+setInstructors(filtered);
+
         setLoading(false);
       } catch (err) {
         console.error(err);
