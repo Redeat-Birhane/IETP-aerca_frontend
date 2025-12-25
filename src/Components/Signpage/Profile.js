@@ -493,6 +493,7 @@ const TaxWorkerProfile = ({ data }) => {
   );
 };
 
+
 // =====================
 // InstructorProfile Component
 // =====================
@@ -509,6 +510,7 @@ const InstructorProfile = ({ data }) => {
   const aiPurchases = data.ai_purchases?.length || 0;
   const purchasedItems = data.purchased_items?.length || 0;
   const sentQuestions = data.sent_questions?.length || 0;
+  const sentRequests = data.sent_requests?.length || 0; // Add this line
 
   return (
     <>
@@ -529,6 +531,8 @@ const InstructorProfile = ({ data }) => {
 
         <StatCard title="Rating" value={Number(data.rating).toFixed(2)} />
         <StatCard title="Earnings" value={`$${Number(data.earning || 0).toFixed(2)}`} />
+
+        {/* ADDED: Requests Stat Card */}
         <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
           {data.sent_requests?.map((request, i) => (
             <div key={i} className="activity-item">
@@ -1062,7 +1066,7 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
         <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
           {data.sent_requests?.map((r, i) => (
             <div key={i} className="activity-item">
-              <span>To: {r.transitor_email}</span> |
+              <span>To: {r.transitor_email}</span>|
               <span>Status: {r.status}</span> |
               <span>Connected: {r.connected ? "Yes" : "No"}</span>
 
