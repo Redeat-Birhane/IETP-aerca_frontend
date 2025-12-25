@@ -93,7 +93,7 @@ export default function Courses() {
   };
 
   if (loading) return <p style={{ textAlign: "center", padding: "50px" }}>Loading courses...</p>;
-  if (userRole === "instructor") return <p style={{ textAlign: "center", padding: "50px" }}>Instructors cannot purchase courses.</p>;
+  
 
   return (
     <div className="courses-container">
