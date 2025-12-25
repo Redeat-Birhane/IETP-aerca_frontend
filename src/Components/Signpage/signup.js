@@ -12,9 +12,7 @@ function getCookie(name) {
     for (let cookie of cookies) {
       cookie = cookie.trim();
       if (cookie.startsWith(name + "=")) {
-        cookieValue = decodeURIComponent(
-          cookie.substring(name.length + 1)
-        );
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
       }
     }
@@ -24,8 +22,6 @@ function getCookie(name) {
 
 const Signup = () => {
   const [role, setRole] = useState("normal");
-  const [isSubmitting, setIsSubmitting] = useState(false); 
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -51,16 +47,36 @@ const Signup = () => {
     setFormData({ ...formData, [name]: files ? files[0] : value });
   };
 
+  
   const handleRoleChange = (e) => {
-    setRole(e.target.value);
-    setFormData({ ...formData, role: e.target.value });
+    const selectedRole = e.target.value;
+    setRole(selectedRole);
+
+    setFormData({
+      username: formData.username,
+      email: formData.email,
+      password1: formData.password1,
+      password2: formData.password2,
+      photo: formData.photo,
+      role: selectedRole,
+
+      transitor_license: null,
+      job_title: "",
+      business_card: null,
+      company_id_card: null,
+      tin_vat_number: "",
+      certificate: null,
+      years_of_experience: "",
+      course_title: "",
+      organization_name: "",
+      work_email: "",
+      phone_number: "",
+      location: "",
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (isSubmitting) return; 
-    setIsSubmitting(true);   
 
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -79,6 +95,7 @@ const Signup = () => {
         },
       });
 
+   
       const result = await res.json();
 
       if (!res.ok) {
@@ -92,8 +109,6 @@ const Signup = () => {
     } catch (err) {
       alert("Network error: " + err.message);
       console.error(err);
-    } finally {
-      setIsSubmitting(false); 
     }
   };
 
@@ -122,7 +137,7 @@ const Signup = () => {
             </select>
           </div>
 
-          {/* role-based fields unchanged */}
+          
         </div>
 
         {/* ===== Photo Upload ===== */}
@@ -177,12 +192,8 @@ const Signup = () => {
           />
 
           <div className="signup-button-container">
-            <button
-              className="signup-button"
-              type="submit"
-              disabled={isSubmitting}  
-            >
-              {isSubmitting ? "Signing up..." : "Sign Up"}
+            <button className="signup-button" type="submit">
+              Sign Up
             </button>
           </div>
 
