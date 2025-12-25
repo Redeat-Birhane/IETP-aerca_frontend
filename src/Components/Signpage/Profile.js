@@ -5,8 +5,6 @@ import "./Profile.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
-
-
 // =====================
 // StarRating Components
 // =====================
@@ -88,6 +86,7 @@ const saveRatedUsers = (userEmail, type, ratedSet) => {
     console.error('Error saving rated users to cookies:', err);
   }
 };
+
 const StatCard = ({ title, value, children, cardType, showRatingFor }) => {
   const shouldExpand = showRatingFor && showRatingFor.type === cardType;
   const [expanded, setExpanded] = useState(false);
@@ -114,9 +113,6 @@ const StatCard = ({ title, value, children, cardType, showRatingFor }) => {
     </div>
   );
 };
-
-
-
 
 // =====================
 // TaxWorkerProfile Component
@@ -155,7 +151,6 @@ const TaxWorkerProfile = ({ data }) => {
               <div className="activity-header">
                 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   <span className="activity-title">{q.question}</span>
-                  {/* Show asker username/email for all users */}
                   <small style={{ color: "#4a5568" }}>
                     Asked by: Normal User - {q.asker_email}
                   </small>
@@ -176,7 +171,6 @@ const TaxWorkerProfile = ({ data }) => {
                 </div>
               )}
 
-              {/* If current user is tax_worker they can answer pending questions */}
               {q.status !== "answered" && (
                 <div style={{ marginTop: 10 }}>
                   {openFormIndex === i ? (
@@ -200,9 +194,6 @@ const TaxWorkerProfile = ({ data }) => {
                             if (!text) return alert("Please enter an answer.");
                             if (!q.asker_email) return alert("Askers email missing.");
 
-
-
-
                             try {
                               const res = await fetch(
                                 `${API_BASE}/users/answer/`,
@@ -224,7 +215,6 @@ const TaxWorkerProfile = ({ data }) => {
 
                               const json = await res.json();
 
-                              // Update question in local state using response if available
                               setQuestions((prev) => {
                                 const copy = [...prev];
                                 copy[i] = {
@@ -294,9 +284,6 @@ const TaxWorkerProfile = ({ data }) => {
               </div>
             ))}
         </StatCard>
-
-
-
 
         <StatCard title="Purchased Items" value={purchasedItems}>
           {data.purchased_items.map((item, i) => (
@@ -368,9 +355,6 @@ const TaxWorkerProfile = ({ data }) => {
                         } catch (err) {
                           alert("Error: " + err.message);
                         }
-
-
-
                       }}
                       onCancel={() => {
                         setShowRatingFor(null);
@@ -395,7 +379,6 @@ const TaxWorkerProfile = ({ data }) => {
             </div>
           ))}
         </StatCard>
-
 
         <StatCard title="Purchased Courses" value={purchasedCourses} cardType="instructor" showRatingFor={showRatingFor}>
           {data.purchased_courses?.map((course, i) => (
@@ -431,8 +414,6 @@ const TaxWorkerProfile = ({ data }) => {
                           return newSet;
                         });
                         setShowRatingFor(null);
-
-
                         setSelectedRating(0);
                       } catch (err) {
                         alert("Error: " + err.message);
@@ -519,7 +500,7 @@ const InstructorProfile = ({ data }) => {
   console.log("Rendering InstructorProfile with data:", data);
 
   const [ratedInstructors, setRatedInstructors] = useState(() => loadRatedUsers(data.email, 'Instructors'));
-  const [showRatingFor, setShowRatingFor] = useState(null); // {type: 'instructor', email: string}
+  const [showRatingFor, setShowRatingFor] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
 
   const coursesCreated = data.courses?.length || 0;
@@ -527,8 +508,6 @@ const InstructorProfile = ({ data }) => {
   const aiPurchases = data.ai_purchases?.length || 0;
   const purchasedItems = data.purchased_items?.length || 0;
   const sentQuestions = data.sent_questions?.length || 0;
-
-
 
   return (
     <>
@@ -612,9 +591,6 @@ const InstructorProfile = ({ data }) => {
           ))}
         </StatCard>
 
-
-
-
         <StatCard title="AI Purchases" value={aiPurchases}>
           {data.ai_purchases?.map((ai, i) => (
             <div key={i} className="activity-item">
@@ -696,17 +672,15 @@ const InstructorProfile = ({ data }) => {
 // =====================
 // TransitorProfile Component
 // =====================
-
 const TransitorProfile = ({ data }) => {
   console.log("Rendering TransitorProfile with data:", data);
 
   const [ratedInstructors, setRatedInstructors] = useState(() => loadRatedUsers(data.email, 'Instructors'));
   const [ratedTransitors, setRatedTransitors] = useState(() => loadRatedUsers(data.email, 'Transitors'));
-  const [showRatingFor, setShowRatingFor] = useState(null); // {type: 'instructor'|'transitor', email: string}
+  const [showRatingFor, setShowRatingFor] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
 
-
-const handleTransitorAction = async (request, action) => {
+  const handleTransitorAction = async (request, action) => {
     try {
       const res = await fetch(`${API_BASE}/users/respond_to_transitor_request/`, {
         method: "POST",
@@ -723,7 +697,6 @@ const handleTransitorAction = async (request, action) => {
       const responseData = await res.json();
       alert(responseData.message);
 
-      // Update local state
       request.status = responseData.request.status;
       request.connected = action === "accept";
     } catch (err) {
@@ -731,9 +704,9 @@ const handleTransitorAction = async (request, action) => {
     }
   };
 
-
   const clientsServed = data.clients?.length || 0;
   const receivedRequests = data.received_requests?.length || 0;
+  const sentRequests = data.sent_requests?.length || 0;
   const purchasedCourses = data.purchased_courses?.length || 0;
   const aiPurchases = data.ai_purchases?.length || 0;
   const purchasedItems = data.purchased_items?.length || 0;
@@ -751,7 +724,6 @@ const handleTransitorAction = async (request, action) => {
                   Status: {r.status} | Connected: {r.connected ? "Yes" : "No"}
                 </small>
                 
-                {/* Add accept/reject buttons for transitors */}
                 {r.status === "pending" && (
                   <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                     <button
@@ -764,9 +736,71 @@ const handleTransitorAction = async (request, action) => {
                     >
                       Accept Request
                     </button>
-                   
                   </div>
                 )}
+              </div>
+            </div>
+          ))}
+        </StatCard>
+
+        <StatCard title="Sent Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
+          {data.sent_requests?.map((request, i) => (
+            <div key={i} className="activity-item">
+              <div className="activity-header">
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <span className="activity-title">To: {request.transitor_email}</span>
+                  <small style={{ color: "#4a5568" }}>
+                    Status: {request.status} | Connected: {request.connected ? "Yes" : "No"}
+                  </small>
+                  {request.connected && !ratedTransitors.has(request.transitor_email) && showRatingFor?.type === 'transitor' && showRatingFor.email === request.transitor_email && (
+                    <StarRating
+                      rating={selectedRating}
+                      onRatingChange={setSelectedRating}
+                      onSubmit={async () => {
+                        if (selectedRating === 0) return;
+                        try {
+                          const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              transitor_email: request.transitor_email,
+                              rating: selectedRating
+                            })
+                          });
+                          if (!res.ok) throw new Error("Failed to rate transitor");
+                          const responseData = await res.json();
+                          alert(responseData.message);
+                          setRatedTransitors(prev => {
+                            const newSet = new Set([...prev, request.transitor_email]);
+                            saveRatedUsers(data.email, 'Transitors', newSet);
+                            return newSet;
+                          });
+                          setShowRatingFor(null);
+                          setSelectedRating(0);
+                        } catch (err) {
+                          alert("Error: " + err.message);
+                        }
+                      }}
+                      onCancel={() => {
+                        setShowRatingFor(null);
+                        setSelectedRating(0);
+                      }}
+                    />
+                  )}
+                  {request.connected && !ratedTransitors.has(request.transitor_email) && !(showRatingFor?.type === 'transitor' && showRatingFor.email === request.transitor_email) && (
+                    <button
+                      onClick={() => setShowRatingFor({ type: 'transitor', email: request.transitor_email })}
+                      className="action-btn"
+                      style={{ padding: "4px 8px", fontSize: "12px", marginTop: 4 }}
+                    >
+                      Rate Transitor
+                    </button>
+                  )}
+                  {request.connected && ratedTransitors.has(request.transitor_email) && (
+                    <small style={{ color: "#4a5568", marginTop: 4 }}>Already rated</small>
+                  )}
+                </div>
               </div>
             </div>
           ))}
@@ -829,8 +863,6 @@ const handleTransitorAction = async (request, action) => {
                     Rate Instructor
                   </button>
                 )}
-
-
                 {ratedInstructors.has(course.instructor_email) && (
                   <small style={{ color: "#4a5568", marginTop: 4 }}>Already rated</small>
                 )}
@@ -863,8 +895,6 @@ const handleTransitorAction = async (request, action) => {
                 <small style={{ color: "#4a5568" }}>
                   Price: ${item.price} | Quantity: {item.quantity}
                 </small>
-               
-  
                 <small style={{ color: "#4a5568" }}>
                   Purchased At: {new Date(item.purchased_at).toLocaleDateString()}
                 </small>
@@ -893,8 +923,6 @@ const handleTransitorAction = async (request, action) => {
         </StatCard>
       </div>
 
-
-
       <div className="role-section">
         <h3>Business Information</h3>
         <div className="details-grid">
@@ -914,30 +942,6 @@ const handleTransitorAction = async (request, action) => {
             <span className="detail-label">Earnings</span>
             <span className="detail-value earnings-value">${data.earning}</span>
           </div>
-          {data.transitor_license && (
-            <div className="detail-item">
-              <span className="detail-label">Transitor License</span>
-              <span className="detail-value">
-                <a href={data.transitor_license} target="_blank" rel="noopener noreferrer">View License</a>
-              </span>
-            </div>
-          )}
-          {data.business_card && (
-            <div className="detail-item">
-              <span className="detail-label">Business Card</span>
-              <span className="detail-value">
-                <a href={data.business_card} target="_blank" rel="noopener noreferrer">View Card</a>
-              </span>
-            </div>
-          )}
-          {data.company_id_card && (
-            <div className="detail-item">
-              <span className="detail-label">Company ID Card</span>
-              <span className="detail-value">
-                <a href={data.company_id_card} target="_blank" rel="noopener noreferrer">View ID</a>
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </>
@@ -953,7 +957,7 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
   const [ratedTaxWorkers, setRatedTaxWorkers] = useState(() => loadRatedUsers(data.email, 'TaxWorkers'));
   const [ratedTransitors, setRatedTransitors] = useState(() => loadRatedUsers(data.email, 'Transitors'));
   const [ratedInstructors, setRatedInstructors] = useState(() => loadRatedUsers(data.email, 'Instructors'));
-  const [showRatingFor, setShowRatingFor] = useState(null); // {type: 'instructor'|'taxworker'|'transitor', email: string}
+  const [showRatingFor, setShowRatingFor] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
 
   const questionsAsked = data.sent_questions?.length || 0;
@@ -966,8 +970,7 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
   const purchasedItems = data.purchased_items?.length || 0;
   const aiPurchases = data.ai_purchases?.length || 0;
 
-
-const handleTransitorAction = async (request, action) => {
+  const handleTransitorAction = async (request, action) => {
     try {
       const res = await fetch(`${API_BASE}/users/respond_to_transitor_request/`, {
         method: "POST",
@@ -984,12 +987,12 @@ const handleTransitorAction = async (request, action) => {
       const responseData = await res.json();
       alert(responseData.message);
 
-      // Update local state to mark request as accepted
       request.status = responseData.request.status;
     } catch (err) {
       alert("Error: " + err.message);
     }
-  }
+  };
+
   return (
     <>
       <div className="profile-stats">
@@ -1016,59 +1019,14 @@ const handleTransitorAction = async (request, action) => {
             </div>
           ))}
         </StatCard>
-           <StatCard title="Received Requests" value={receivedRequests}>
-  {data.received_requests?.map((r, i) => (
-    <div key={i} className="activity-item">
-      <span>From: {r.user_email}</span>
-      <span>Status: {r.status}</span>
-      <span>Connected: {r.connected ? "Yes" : "No"}</span>
-      {userData.role === "transitor" && r.status === "pending" && (
-        <button
-          className="action-btn"
-          style={{ padding: "4px 8px", fontSize: "12px", marginTop: 4 }}
-          onClick={async () => {
-            try {
-              const res = await fetch(
-                `${API_BASE}/users/respond_to_transitor_request/`,
-                {
-                  method: "POST",
-                  credentials: "include",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    user_email: r.user_email,
-                    action: "accept"
-                  }),
-                }
-              );
-              if (!res.ok) throw new Error("Failed to accept request");
-              const responseData = await res.json();
-              alert(responseData.message);
 
-              // Update local state to reflect accepted request
-              r.status = "accepted"; 
-              setUserData({ ...userData }); 
-            } catch (err) {
-              alert("Error: " + err.message);
-            }
-          }}
-        >
-          Accept Request
-        </button>
-      )}
-    </div>
-  ))}
-</StatCard>
-
-
-          {/* Sent Requests (for rating after accepted) */}
-        <StatCard title="Sent Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
+        <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
           {data.sent_requests?.map((r, i) => (
             <div key={i} className="activity-item">
               <span>To: {r.transitor_email}</span>
               <span>Status: {r.status}</span>
               <span>Connected: {r.connected ? "Yes" : "No"}</span>
 
-              {/* Rating available only if request was accepted */}
               {r.connected && !ratedTransitors.has(r.transitor_email) && showRatingFor?.type === 'transitor' && showRatingFor.email === r.transitor_email && (
                 <StarRating
                   rating={selectedRating}
@@ -1180,70 +1138,9 @@ const handleTransitorAction = async (request, action) => {
                 )}
                 {ratedTaxWorkers.has(q.receiver_email) && (
                   <small style={{ color: "#4a5568", marginTop: 4 }}>Already rated</small>
-
-
-
                 )}
               </div>
             ))}
-        </StatCard>
-
-        <StatCard title="Sent Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
-          {data.sent_requests?.map((r, i) => (
-            <div key={i} className="activity-item">
-              <span>To: {r.transitor_email}</span>
-              <span>Status: {r.status}</span>
-              <span>Connected: {r.connected ? "Yes" : "No"}</span>
-              {r.connected && !ratedTransitors.has(r.transitor_email) && showRatingFor?.type === 'transitor' && showRatingFor.email === r.transitor_email && (
-                <StarRating
-                  rating={selectedRating}
-                  onRatingChange={setSelectedRating}
-                  onSubmit={async () => {
-                    if (selectedRating === 0) return;
-                    try {
-                      const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
-                        method: "POST",
-                        credentials: "include",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          transitor_email: r.transitor_email,
-                          rating: selectedRating
-                        })
-                      });
-                      if (!res.ok) throw new Error("Failed to rate transitor");
-                      const responseData = await res.json();
-                      alert(responseData.message);
-                      setRatedTransitors(prev => {
-                        const newSet = new Set([...prev, r.transitor_email]);
-                        saveRatedUsers(data.email, 'Transitors', newSet);
-                        return newSet;
-                      });
-                      setShowRatingFor(null);
-                      setSelectedRating(0);
-                    } catch (err) {
-                      alert("Error: " + err.message);
-                    }
-                  }}
-                  onCancel={() => {
-                    setShowRatingFor(null);
-                    setSelectedRating(0);
-                  }}
-                />
-              )}
-              {r.connected && !ratedTransitors.has(r.transitor_email) && !(showRatingFor?.type === 'transitor' && showRatingFor.email === r.transitor_email) && (
-                <button
-                  onClick={() => setShowRatingFor({ type: 'transitor', email: r.transitor_email })}
-                  className="action-btn"
-                  style={{ padding: "4px 8px", fontSize: "12px", marginTop: 4 }}
-                >
-                  Rate Transitor
-                </button>
-              )}
-              {r.connected && ratedTransitors.has(r.transitor_email) && (
-                <small style={{ color: "#4a5568", marginTop: 4 }}>Already rated</small>
-              )}
-            </div>
-          ))}
         </StatCard>
 
         <StatCard title="Received Requests" value={receivedRequests}>
@@ -1255,9 +1152,6 @@ const handleTransitorAction = async (request, action) => {
             </div>
           ))}
         </StatCard>
-
-
-
 
         <StatCard title="Purchased Courses" value={purchasedCourses} cardType="instructor" showRatingFor={showRatingFor}>
           {data.purchased_courses?.map((course, i) => (
@@ -1321,9 +1215,6 @@ const handleTransitorAction = async (request, action) => {
           ))}
         </StatCard>
 
-
-
-
         <StatCard title="Purchased Items" value={purchasedItems}>
           {data.purchased_items?.map((item, i) => (
             <div key={i} className="activity-item">
@@ -1335,8 +1226,6 @@ const handleTransitorAction = async (request, action) => {
                 <small style={{ color: "#4a5568" }}>
                   Price: ${item.price} | Quantity: {item.quantity}
                 </small>
-               
-               
                 <small style={{ color: "#4a5568" }}>
                   Purchased At: {new Date(item.purchased_at).toLocaleDateString()}
                 </small>
@@ -1439,9 +1328,6 @@ const Profile = () => {
     }
   };
 
-
-
-
   if (loading) return <p>Loading...</p>;
   if (!userData) return null;
 
@@ -1487,12 +1373,12 @@ The paid amount will be refunded to the payer if the request is not accepted or 
               <TransitorProfile data={userData} />
             )}
             {userData.role === "normal" && (
-            <NormalUserProfile 
+              <NormalUserProfile 
                 data={userData} 
                 userData={userData} 
                 setUserData={setUserData} 
-            />
-          )}
+              />
+            )}
           </div>
         </div>
       </div>
