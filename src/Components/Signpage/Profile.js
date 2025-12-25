@@ -500,6 +500,7 @@ const InstructorProfile = ({ data }) => {
   console.log("Rendering InstructorProfile with data:", data);
 
   const [ratedInstructors, setRatedInstructors] = useState(() => loadRatedUsers(data.email, 'Instructors'));
+  const [ratedTransitors, setRatedTransitors] = useState(() => loadRatedUsers(data.email, 'Transitors'));
   const [showRatingFor, setShowRatingFor] = useState(null);
   const [selectedRating, setSelectedRating] = useState(0);
 
@@ -528,6 +529,68 @@ const InstructorProfile = ({ data }) => {
 
         <StatCard title="Rating" value={Number(data.rating).toFixed(2)} />
         <StatCard title="Earnings" value={`$${Number(data.earning || 0).toFixed(2)}`} />
+        <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
+          {data.sent_requests?.map((request, i) => (
+            <div key={i} className="activity-item">
+              <div className="activity-header">
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <span className="activity-title">To: {request.transitor_email}</span>
+                  <small style={{ color: "#4a5568" }}>
+                    Status: {request.status} | Connected: {request.connected ? "Yes" : "No"}
+                  </small>
+                  {request.connected && !ratedTransitors.has(request.transitor_email) && showRatingFor?.type === 'transitor' && showRatingFor.email === request.transitor_email && (
+                    <StarRating
+                      rating={selectedRating}
+                      onRatingChange={setSelectedRating}
+                      onSubmit={async () => {
+                        if (selectedRating === 0) return;
+                        try {
+                          const res = await fetch(`${API_BASE}/users/rate_transitor/`, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              transitor_email: request.transitor_email,
+                              rating: selectedRating
+                            })
+                          });
+                          if (!res.ok) throw new Error("Failed to rate transitor");
+                          const responseData = await res.json();
+                          alert(responseData.message);
+                          setRatedTransitors(prev => {
+                            const newSet = new Set([...prev, request.transitor_email]);
+                            saveRatedUsers(data.email, 'Transitors', newSet);
+                            return newSet;
+                          });
+                          setShowRatingFor(null);
+                          setSelectedRating(0);
+                        } catch (err) {
+                          alert("Error: " + err.message);
+                        }
+                      }}
+                      onCancel={() => {
+                        setShowRatingFor(null);
+                        setSelectedRating(0);
+                      }}
+                    />
+                  )}
+                  {request.connected && !ratedTransitors.has(request.transitor_email) && !(showRatingFor?.type === 'transitor' && showRatingFor.email === request.transitor_email) && (
+                    <button
+                      onClick={() => setShowRatingFor({ type: 'transitor', email: request.transitor_email })}
+                      className="action-btn"
+                      style={{ padding: "4px 8px", fontSize: "12px", marginTop: 4 }}
+                    >
+                      Rate Transitor
+                    </button>
+                  )}
+                  {request.connected && ratedTransitors.has(request.transitor_email) && (
+                    <small style={{ color: "#4a5568", marginTop: 4 }}>Already rated</small>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </StatCard>
 
         <StatCard title="Purchased Courses" value={purchasedCourses} cardType="instructor" showRatingFor={showRatingFor}>
           {data.purchased_courses?.map((course, i) => (
