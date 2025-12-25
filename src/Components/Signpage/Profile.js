@@ -965,33 +965,9 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
     (q) => q.status === "answered"
   ).length;
   const sentRequests = data.sent_requests?.length || 0;
-  const receivedRequests = data.received_requests?.length || 0;
   const purchasedCourses = data.purchased_courses?.length || 0;
   const purchasedItems = data.purchased_items?.length || 0;
   const aiPurchases = data.ai_purchases?.length || 0;
-
-  const handleTransitorAction = async (request, action) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/respond_to_transitor_request/`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_email: request.user_email,
-          action: action
-        })
-      });
-
-      if (!res.ok) throw new Error("Failed to respond to request");
-
-      const responseData = await res.json();
-      alert(responseData.message);
-
-      request.status = responseData.request.status;
-    } catch (err) {
-      alert("Error: " + err.message);
-    }
-  };
 
   return (
     <>
@@ -1023,8 +999,8 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
         <StatCard title="Requests" value={sentRequests} cardType="transitor" showRatingFor={showRatingFor}>
           {data.sent_requests?.map((r, i) => (
             <div key={i} className="activity-item">
-              <span>To: {r.transitor_email}</span>
-              <span>Status: {r.status}</span>
+              <span>To: {r.transitor_email}</span>|
+              <span>Status: {r.status}</span> |
               <span>Connected: {r.connected ? "Yes" : "No"}</span>
 
               {r.connected && !ratedTransitors.has(r.transitor_email) && showRatingFor?.type === 'transitor' && showRatingFor.email === r.transitor_email && (
@@ -1143,15 +1119,6 @@ const NormalUserProfile = ({ data, userData, setUserData }) => {
             ))}
         </StatCard>
 
-        <StatCard title="Received Requests" value={receivedRequests}>
-          {data.received_requests?.map((r, i) => (
-            <div key={i} className="activity-item">
-              <span>From: {r.user_email}</span>
-              <span>Status: {r.status}</span>
-              <span>Connected: {r.connected ? "Yes" : "No"}</span>
-            </div>
-          ))}
-        </StatCard>
 
         <StatCard title="Purchased Courses" value={purchasedCourses} cardType="instructor" showRatingFor={showRatingFor}>
           {data.purchased_courses?.map((course, i) => (
