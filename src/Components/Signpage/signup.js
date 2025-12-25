@@ -75,7 +75,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
       );
  const result = await res.json();
       if (!res.ok) {
-        const err = await res.json();
+        const err = await res.json(result);
         alert("Signup failed: " + JSON.stringify(result));
         setIsSubmitting(false); 
     return;
@@ -120,7 +120,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
           {role === "transitor" && (
             <div className="signup-role-fields">
               <label className="transitor_license">
-                UUpload Your Transitor License <span className="required">*</span>
+                Upload Your Transitor License <span className="required">*</span>
               </label>
               <input
                 className="signup-input-file"
@@ -153,7 +153,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
               />
 
               <label className="company_id_card">
-                Upload Your Company Id Card
+                Upload Your Company Id Card<span className="required">*</span>
               </label>
               <input
                 className="signup-input-file"
@@ -193,7 +193,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 <label>
       Upload Your Certificate <span className="required">*</span>
     </label>
-              <label className="certificate">Upload Your Certificate </label>
               <input
                 className="signup-input-file"
                 type="file"
@@ -230,6 +229,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
           {role === "tax_worker" && (
             <div className="signup-role-fields">
+              <label>
+      Job Title <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -239,6 +241,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                 required
               />
               <small className="field-info">Max 50 characters recommended</small>
+              <label>
+      Organization Name <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-text"
                 type="text"
@@ -248,6 +253,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                 required
               />
               <small className="field-info">Max 50 characters recommended</small>
+              <label>
+      Work Email <span className="required">*</span>
+    </label>
               <input
                 className="signup-input-email"
                 type="email"
@@ -287,6 +295,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                 placeholder="Years of Experience"
                 onChange={handleChange}
                 required
+                min={0}
+                max={25}
               />
               <small className="field-info">Enter a realistic number</small>
                <label>
@@ -320,6 +330,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
         {/* ===== User Info Fields ===== */}
         <div className="signup-wrapper">
           <small className="field-info">Don't use space</small>
+          <label>
+      FullNme <span className="required">*</span>
+    </label>
           <input
             className="signup-name"
             type="text"
@@ -329,6 +342,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             onChange={handleChange}
             required
           />
+          <label>
+      email <span className="required">*</span>
+    </label>
           <input
             className="signup-email"
             type="email"
@@ -338,6 +354,9 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             onChange={handleChange}
             required
           />
+          <label>
+      Password <span className="required">*</span>
+    </label>
           <input
             className="signup-pass"
             type="password"

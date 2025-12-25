@@ -30,7 +30,7 @@ export default function Lawpost() {
           and Customs Authority — empowering businesses and citizens to make
           informed decisions.
         </p>
-        <Link to="/Signin" className="watchButton">
+        <Link to="/Law" className="watchButton">
           Watch Now
         </Link>
       </section>
