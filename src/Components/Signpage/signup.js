@@ -22,6 +22,9 @@ function getCookie(name) {
 
 const Signup = () => {
   const [role, setRole] = useState("normal");
+  const [errors, setErrors] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -40,47 +43,38 @@ const Signup = () => {
     work_email: "",
     phone_number: "",
     location: "",
+    role: "normal",
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData({ ...formData, [name]: files ? files[0] : value });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
   };
 
-  
   const handleRoleChange = (e) => {
     const selectedRole = e.target.value;
     setRole(selectedRole);
-
-    setFormData({
-      username: formData.username,
-      email: formData.email,
-      password1: formData.password1,
-      password2: formData.password2,
-      photo: formData.photo,
+    setFormData((prev) => ({
+      ...prev,
       role: selectedRole,
-
-      transitor_license: null,
-      job_title: "",
-      business_card: null,
-      company_id_card: null,
-      tin_vat_number: "",
-      certificate: null,
-      years_of_experience: "",
-      course_title: "",
-      organization_name: "",
-      work_email: "",
-      phone_number: "",
-      location: "",
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setErrors(null); 
+
     const data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== "") data.append(key, value);
+      if (value !== null && value !== "") {
+        data.append(key, value);
+      }
     });
 
     const csrfToken = getCookie("csrftoken");
@@ -95,20 +89,44 @@ const Signup = () => {
         },
       });
 
-   
-      const result = await res.json();
+      const result = await res.json(); 
 
       if (!res.ok) {
-        alert("Signup failed: " + JSON.stringify(result));
+        setErrors(result);
         return;
       }
 
       alert("Signup successful! Role: " + result.role);
-      console.log(result);
+
+      
+      setFormData({
+        username: "",
+        email: "",
+        password1: "",
+        password2: "",
+        photo: null,
+        transitor_license: null,
+        job_title: "",
+        business_card: null,
+        company_id_card: null,
+        tin_vat_number: "",
+        certificate: null,
+        years_of_experience: "",
+        course_title: "",
+        organization_name: "",
+        work_email: "",
+        phone_number: "",
+        location: "",
+        role: "normal",
+      });
+
+      setRole("normal");
+      setErrors(null);
 
     } catch (err) {
-      alert("Network error: " + err.message);
-      console.error(err);
+      setErrors({ network: err.message });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -119,6 +137,18 @@ const Signup = () => {
         encType="multipart/form-data"
         className="signup-form"
       >
+        
+        {errors && (
+          <div className="signup-error-box">
+            {Object.entries(errors).map(([key, value]) => (
+              <p key={key}>
+                <strong>{key}:</strong>{" "}
+                {Array.isArray(value) ? value.join(", ") : value}
+              </p>
+            ))}
+          </div>
+        )}
+
         {/* ===== Role Section ===== */}
         <div className="signup-role-wrapper">
           <div className="signup-role-select">
@@ -138,71 +168,59 @@ const Signup = () => {
           </div>
 
           
+          {role === "transitor" && (
+            <div className="signup-role-fields">
+              <label>Upload Your Transitor License</label>
+              <input type="file" name="transitor_license" onChange={handleChange} required />
+              <input type="text" name="job_title" placeholder="Job Title" onChange={handleChange} required />
+              <input type="file" name="business_card" onChange={handleChange} required />
+              <input type="file" name="company_id_card" onChange={handleChange} />
+              <input type="text" name="tin_vat_number" placeholder="TIN/VAT Number" onChange={handleChange} required />
+            </div>
+          )}
+
+          {role === "instructor" && (
+            <div className="signup-role-fields">
+              <input type="text" name="job_title" placeholder="Job Title" onChange={handleChange} required />
+              <input type="file" name="certificate" onChange={handleChange} required />
+              <input type="number" name="years_of_experience" placeholder="Years of Experience" onChange={handleChange} required />
+              <input type="text" name="course_title" placeholder="Course Title" onChange={handleChange} required />
+            </div>
+          )}
+
+          {role === "tax_worker" && (
+            <div className="signup-role-fields">
+              <input type="text" name="job_title" placeholder="Job Title" onChange={handleChange} required />
+              <input type="text" name="organization_name" placeholder="Organization Name" onChange={handleChange} required />
+              <input type="email" name="work_email" placeholder="Work Email" onChange={handleChange} required />
+              <input type="file" name="company_id_card" onChange={handleChange} required />
+              <input type="text" name="phone_number" placeholder="Phone Number" onChange={handleChange} />
+              <input type="number" name="years_of_experience" placeholder="Years of Experience" onChange={handleChange} required />
+              <input type="text" name="location" placeholder="Location" onChange={handleChange} required />
+            </div>
+          )}
         </div>
 
-        {/* ===== Photo Upload ===== */}
+        {/* ===== Photo ===== */}
         <div className="signup-photo-upload">
-          <label className="signup-photo-label">Your Photo:</label>
-          <input
-            className="signup-input-file"
-            type="file"
-            name="photo"
-            onChange={handleChange}
-          />
+          <label>Your Photo:</label>
+          <input type="file" name="photo" onChange={handleChange} />
         </div>
 
-        {/* ===== User Info Fields ===== */}
+        {/* ===== User Info ===== */}
         <div className="signup-wrapper">
-          <small className="field-info">Don't use space</small>
-          <input
-            className="signup-name"
-            type="text"
-            name="username"
-            placeholder="FullName"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="signup-email"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="signup-pass"
-            type="password"
-            name="password1"
-            placeholder="Password"
-            value={formData.password1}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className="signup-pass"
-            type="password"
-            name="password2"
-            placeholder="Confirm Password"
-            value={formData.password2}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="username" placeholder="Full Name" value={formData.username} onChange={handleChange} required />
+          <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+          <input type="password" name="password1" placeholder="Password" value={formData.password1} onChange={handleChange} required />
+          <input type="password" name="password2" placeholder="Confirm Password" value={formData.password2} onChange={handleChange} required />
 
-          <div className="signup-button-container">
-            <button className="signup-button" type="submit">
-              Sign Up
-            </button>
-          </div>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Signing up..." : "Sign Up"}
+          </button>
 
-          <br />
-          <div className="signnn">
-            <p>
-              If you have Account <Link to="/Signin">Signin</Link>
-            </p>
-          </div>
+          <p>
+            If you have an account <Link to="/Signin">Signin</Link>
+          </p>
         </div>
       </form>
     </div>
