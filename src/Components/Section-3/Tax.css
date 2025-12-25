@@ -1,0 +1,103 @@
+/* Page background */
+.taxPage {
+  background: #f0f4f8; /* soft light background */
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  padding: 40px 20px;
+}
+
+/* Intro Section */
+.taxIntro {
+  max-width: 900px;
+  margin: 0 auto 50px auto;
+  text-align: center;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.taxIntro h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #1a237e;
+}
+
+.taxIntro p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.taxIntro h2 {
+  margin-top: 20px;
+  font-size: 1.8rem;
+  color: #ff6f00;
+}
+
+.taxIntro ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  max-width: 700px;
+  margin: 20px auto 0 auto;
+}
+
+.taxIntro li {
+  background: #e3f2fd;
+  margin-bottom: 12px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Connect Section */
+.taxConnectSection {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.taxConnectSection h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #1a237e;
+}
+
+.taxConnectSection p {
+  font-size: 1.05rem;
+  margin-bottom: 25px;
+}
+
+/* Connect Button */
+.connectButton {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #ff6f00;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none; /* removes underline */
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.connectButton:hover {
+  background-color: #ff8f00;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .taxIntro, .taxConnectSection {
+    width: 95%;
+    padding: 20px;
+  }
+}

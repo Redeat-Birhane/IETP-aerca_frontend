@@ -40,3 +40,11 @@
   color: #0071e3;
   border-color: #0071e3;
 }
+.no-underline3 {
+  text-decoration: none;   /* removes underline */
+  color: inherit;           /* keeps text same color as surrounding text */
+}
+
+.no-underline3:hover {
+  text-decoration: none;    /* make sure hover doesn't add underline */
+}

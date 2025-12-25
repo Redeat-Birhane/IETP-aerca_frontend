@@ -5,6 +5,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
+
+
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import Section1 from "./Components/Section-1/section1";
@@ -20,6 +22,9 @@ import Signup from "./Components/Signpage/signup";
 import Profile from "./Components/Signpage/Profile";
 import Coursespage from "./Components/Section-2/Course.js";
 import TaxWorkers from "./Components/Pages/Tax-Workers/Taxworkers.js";
+import Taxconnect from "./Components/Section-3/Tax.js";
+import Lawpost from "./Components/Section-4/Lawpost.js";
+import Transistorconnect from "./Components/Section-4/Transitorconnect.js";
 import Law from "./Components/Pages/Law&Authority/Law.js";
 import Overview from "./Components/Pages/Geez-Assistant/overview";
 import Teckspec from "./Components/Pages/Geez-Assistant/teckspec";
@@ -59,6 +64,9 @@ function Layout() {
         <Route path="/Signup" element={<Signup />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="/Coursespage" element={<Coursespage />} />
+        <Route path="/Taxconnect" element={<Taxconnect />} />
+        <Route path="/Lawpost" element={<Lawpost />} />
+        <Route path="/Transistorconnect" element={<Transistorconnect />} />
         <Route path="/Overview" element={<Overview />} />
         <Route path="/Teckspec" element={<Teckspec />} />
         <Route path="/TaxWorkers" element={<TaxWorkers />} />
