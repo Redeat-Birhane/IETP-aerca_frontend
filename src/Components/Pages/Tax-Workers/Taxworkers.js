@@ -28,48 +28,62 @@ export default function TaxWorkers() {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_BASE}/users/tax_workers/`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then(async (res) => {
-        if (res.status === 403 || res.status === 401) {
-          navigate("/Signin");
-          return;
-        }
-        if (!res.ok) throw new Error("Failed to fetch tax workers");
-
-        const data = await res.json();
-        const currentUserEmail = getCookie("user_email"); 
-
-        const mappedWorkers = (data.tax_workers || [])
-          .filter(
-            (w) =>
-              w.email !== currentUserEmail && !w.is_current_user 
-          )
-          .map((w) => ({
-            username: w.username,
-            email: w.email,
-            job_title: w.job_title,
-            organization_name: w.organization_name,
-            work_email: w.work_email,
-            phone_number: w.phone_number,
-            location: w.location,
-            photo: w.photo,
-            clients_served: w.clients_served,
-            rating: w.rating,
-            years_of_experience: w.years_of_experience,
-            fee: w.fee,
-          }));
-
-        setWorkers(mappedWorkers);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching tax workers:", err);
-        navigate("/Signin");
+  const fetchProfileAndWorkers = async () => {
+    try {
+      const profileRes = await fetch(`${API_BASE}/users/profile/`, {
+        method: "GET",
+        credentials: "include",
       });
-  }, [navigate]);
+
+      if (profileRes.status === 403 || profileRes.status === 401) {
+        navigate("/Signin");
+        return;
+      }
+      if (!profileRes.ok) throw new Error("Failed to fetch profile");
+
+      const profileData = await profileRes.json();
+      const currentUserRole = profileData.role; 
+      const res = await fetch(`${API_BASE}/users/tax_workers/`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (res.status === 403 || res.status === 401) {
+        navigate("/Signin");
+        return;
+      }
+      if (!res.ok) throw new Error("Failed to fetch tax workers");
+
+      const data = await res.json();
+
+      const mappedWorkers = (data.tax_workers || [])
+        .filter((w) => w.role !== currentUserRole) 
+        .map((w) => ({
+          username: w.username,
+          email: w.email,
+          job_title: w.job_title,
+          organization_name: w.organization_name,
+          work_email: w.work_email,
+          phone_number: w.phone_number,
+          location: w.location,
+          photo: w.photo,
+          clients_served: w.clients_served,
+          rating: w.rating,
+          years_of_experience: w.years_of_experience,
+          fee: w.fee,
+        }));
+
+      setWorkers(mappedWorkers);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching tax workers:", err);
+      navigate("/Signin");
+    }
+  };
+
+  fetchProfileAndWorkers();
+}, [navigate]);
+
 
   const handleOpenBox = (email) => {
     setOpenBox(email);
