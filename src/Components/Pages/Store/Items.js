@@ -16,76 +16,106 @@ export default function Items() {
   // New state for filters
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
- const fetchItems = async () => {
-  try {
-    const res = await fetch(`${API_BASE}/users/items/`, {
-      credentials: "include", // send cookies for backend session auth
-    });
-
-    if (!res.ok) {
-      if (res.status === 401) {
-        setError("You are not authenticated. Please log in.");
-        navigate("/Signin", { state: { from: location.pathname } });
-        return;
-      }
-      throw new Error("Failed to fetch items");
-    }
-
-    const data = await res.json();
-    setItems(data);
-  } catch (err) {
-    console.error(err);
-    setError("Failed to fetch items");
-  }
-};
-
-useEffect(() => {
-  const isAuth = localStorage.getItem("isAuthenticated");
-  if (!isAuth) {
-    navigate("/Signin", { state: { from: location.pathname } });
-    return;
-  }
-  fetchItems();
-}, [navigate, location]);
-
-// Update items when filters change
-useEffect(() => {
-  if (!loading) fetchItems();
-}, [sizeFilter, enhancementFilter]);
-
-
-  // In Items.js, update the addToCartHandler function:
-const addToCartHandler = async (item) => {
-  try {
-    const res = await fetch(`${API_BASE}/users/add/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ item_id: item.id, quantity: 1 }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      addItem({ 
-        id: item.id, 
-        quantity: 1, 
-        name: item.name, 
-        price: item.price, 
-        photo: item.photo,
-        location: item.location,
-        size: item.size,
-        enhancement: item.enhancement
+  
+  const fetchItems = async () => {
+    setLoading(true); // Reset loading when starting fetch
+    setError("");
+    
+    try {
+      // Build query parameters for filters
+      const params = new URLSearchParams();
+      if (sizeFilter) params.append('size', sizeFilter);
+      if (enhancementFilter) params.append('enhancement', enhancementFilter);
+      
+      const queryString = params.toString();
+      const url = queryString 
+        ? `${API_BASE}/users/items/?${queryString}`
+        : `${API_BASE}/users/items/`;
+      
+      const res = await fetch(url, {
+        credentials: "include",
       });
-      alert(data.message || "Unit added to deployment");
-    } else {
-      alert(data.message || "Failed to add unit");
-    }
-  } catch (err) {
-    alert("Network error");
-  }
-};
 
-  if (loading) return <div className="item-container">✨ Loading System Data...</div>;
+      if (!res.ok) {
+        if (res.status === 401) {
+          setError("You are not authenticated. Please log in.");
+          navigate("/Signin", { state: { from: location.pathname } });
+          setLoading(false);
+          return;
+        }
+        throw new Error(`Failed to fetch items: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setItems(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError(err.message || "Failed to fetch items");
+    } finally {
+      setLoading(false); // Always set loading to false
+    }
+  };
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem("isAuthenticated");
+    if (!isAuth) {
+      navigate("/Signin", { state: { from: location.pathname } });
+      return;
+    }
+    fetchItems();
+  }, [navigate, location]);
+
+  // Update items when filters change (with debounce to prevent too many requests)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!loading) fetchItems();
+    }, 300); // Debounce for 300ms
+
+    return () => clearTimeout(timer);
+  }, [sizeFilter, enhancementFilter]);
+
+  const addToCartHandler = async (item) => {
+    try {
+      const res = await fetch(`${API_BASE}/users/add/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        addItem({ 
+          id: item.id, 
+          quantity: 1, 
+          name: item.name, 
+          price: item.price, 
+          photo: item.photo,
+          location: item.location,
+          size: item.size,
+          enhancement: item.enhancement
+        });
+        alert(data.message || "Unit added to deployment");
+      } else {
+        alert(data.message || "Failed to add unit");
+      }
+    } catch (err) {
+      alert("Network error");
+    }
+  };
+
+  // Add a loading spinner with timeout warning
+  if (loading) {
+    return (
+      <div className="item-container">
+        <div className="loading-spinner">✨ Loading System Data...</div>
+        <div className="loading-subtext">
+          This is taking longer than expected. Please check your connection.
+        </div>
+      </div>
+    );
+  }
+  
   if (error) return <div className="item-container error-text">{error}</div>;
 
   return (
@@ -109,6 +139,15 @@ const addToCartHandler = async (item) => {
           onChange={(e) => setEnhancementFilter(e.target.value)}
           className="item-filter-input"
         />
+        <button 
+          onClick={() => {
+            setSizeFilter("");
+            setEnhancementFilter("");
+          }}
+          className="item-filter-clear"
+        >
+          Clear Filters
+        </button>
       </div>
 
       <div className="item-stats-wrapper">
@@ -119,7 +158,9 @@ const addToCartHandler = async (item) => {
 
       <div className="item-grid">
         {items.length === 0 ? (
-          <p className="no-results">No technical assets found.</p>
+          <p className="no-results">
+            No technical assets found. {sizeFilter || enhancementFilter ? "Try different filters." : ""}
+          </p>
         ) : (
           items.map((it) => (
             <div className="item-card" key={it.id}>
