@@ -174,9 +174,9 @@ export default function Header() {
 
         {/* Search */}
         <li style={{ position: "relative" }}>
-          <a onClick={() => navigate("/Search")}>
-            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
-          </a>
+           <button className="header-btn" onClick={() => navigate("/Search")}>
+    Search
+  </button>
           <div className="Vision_dropdown">
             <div className="Vision_one">
               <Link to="/Search">
