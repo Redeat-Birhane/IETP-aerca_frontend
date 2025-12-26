@@ -21,6 +21,10 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
+    // Optimistic UI: remove item immediately
+    const previousItems = [...cartItems];
+    setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
+
     try {
       const res = await fetch(`${API_BASE}/users/remove/`, {
         method: "POST",
@@ -32,12 +36,13 @@ export const CartProvider = ({ children }) => {
       const data = await res.json();
 
       if (!res.ok) {
+        // Restore previous state if backend fails
+        setCartItems(previousItems);
         throw new Error(data.message || "Failed to remove item");
       }
-
-      // Remove from frontend only after backend confirms deletion
-      setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
     } catch (err) {
+      // Restore previous state on network or other errors
+      setCartItems(previousItems);
       alert(err.message || "Failed to remove item. Please try again.");
     }
   };
