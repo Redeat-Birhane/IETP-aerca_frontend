@@ -407,7 +407,7 @@ export default function Search() {
           return (
             <div className="result-card" key={idx}>
               <div className="result-header">
-                <div className="item-card-header">
+                
                 <img
     src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"}
     alt={displayName}
@@ -416,7 +416,7 @@ export default function Search() {
       e.target.onerror = null;
       e.target.src = "/fallback.png";
     }}
-  /></div>
+  />
 
                 <div className="result-header-info">
                   <h3>{displayName}</h3>
