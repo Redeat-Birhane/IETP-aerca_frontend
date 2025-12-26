@@ -418,7 +418,13 @@ export default function Search() {
     }}
   />
 
-                <div className="result-header-info">
+                
+              </div>
+
+              <div className="result-body">
+                {category === "store" ? (
+                  <>
+                  <div className="result-header-info">
                   <h3>{displayName}</h3>
                   <p className="result-sub-text">
                     {item.job_title || item.location || "Verified Member"}
@@ -430,11 +436,6 @@ export default function Search() {
                     </div>
                   )}
                 </div>
-              </div>
-
-              <div className="result-body">
-                {category === "store" ? (
-                  <>
                     <div className="info-row">
                       <span className="label">Price:</span>
                       <span className="val price-text">${item.price}</span>
