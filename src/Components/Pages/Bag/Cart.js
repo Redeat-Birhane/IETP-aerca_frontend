@@ -1,194 +1,86 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../../context/CartContext";
-import "./Cart.css";
+import React, { createContext, useState, useEffect } from "react";
 
+export const CartContext = createContext();
 const API_BASE = process.env.REACT_APP_API_BASE;
 
-function Cart() {
-  const { cartItems, setCartItems, removeItem } = useContext(CartContext);
-  const [expandedId, setExpandedId] = useState(null);
-  const [deliveryLocation, setDeliveryLocation] = useState("");
-  const [receipt, setReceipt] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
 
-  const handleCheckout = async (e, itemId) => {
-    e.preventDefault();
-    const isAuth = localStorage.getItem("isAuthenticated");
-    if (!isAuth) return navigate("/Signin");
+  // Fetch cart items when app loads
+  useEffect(() => {
+    fetch(`${API_BASE}/users/view/`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => setCartItems(data.cart_items || []))
+      .catch(() => setCartItems([]));
+  }, []);
 
-    if (!receipt) return alert("Please select a receipt file");
-
-    const form = new FormData();
-    form.append("receipt", receipt);
-    if (deliveryLocation) form.append("delivery_location", deliveryLocation);
-
-    setSubmitting(true);
-    try {
-      const res = await fetch(`${API_BASE}/users/checkout/`, {
-        method: "POST",
-        credentials: "include",
-        body: form,
-      });
-      const data = await res.json();
-      if (res.ok) {
-        alert(data.message || "Cart checked out successfully");
-        setCartItems((prev) => prev.filter((c) => c.id !== itemId));
-      } else alert(data.message || "Checkout failed");
-    } catch {
-      alert("Network error");
-    } finally {
-      setSubmitting(false);
-    }
+  const addItem = (item) => {
+    setCartItems((prev) => [...prev, item]);
   };
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="cart-empty-container">
-        <div className="cart-loading">Your cart is empty 🛒</div>
-        <button className="btn-go-store" onClick={() => navigate("/items")}>
-          Go to Store
-        </button>
-      </div>
-    );
-  }
+  const removeItem = async (cart_item_id) => {
+    // Debug logging start
+    console.log("🔍 === REMOVE ITEM DEBUG START ===");
+    console.log("📦 Current cart items:", cartItems);
+    console.log("🎯 Item ID to remove:", cart_item_id);
+    console.log("🔢 Type of ID:", typeof cart_item_id);
+    console.log("🌐 API_BASE:", API_BASE);
+    
+    const fullUrl = `${API_BASE}/users/remove/`;
+    console.log("📍 Full URL being called:", fullUrl);
+    
+    // Find the item being removed
+    const itemBeingRemoved = cartItems.find(item => item.id === cart_item_id);
+    console.log("📝 Item details being removed:", itemBeingRemoved);
+    // Debug logging end
+
+    // Optimistic UI: remove item immediately
+    const previousItems = [...cartItems];
+    setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
+
+    try {
+      const res = await fetch(`${API_BASE}/users/remove/`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart_item_id }),
+      });
+
+      // Debug logging for response
+      console.log("📥 Response received!");
+      console.log("✅ Response URL:", res.url);
+      console.log("🔢 Response status:", res.status);
+      console.log("📋 Response status text:", res.statusText);
+      
+      const data = await res.json();
+      console.log("📊 Response data:", data);
+
+      if (!res.ok) {
+        // Restore previous state if backend fails
+        setCartItems(previousItems);
+        throw new Error(data.message || "Failed to remove item");
+      }
+      
+      console.log("🎉 Success! Item removed from backend");
+    } catch (err) {
+      console.error("💥 Error in removeItem:", err);
+      // Restore previous state on network or other errors
+      setCartItems(previousItems);
+      alert(err.message || "Failed to remove item. Please try again.");
+    }
+    
+    console.log("🔍 === REMOVE ITEM DEBUG END ===");
+  };
+
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="cart-page">
-      <h1 className="cart-title">Cart Items</h1>
-      <p className="cart-subtitle">
-        Connect with professionals who manage and verify tax payment records.
-      </p>
-
-      <div className="cart-grid">
-        {cartItems.map((c) => (
-          <div
-            className={`cart-item-card ${expandedId === c.id ? "expanded" : ""}`}
-            key={c.id}
-            onClick={() =>
-              setExpandedId(expandedId === c.id ? null : c.id)
-            }
-          >
-            {/* FULL WIDTH TOP PHOTO */}
-            <div className="cart-photo-container">
-              {c.photo ? (
-                <img
-                  src={`${API_BASE}${c.photo}`}
-                  alt={c.name}
-                  className="item-card-image"
-                  onError={(e) => {
-                    // Apply the same style from Items.js
-                    e.target.onerror = null;
-                    e.target.src = "/fallback.png";
-                  }}
-                />
-              ) : (
-                // For items without photo, use the same style as Items.js
-                <div className="cart-photo-fallback-rect">
-                  NO IMAGE
-                </div>
-              )}
-            </div>
-
-            <div className="cart-content-wrapper">
-              <div className="cart-item-header-info">
-                <h2>{c.name}</h2>
-                <p className="cart-price-text">Price: ${c.price}</p>
-              </div>
-
-              <div className="cart-item-body-content">
-                <div className="info-row">
-                  <span className="info-label">Quantity:</span>
-                  <span className="info-value">{c.quantity}</span>
-                </div>
-
-                <div className="info-row">
-                  <span className="info-label">Status:</span>
-                  <span className="info-value">Pending Checkout</span>
-                </div>
-
-                {c.location && (
-                  <div className="info-row">
-                    <span className="info-label">Location:</span>
-                    <span className="info-value">{c.location}</span>
-                  </div>
-                )}
-
-                {c.size && (
-                  <div className="info-row">
-                    <span className="info-label">Size:</span>
-                    <span className="info-value">{c.size}</span>
-                  </div>
-                )}
-
-                {c.enhancement && (
-                  <div className="info-row">
-                    <span className="info-label">Enhancement:</span>
-                    <span className="info-value">{c.enhancement}</span>
-                  </div>
-                )}
-              </div>
-
-              {expandedId === c.id ? (
-                <div
-                  className="cart-expanded-area"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <form
-                    className="checkout-form"
-                    onSubmit={(e) => handleCheckout(e, c.id)}
-                  >
-                    <label>
-                      Receipt (required):
-                      <input
-                        type="file"
-                        accept="image/*,application/pdf"
-                        onChange={(e) => setReceipt(e.target.files[0])}
-                      />
-                    </label>
-
-                    <label>
-                      Delivery location (optional):
-                      <input
-                        type="text"
-                        placeholder="Enter address..."
-                        value={deliveryLocation}
-                        onChange={(e) =>
-                          setDeliveryLocation(e.target.value)
-                        }
-                      />
-                    </label>
-
-                    <div className="cart-actions-row">
-                      <button
-                        type="submit"
-                        className="btn-submit"
-                        disabled={submitting}
-                      >
-                        {submitting ? "..." : "Checkout"}
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-remove"
-                        onClick={() => removeItem(c.id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              ) : (
-                <div className="cart-tap-prompt">
-                  <span>📎 Add paid receipt & checkout</span>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <CartContext.Provider
+      value={{ cartItems, setCartItems, addItem, removeItem, totalItems }}
+    >
+      {children}
+    </CartContext.Provider>
   );
-}
-
-export default Cart;
+};
