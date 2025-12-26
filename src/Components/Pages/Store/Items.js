@@ -13,20 +13,42 @@ export default function Items() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 🔹 Check authentication on page load
+  // New state for filters
+  const [sizeFilter, setSizeFilter] = useState("");
+  const [enhancementFilter, setEnhancementFilter] = useState("");
+
+  // 🔹 Fetch function with filters
+  const fetchItems = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      let url = `${API_BASE}/users/search/?category=store`;
+      if (sizeFilter) url += `&size=${encodeURIComponent(sizeFilter)}`;
+      if (enhancementFilter) url += `&enhancement=${encodeURIComponent(enhancementFilter)}`;
+
+      const res = await fetch(url, { credentials: "include" });
+      const data = await res.json();
+      setItems(data.results || []);
+    } catch (err) {
+      setError("Failed to synchronize inventory");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
     if (!isAuth) {
       navigate("/Signin", { state: { from: location.pathname } });
       return;
     }
-
-    fetch(`${API_BASE}/users/items/`, { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => setItems(data.store_items || []))
-      .catch(() => setError("Failed to synchronize inventory"))
-      .finally(() => setLoading(false));
+    fetchItems();
   }, [navigate, location]);
+
+  // Update items when filters change
+  useEffect(() => {
+    fetchItems();
+  }, [sizeFilter, enhancementFilter]);
 
   const addToCartHandler = async (item) => {
     try {
@@ -56,6 +78,24 @@ export default function Items() {
     <div className="item-container">
       <h1 className="item-title">Technical Inventory</h1>
       <p className="item-subtitle">High-performance hardware optimized for mission-critical fieldwork.</p>
+
+      {/* Filter Panel */}
+      <div className="item-filter-panel">
+        <input
+          type="text"
+          placeholder="Filter by Size"
+          value={sizeFilter}
+          onChange={(e) => setSizeFilter(e.target.value)}
+          className="item-filter-input"
+        />
+        <input
+          type="text"
+          placeholder="Filter by Enhancement"
+          value={enhancementFilter}
+          onChange={(e) => setEnhancementFilter(e.target.value)}
+          className="item-filter-input"
+        />
+      </div>
 
       <div className="item-stats-wrapper">
         <div className="item-stat-pill">🔄 Rapid Sync</div>
@@ -95,6 +135,8 @@ export default function Items() {
 
                 <div className="item-card-footer">
                   <span className="item-category-tag">📍 {it.location}</span>
+                  <span className="item-category-tag">📏 {it.size}</span>
+                  <span className="item-category-tag">✨ {it.enhancement}</span>
                   <button className="item-action-btn" onClick={() => addToCartHandler(it)}>
                     Add to cart
                   </button>
