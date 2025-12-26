@@ -49,25 +49,6 @@ export default function Items() {
     }
   };
 
-  // Handle image error
-  const handleImageError = (e) => {
-    e.target.style.display = 'none';
-    
-    // Check if fallback container exists
-    const cardHeader = e.target.parentElement;
-    const fallbackContainer = cardHeader.querySelector('.item-no-photo');
-    
-    if (!fallbackContainer) {
-      // Create fallback if it doesn't exist
-      const fallbackDiv = document.createElement('div');
-      fallbackDiv.className = 'item-no-photo';
-      fallbackDiv.textContent = 'NO IMAGE';
-      cardHeader.appendChild(fallbackDiv);
-    } else {
-      fallbackContainer.style.display = 'flex';
-    }
-  };
-
   if (loading) return <div className="item-container">✨ Loading System Data...</div>;
   if (error) return <div className="item-container error-text">{error}</div>;
 
@@ -90,21 +71,17 @@ export default function Items() {
             <div className="item-card" key={it.id}>
               <div className="item-card-header">
                 {it.photo ? (
-                  <>
-                    <img
-                      src={`${API_BASE}${it.photo}`}
-                      alt={it.name}
-                      className="item-card-image"
-                      onError={handleImageError}
-                    />
-                    <div className="item-no-photo" style={{ display: 'none' }}>
-                      NO IMAGE
-                    </div>
-                  </>
+                  <img
+                    src={`${API_BASE}${it.photo}`}
+                    alt={it.name}
+                    className="item-card-image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/fallback.png";
+                    }}
+                  />
                 ) : (
-                  <div className="item-no-photo">
-                    NO IMAGE
-                  </div>
+                  <div className="item-no-photo">NO IMAGE</div>
                 )}
               </div>
 
