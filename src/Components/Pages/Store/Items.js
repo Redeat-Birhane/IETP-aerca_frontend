@@ -8,7 +8,7 @@ const API_BASE = process.env.REACT_APP_API_BASE;
 export default function Items() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { addItem } = useContext(CartContext); // ✅ Inside component
+  const { addItem } = useContext(CartContext); 
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

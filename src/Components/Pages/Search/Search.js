@@ -12,12 +12,14 @@ const CATEGORY_ENDPOINTS = {
 
 export default function Search() {
   const [category, setCategory] = useState("instructors");
-  const [filter, setFilter] = useState(""); 
+  const [filter, setFilter] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
 
-  
+  /* ---------------------------------------------
+     FETCH FILTER OPTIONS BASED ON CATEGORY
+  ----------------------------------------------*/
   useEffect(() => {
     setFilter("");
     setResults([]);
@@ -29,25 +31,23 @@ export default function Search() {
         if (!endpoint) return;
 
         const res = await fetch(`${API_BASE}${endpoint}`, {
-          method: "GET",
           credentials: "include",
         });
-        if (!res.ok) throw new Error("Failed to fetch options");
 
+        if (!res.ok) throw new Error("Failed to fetch options");
         const data = await res.json();
 
+        /* STORE → PRICE RANGES (NUMBERS ONLY) */
         if (category === "store") {
-          
-          const ranges = [
-            { label: "0 - 100", value: 100.0 },
-            { label: "100 - 500", value: 500.0 },
-            { label: "500 - 1000", value: 1000.0 },
-          ];
-          setOptions(ranges);
+          setOptions([
+            { label: "0 - 100", value: 100 },
+            { label: "100 - 500", value: 500 },
+            { label: "500 - 1000", value: 1000 },
+          ]);
           return;
         }
 
-        
+        /* OTHER CATEGORIES → JOB TITLES */
         const list =
           data.instructors ||
           data.tax_workers ||
@@ -58,12 +58,12 @@ export default function Search() {
           ...new Set(list.map((u) => u.job_title).filter(Boolean)),
         ];
 
-        const mapped = uniqueTitles.map((title, index) => ({
-          label: title,
-          value: title, 
-        }));
-
-        setOptions(mapped);
+        setOptions(
+          uniqueTitles.map((title) => ({
+            label: title,
+            value: title,
+          }))
+        );
       } catch (err) {
         console.error("Option fetch error:", err);
         setOptions([]);
@@ -73,6 +73,9 @@ export default function Search() {
     fetchOptions();
   }, [category]);
 
+  /* ---------------------------------------------
+     SEARCH HANDLER
+  ----------------------------------------------*/
   const handleSearch = async () => {
     if (filter === "") {
       alert("Please select a role or price range.");
@@ -86,9 +89,7 @@ export default function Search() {
       )}`;
 
       const res = await fetch(url, {
-        method: "GET",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
       });
 
       const data = await res.json();
@@ -103,6 +104,9 @@ export default function Search() {
     }
   };
 
+  /* ---------------------------------------------
+     UI
+  ----------------------------------------------*/
   return (
     <div className="search-container">
       <h1 className="search-title">Global Search</h1>
@@ -112,10 +116,7 @@ export default function Search() {
 
       <div className="search-box-wrapper">
         <div className="search-controls">
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="instructors">Instructors</option>
             <option value="tax_workers">Tax Workers</option>
             <option value="transitors">Transitors</option>
@@ -131,7 +132,9 @@ export default function Search() {
             }
           >
             <option value="">
-              {category === "store" ? "Select Price Range" : "Select Role"}
+              {category === "store"
+                ? "Select Price Range"
+                : "Select Role"}
             </option>
 
             {options.map((opt) => (
@@ -174,7 +177,9 @@ export default function Search() {
                   <>
                     <div className="info-row">
                       <span className="label">Price:</span>
-                      <span className="val price-text">${item.price}</span>
+                      <span className="val price-text">
+                        ${Number(item.price)}
+                      </span>
                     </div>
                     <p className="desc-text">{item.description}</p>
                   </>
