@@ -27,7 +27,7 @@ function getCookie(name) {
 
 export default function Search() {
   const [category, setCategory] = useState("instructors");
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState(""); 
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -36,13 +36,6 @@ export default function Search() {
   const [openBox, setOpenBox] = useState(null);
   const [messageText, setMessageText] = useState("");
   const [file, setFile] = useState(null);
-
-  // Store-specific filters
-  const [sizeFilter, setSizeFilter] = useState("");
-  const [enhancementFilter, setEnhancementFilter] = useState("");
-  const [priceOptions, setPriceOptions] = useState([]);
-  const [sizeOptions, setSizeOptions] = useState([]);
-  const [enhancementOptions, setEnhancementOptions] = useState([]);
 
   const userEmail = localStorage.getItem("userEmail");
   const STORAGE_KEY = userEmail ? `transitorRequests_${userEmail}` : null;
@@ -59,20 +52,29 @@ export default function Search() {
         if (res.ok) {
           const data = await res.json();
           setPurchasedCourses(data.purchased_courses || []);
-
+          
+          // Initialize connection requests from profile data
           const initialConnections = {};
           (data.sent_requests || []).forEach((req) => {
-            if (req.connected) initialConnections[req.transitor_email] = "connected";
-            else if (req.status === "pending") initialConnections[req.transitor_email] = "pending";
+            if (req.connected) {
+              initialConnections[req.transitor_email] = "connected";
+            } else if (req.status === "pending") {
+              initialConnections[req.transitor_email] = "pending";
+            }
           });
-
+          
+          // Load persisted state
           if (STORAGE_KEY) {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
               const storedData = JSON.parse(stored);
-              setConnectionRequests({ ...initialConnections, ...storedData });
-            } else setConnectionRequests(initialConnections);
-          } else setConnectionRequests(initialConnections);
+              setConnectionRequests({...initialConnections, ...storedData});
+            } else {
+              setConnectionRequests(initialConnections);
+            }
+          } else {
+            setConnectionRequests(initialConnections);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch profile:", err);
@@ -82,9 +84,12 @@ export default function Search() {
     fetchProfileData();
   }, [STORAGE_KEY]);
 
+  // Persist connection requests
   const persistConnections = (data) => {
     setConnectionRequests(data);
-    if (STORAGE_KEY) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if (STORAGE_KEY) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
   };
 
   // Fetch filter options
@@ -92,9 +97,6 @@ export default function Search() {
     setFilter("");
     setResults([]);
     setOptions([]);
-    setPriceOptions([]);
-    setSizeOptions([]);
-    setEnhancementOptions([]);
 
     const fetchOptions = async () => {
       try {
@@ -110,22 +112,32 @@ export default function Search() {
         const data = await res.json();
 
         if (category === "store") {
-          const itemsList = data.items || [];
-
-          // Extract unique prices, sizes, enhancements dynamically
-          const prices = [...new Set(itemsList.map((i) => i.price).filter(Boolean))].sort((a, b) => a - b);
-          const sizes = [...new Set(itemsList.map((i) => i.size).filter(Boolean))];
-          const enhancements = [...new Set(itemsList.map((i) => i.enhancement).filter(Boolean))];
-
-          setPriceOptions(prices);
-          setSizeOptions(sizes);
-          setEnhancementOptions(enhancements);
+          // Price ranges for store items
+          const ranges = [
+            { label: "0 - 100", value: 100.0 },
+            { label: "100 - 500", value: 500.0 },
+            { label: "500 - 1000", value: 1000.0 },
+          ];
+          setOptions(ranges);
           return;
         }
 
-        const list = data.instructors || data.tax_workers || data.transitors || [];
-        const uniqueTitles = [...new Set(list.map((u) => u.job_title).filter(Boolean))];
-        const mapped = uniqueTitles.map((title) => ({ label: title, value: title }));
+        // Job titles for other categories
+        const list =
+          data.instructors ||
+          data.tax_workers ||
+          data.transitors ||
+          [];
+
+        const uniqueTitles = [
+          ...new Set(list.map((u) => u.job_title).filter(Boolean)),
+        ];
+
+        const mapped = uniqueTitles.map((title, index) => ({
+          label: title,
+          value: title, 
+        }));
+
         setOptions(mapped);
       } catch (err) {
         console.error("Option fetch error:", err);
@@ -136,7 +148,7 @@ export default function Search() {
     fetchOptions();
   }, [category]);
 
-  // Add to cart for store items
+  // Add item to cart functionality (for store items)
   const addToCartHandler = async (item) => {
     try {
       const res = await fetch(`${API_BASE}/users/add/`, {
@@ -145,21 +157,29 @@ export default function Search() {
         credentials: "include",
         body: JSON.stringify({ item_id: item.id, quantity: 1 }),
       });
+
       const data = await res.json();
-      alert(res.ok ? data.message || "Item added to cart" : data.message || "Failed to add item");
-    } catch {
+      if (res.ok) {
+        alert(data.message || "Item added to cart");
+      } else {
+        alert(data.message || "Failed to add item");
+      }
+    } catch (err) {
       alert("Network error");
     }
   };
 
-  // Buy course
+  // Buy course functionality (for instructors)
   const handleBuyCourse = (instructorEmail) => {
-    const alreadyPurchased = purchasedCourses.find((c) => c.instructor_email === instructorEmail);
+    const alreadyPurchased = purchasedCourses.find(
+      (c) => c.instructor_email === instructorEmail
+    );
     if (alreadyPurchased) return alert("You already purchased this course.");
 
     const confirmPayment = window.confirm(
       "To purchase this course, please pay the fixed price of $50 and upload your receipt."
     );
+
     if (!confirmPayment) return;
 
     const input = document.createElement("input");
@@ -179,11 +199,15 @@ export default function Search() {
           credentials: "include",
           body: formData,
         });
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || data.message);
 
         alert("Course purchased successfully!");
-        setPurchasedCourses([...purchasedCourses, { instructor_email: instructorEmail }]);
+        setPurchasedCourses([
+          ...purchasedCourses,
+          { instructor_email: instructorEmail },
+        ]);
       } catch (err) {
         alert(err.message || "Failed to purchase course");
       }
@@ -191,20 +215,22 @@ export default function Search() {
     input.click();
   };
 
-  // Transitor connect
+  // Connect with transitor functionality
   const handleSendRequest = (transitorEmail, transitorId) => {
-    const status = connectionRequests[transitorId];
-    if (status === "pending") return alert("Request already sent.");
-    if (status === "connected") return alert("Already connected.");
+    const currentStatus = connectionRequests[transitorId];
+    if (currentStatus === "pending") return alert("Request already sent.");
+    if (currentStatus === "connected") return alert("Already connected.");
 
     const confirmPayment = window.confirm(
       "To connect with a transitor, you must pay $50 and upload the receipt."
     );
+
     if (!confirmPayment) return;
 
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*,application/pdf";
+
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -219,10 +245,12 @@ export default function Search() {
           credentials: "include",
           body: formData,
         });
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || data.message);
 
-        persistConnections({ ...connectionRequests, [transitorId]: "pending" });
+        const updated = { ...connectionRequests, [transitorId]: "pending" };
+        persistConnections(updated);
         alert("Request sent successfully.");
       } catch (err) {
         alert(err.message || "Failed to send request");
@@ -231,7 +259,7 @@ export default function Search() {
     input.click();
   };
 
-  // Tax worker
+  // Tax worker message box functionality
   const handleOpenBox = (email) => {
     setOpenBox(email);
     setMessageText("");
@@ -239,8 +267,14 @@ export default function Search() {
   };
 
   const handleSubmit = async (workerEmail) => {
-    if (!file) return alert("Please upload your receipt first.");
-    if (!messageText.trim()) return alert("Please type a message.");
+    if (!file) {
+      alert("Please upload your receipt first.");
+      return;
+    }
+    if (!messageText.trim()) {
+      alert("Please type a message.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("tax_worker_email", workerEmail);
@@ -253,9 +287,12 @@ export default function Search() {
       const res = await fetch(`${API_BASE}/users/ask/`, {
         method: "POST",
         credentials: "include",
-        headers: { "X-CSRFToken": csrfToken },
+        headers: {
+          "X-CSRFToken": csrfToken,
+        },
         body: formData,
       });
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error submitting request");
 
@@ -264,28 +301,22 @@ export default function Search() {
       setFile(null);
       setMessageText("");
     } catch (err) {
+      console.error(err);
       alert(err.message);
     }
   };
 
-  // Search
   const handleSearch = async () => {
-    if (filter === "" && category !== "store") {
+    if (filter === "") {
       alert("Please select a role or price range.");
       return;
     }
 
     setLoading(true);
     try {
-      let url = `${API_BASE}/users/search/?category=${category}`;
-
-      if (category === "store") {
-        if (filter) url += `&price=${encodeURIComponent(filter)}`;
-        if (sizeFilter) url += `&size=${encodeURIComponent(sizeFilter)}`;
-        if (enhancementFilter) url += `&enhancement=${encodeURIComponent(enhancementFilter)}`;
-      } else {
-        if (filter) url += `&query=${encodeURIComponent(filter)}`;
-      }
+      const url = `${API_BASE}/users/search/?category=${category}&query=${encodeURIComponent(
+        filter
+      )}`;
 
       const res = await fetch(url, {
         method: "GET",
@@ -305,23 +336,32 @@ export default function Search() {
     }
   };
 
+  // Get button configuration for transitors
   const getButtonConfig = (transitorId) => {
     const status = connectionRequests[transitorId];
     switch (status) {
-      case "connected": return { text: "Connected", disabled: true, className: "connected-btn" };
-      case "pending": return { text: "Pending...", disabled: true, className: "pending-btn" };
-      default: return { text: "Connect", disabled: false, className: "connect-btn" };
+      case "connected":
+        return { text: "Connected", disabled: true, className: "connected-btn" };
+      case "pending":
+        return { text: "Pending...", disabled: true, className: "pending-btn" };
+      default:
+        return { text: "Connect", disabled: false, className: "connect-btn" };
     }
   };
 
   return (
     <div className="search-container">
       <h1 className="search-title">Global Search</h1>
-      <p className="search-subtitle">Find professionals and services across the network.</p>
+      <p className="search-subtitle">
+        Find professionals and services across the network.
+      </p>
 
       <div className="search-box-wrapper">
         <div className="search-controls">
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
             <option value="instructors">Instructors</option>
             <option value="tax_workers">Tax Workers</option>
             <option value="transitors">Transitors</option>
@@ -331,36 +371,27 @@ export default function Search() {
           <select
             value={filter}
             onChange={(e) =>
-              category === "store" ? setFilter(Number(e.target.value)) : setFilter(e.target.value)
+              category === "store"
+                ? setFilter(Number(e.target.value))
+                : setFilter(e.target.value)
             }
           >
             <option value="">
-              {category === "store" ? "Select Price" : "Select Role"}
+              {category === "store" ? "Select Price Range" : "Select Role"}
             </option>
-            {priceOptions.map((price) => (
-              <option key={price} value={price}>${price}</option>
+
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
 
-          {category === "store" && (
-            <>
-              <select value={sizeFilter} onChange={(e) => setSizeFilter(e.target.value)}>
-                <option value="">Select Size</option>
-                {sizeOptions.map((size) => (
-                  <option key={size} value={size}>{size}</option>
-                ))}
-              </select>
-
-              <select value={enhancementFilter} onChange={(e) => setEnhancementFilter(e.target.value)}>
-                <option value="">Select Enhancement</option>
-                {enhancementOptions.map((enh) => (
-                  <option key={enh} value={enh}>{enh}</option>
-                ))}
-              </select>
-            </>
-          )}
-
-          <button className="search-btn" onClick={handleSearch} disabled={loading}>
+          <button
+            className="search-btn"
+            onClick={handleSearch}
+            disabled={loading}
+          >
             {loading ? "..." : "Search"}
           </button>
         </div>
@@ -369,39 +400,53 @@ export default function Search() {
       <div className="results-grid">
         {results.map((item, idx) => {
           const displayName = item.username || item.name || "?";
-          const isPurchased = category === "instructors" &&
-            purchasedCourses.some((c) => c.instructor_email === item.email);
+          const firstLetter = displayName.charAt(0).toUpperCase();
+          const isPurchased = category === "instructors" && 
+            purchasedCourses.some(c => c.instructor_email === item.email);
 
           return (
             <div className="result-card" key={idx}>
               <div className="result-header">
+                
                 <img
-                  src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"}
-                  alt={displayName}
-                  className="item-card-image"
-                  onError={(e) => { e.target.onerror = null; e.target.src = "/fallback.png"; }}
-                />
+    src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"}
+    alt={displayName}
+    className="item-card-image"
+    onError={(e) => {
+      e.target.onerror = null;
+      e.target.src = "/fallback.png";
+    }}
+  />
+
+                
               </div>
 
               <div className="result-body">
                 {category === "store" ? (
                   <>
-                    <h3>{displayName}</h3>
+                  <div className="result-header-info">
+                  <h3>{displayName}</h3>
+                  <p className="result-sub-text">
+                    {item.job_title || item.location || "Verified Member"}
+                  </p>
+                  {item.rating && (
+                    <div className="rating">
+                      {"★".repeat(Math.round(item.rating))}
+                      {"☆".repeat(5 - Math.round(item.rating))}
+                    </div>
+                  )}
+                </div>
                     <div className="info-row">
                       <span className="label">Price:</span>
                       <span className="val price-text">${item.price}</span>
                     </div>
-                    <div className="info-row">
-                      <span className="label">Size:</span>
-                      <span className="val">{item.size || "N/A"}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Enhancement:</span>
-                      <span className="val">{item.enhancement || "N/A"}</span>
-                    </div>
                     <p className="desc-text">{item.description}</p>
+                    
                     <div className="result-actions">
-                      <button className="item-action-btn" onClick={() => addToCartHandler(item)}>
+                      <button 
+                        className="item-action-btn"
+                        onClick={() => addToCartHandler(item)}
+                      >
                         Add to Cart
                       </button>
                     </div>
@@ -420,8 +465,11 @@ export default function Search() {
                     </div>
                     <div className="info-row">
                       <span className="label">Experience:</span>
-                      <span className="val">{item.years_of_experience || 0} yrs</span>
+                      <span className="val">
+                        {item.years_of_experience || 0} yrs
+                      </span>
                     </div>
+                    
                     <div className="result-actions">
                       <button
                         className={`buy-btn ${isPurchased ? "purchased-btn" : ""}`}
@@ -446,6 +494,7 @@ export default function Search() {
                       <span className="label">Experience:</span>
                       <span className="val">{item.years_of_experience || 0} yrs</span>
                     </div>
+                    
                     <div className="result-actions">
                       {(() => {
                         const transitorId = item.email;
@@ -482,17 +531,26 @@ export default function Search() {
                         <span className="val">${item.fee}</span>
                       </div>
                     )}
+                    
                     <div className="result-actions">
                       {openBox === item.email ? (
                         <div className="taxworker-ask-box">
-                          <input type="file" accept="*/*" onChange={(e) => setFile(e.target.files[0])} />
+                          <input
+                            type="file"
+                            accept="*/*"
+                            onChange={(e) => setFile(e.target.files[0])}
+                          />
                           <textarea
                             placeholder="Type your message here..."
                             value={messageText}
                             onChange={(e) => setMessageText(e.target.value)}
                           />
-                          <button className="btn submit-btn" onClick={() => handleSubmit(item.email)}>Submit</button>
-                          <button className="btn cancel-btn" onClick={() => setOpenBox(null)}>Cancel</button>
+                          <button className="btn submit-btn" onClick={() => handleSubmit(item.email)}>
+                            Submit
+                          </button>
+                          <button className="btn cancel-btn" onClick={() => setOpenBox(null)}>
+                            Cancel
+                          </button>
                         </div>
                       ) : (
                         <div className="taxworker-receipt-box" onClick={() => handleOpenBox(item.email)}>
@@ -508,7 +566,9 @@ export default function Search() {
         })}
       </div>
 
-      {results.length === 0 && !loading && <p className="no-results">No results found for this selection.</p>}
+      {results.length === 0 && !loading && (
+        <p className="no-results">No results found for this selection.</p>
+      )}
     </div>
   );
 }

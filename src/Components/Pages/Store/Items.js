@@ -12,8 +12,29 @@ export default function Items() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [sizeFilter, setSizeFilter] = useState(""); // Added
-  const [enhancementFilter, setEnhancementFilter] = useState(""); // Added
+
+  // New state for filters
+  const [sizeFilter, setSizeFilter] = useState("");
+  const [enhancementFilter, setEnhancementFilter] = useState("");
+
+  // 🔹 Fetch function with filters
+  const fetchItems = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      let url = `${API_BASE}/users/search/?category=store`;
+      if (sizeFilter) url += `&size=${encodeURIComponent(sizeFilter)}`;
+      if (enhancementFilter) url += `&enhancement=${encodeURIComponent(enhancementFilter)}`;
+
+      const res = await fetch(url, { credentials: "include" });
+      const data = await res.json();
+      setItems(data.results || []);
+    } catch (err) {
+      setError("Failed to synchronize inventory");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
@@ -24,34 +45,10 @@ export default function Items() {
     fetchItems();
   }, [navigate, location]);
 
+  // Update items when filters change
   useEffect(() => {
     fetchItems();
   }, [sizeFilter, enhancementFilter]);
-
-  const fetchItems = async () => {
-    try {
-      setLoading(true);
-      let url = `${API_BASE}/users/items/?`;
-      if (sizeFilter) url += `size=${encodeURIComponent(sizeFilter)}&`;
-      if (enhancementFilter) url += `enhancement=${encodeURIComponent(enhancementFilter)}`;
-
-      const res = await fetch(url, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to fetch items");
-
-      setItems(data.items || []);
-      setError("");
-    } catch (err) {
-      setError(err.message);
-      setItems([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const addToCartHandler = async (item) => {
     try {
@@ -84,28 +81,20 @@ export default function Items() {
 
       {/* Filter Panel */}
       <div className="item-filter-panel">
-        <div className="item-filter-field">
-          <label htmlFor="size-filter">Filter by Size:</label>
-          <input
-            id="size-filter"
-            type="text"
-            placeholder="e.g., Small, Medium, Large"
-            value={sizeFilter}
-            onChange={(e) => setSizeFilter(e.target.value)}
-            className="item-filter-input"
-          />
-        </div>
-        <div className="item-filter-field">
-          <label htmlFor="enhancement-filter">Filter by Enhancement:</label>
-          <input
-            id="enhancement-filter"
-            type="text"
-            placeholder="e.g., Enhanced, Standard"
-            value={enhancementFilter}
-            onChange={(e) => setEnhancementFilter(e.target.value)}
-            className="item-filter-input"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Filter by Size"
+          value={sizeFilter}
+          onChange={(e) => setSizeFilter(e.target.value)}
+          className="item-filter-input"
+        />
+        <input
+          type="text"
+          placeholder="Filter by Enhancement"
+          value={enhancementFilter}
+          onChange={(e) => setEnhancementFilter(e.target.value)}
+          className="item-filter-input"
+        />
       </div>
 
       <div className="item-stats-wrapper">
