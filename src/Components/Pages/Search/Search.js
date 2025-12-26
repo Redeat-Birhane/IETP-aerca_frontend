@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Search.css";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
@@ -14,8 +15,8 @@ function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== "") {
     const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
       if (cookie.startsWith(name + "=")) {
         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
         break;
@@ -26,8 +27,11 @@ function getCookie(name) {
 }
 
 export default function Search() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [category, setCategory] = useState("instructors");
-  const [filter, setFilter] = useState(""); 
+  const [filter, setFilter] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
@@ -36,67 +40,59 @@ export default function Search() {
   const [openBox, setOpenBox] = useState(null);
   const [messageText, setMessageText] = useState("");
   const [file, setFile] = useState(null);
-
   const userEmail = localStorage.getItem("userEmail");
   const STORAGE_KEY = userEmail ? `transitorRequests_${userEmail}` : null;
 
-  // Load user profile data
+  // Fetch profile and initialize state
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchProfile = async () => {
       try {
         const res = await fetch(`${API_BASE}/users/profile/`, {
           method: "GET",
           credentials: "include",
         });
 
-        if (res.ok) {
-          const data = await res.json();
-          setPurchasedCourses(data.purchased_courses || []);
-          
-          // Initialize connection requests from profile data
-          const initialConnections = {};
-          (data.sent_requests || []).forEach((req) => {
-            if (req.connected) {
-              initialConnections[req.transitor_email] = "connected";
-            } else if (req.status === "pending") {
-              initialConnections[req.transitor_email] = "pending";
-            }
-          });
-          
-          // Load persisted state
-          if (STORAGE_KEY) {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-              const storedData = JSON.parse(stored);
-              setConnectionRequests({...initialConnections, ...storedData});
-            } else {
-              setConnectionRequests(initialConnections);
-            }
-          } else {
-            setConnectionRequests(initialConnections);
-          }
+        if (res.status === 401 || res.status === 403) {
+          navigate("/Signin", { state: { from: location.pathname } });
+          return;
         }
+
+        if (!res.ok) throw new Error("Failed to fetch profile");
+        const data = await res.json();
+        setPurchasedCourses(data.purchased_courses || []);
+
+        // Initialize transitor connection requests
+        const initialConnections = {};
+        (data.sent_requests || []).forEach((req) => {
+          if (req.connected) initialConnections[req.transitor_email] = "connected";
+          else if (req.status === "pending") initialConnections[req.transitor_email] = "pending";
+        });
+
+        if (STORAGE_KEY) {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const storedData = JSON.parse(stored);
+            setConnectionRequests({ ...initialConnections, ...storedData });
+          } else setConnectionRequests(initialConnections);
+        } else setConnectionRequests(initialConnections);
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
+        console.error(err);
+        navigate("/Signin", { state: { from: location.pathname } });
       }
     };
+    fetchProfile();
+  }, [navigate, location.pathname, STORAGE_KEY]);
 
-    fetchProfileData();
-  }, [STORAGE_KEY]);
-
-  // Persist connection requests
   const persistConnections = (data) => {
     setConnectionRequests(data);
-    if (STORAGE_KEY) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
+    if (STORAGE_KEY) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   };
 
   // Fetch filter options
   useEffect(() => {
     setFilter("");
-    setResults([]);
     setOptions([]);
+    setResults([]);
 
     const fetchOptions = async () => {
       try {
@@ -112,35 +108,21 @@ export default function Search() {
         const data = await res.json();
 
         if (category === "store") {
-          // Price ranges for store items
           const ranges = [
-            { label: "0 - 100", value: 100.0 },
-            { label: "100 - 500", value: 500.0 },
-            { label: "500 - 1000", value: 1000.0 },
+            { label: "0 - 100", value: 100 },
+            { label: "100 - 500", value: 500 },
+            { label: "500 - 1000", value: 1000 },
           ];
           setOptions(ranges);
           return;
         }
 
-        // Job titles for other categories
-        const list =
-          data.instructors ||
-          data.tax_workers ||
-          data.transitors ||
-          [];
-
-        const uniqueTitles = [
-          ...new Set(list.map((u) => u.job_title).filter(Boolean)),
-        ];
-
-        const mapped = uniqueTitles.map((title, index) => ({
-          label: title,
-          value: title, 
-        }));
-
+        const list = data[category] || [];
+        const uniqueTitles = [...new Set(list.map((u) => u.job_title).filter(Boolean))];
+        const mapped = uniqueTitles.map((title) => ({ label: title, value: title }));
         setOptions(mapped);
       } catch (err) {
-        console.error("Option fetch error:", err);
+        console.error(err);
         setOptions([]);
       }
     };
@@ -148,38 +130,42 @@ export default function Search() {
     fetchOptions();
   }, [category]);
 
-  // Add item to cart functionality (for store items)
-  const addToCartHandler = async (item) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/add/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
-      });
+  // Search handler
+  const handleSearch = async () => {
+    if (!filter) {
+      alert("Please select a role or price range.");
+      return;
+    }
 
+    setLoading(true);
+    try {
+      const url = `${API_BASE}/users/search/?category=${category}&query=${encodeURIComponent(
+        filter
+      )}`;
+      const res = await fetch(url, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
       const data = await res.json();
-      if (res.ok) {
-        alert(data.message || "Item added to cart");
-      } else {
-        alert(data.message || "Failed to add item");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed to fetch results");
+      setResults(data.results || []);
     } catch (err) {
-      alert("Network error");
+      alert(err.message);
+      setResults([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Buy course functionality (for instructors)
+  // Handle buy course
   const handleBuyCourse = (instructorEmail) => {
-    const alreadyPurchased = purchasedCourses.find(
-      (c) => c.instructor_email === instructorEmail
-    );
+    const alreadyPurchased = purchasedCourses.find((c) => c.instructor_email === instructorEmail);
     if (alreadyPurchased) return alert("You already purchased this course.");
 
     const confirmPayment = window.confirm(
-      "To purchase this course, please pay the fixed price of $50 and upload your receipt."
+      "To purchase this course, please pay $50 and upload your receipt."
     );
-
     if (!confirmPayment) return;
 
     const input = document.createElement("input");
@@ -199,15 +185,10 @@ export default function Search() {
           credentials: "include",
           body: formData,
         });
-
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || data.message);
-
         alert("Course purchased successfully!");
-        setPurchasedCourses([
-          ...purchasedCourses,
-          { instructor_email: instructorEmail },
-        ]);
+        setPurchasedCourses([...purchasedCourses, { instructor_email: instructorEmail }]);
       } catch (err) {
         alert(err.message || "Failed to purchase course");
       }
@@ -215,7 +196,7 @@ export default function Search() {
     input.click();
   };
 
-  // Connect with transitor functionality
+  // Handle transitor connection
   const handleSendRequest = (transitorEmail, transitorId) => {
     const currentStatus = connectionRequests[transitorId];
     if (currentStatus === "pending") return alert("Request already sent.");
@@ -224,13 +205,11 @@ export default function Search() {
     const confirmPayment = window.confirm(
       "To connect with a transitor, you must pay $50 and upload the receipt."
     );
-
     if (!confirmPayment) return;
 
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*,application/pdf";
-
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -245,12 +224,9 @@ export default function Search() {
           credentials: "include",
           body: formData,
         });
-
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || data.message);
-
-        const updated = { ...connectionRequests, [transitorId]: "pending" };
-        persistConnections(updated);
+        persistConnections({ ...connectionRequests, [transitorId]: "pending" });
         alert("Request sent successfully.");
       } catch (err) {
         alert(err.message || "Failed to send request");
@@ -259,7 +235,7 @@ export default function Search() {
     input.click();
   };
 
-  // Tax worker message box functionality
+  // Tax worker message handling
   const handleOpenBox = (email) => {
     setOpenBox(email);
     setMessageText("");
@@ -267,14 +243,8 @@ export default function Search() {
   };
 
   const handleSubmit = async (workerEmail) => {
-    if (!file) {
-      alert("Please upload your receipt first.");
-      return;
-    }
-    if (!messageText.trim()) {
-      alert("Please type a message.");
-      return;
-    }
+    if (!file) return alert("Please upload your receipt first.");
+    if (!messageText.trim()) return alert("Please type a message.");
 
     const formData = new FormData();
     formData.append("tax_worker_email", workerEmail);
@@ -287,15 +257,11 @@ export default function Search() {
       const res = await fetch(`${API_BASE}/users/ask/`, {
         method: "POST",
         credentials: "include",
-        headers: {
-          "X-CSRFToken": csrfToken,
-        },
+        headers: { "X-CSRFToken": csrfToken },
         body: formData,
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error submitting request");
-
       alert(data.message);
       setOpenBox(null);
       setFile(null);
@@ -306,37 +272,6 @@ export default function Search() {
     }
   };
 
-  const handleSearch = async () => {
-    if (filter === "") {
-      alert("Please select a role or price range.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const url = `${API_BASE}/users/search/?category=${category}&query=${encodeURIComponent(
-        filter
-      )}`;
-
-      const res = await fetch(url, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to fetch results");
-
-      setResults(data.results || []);
-    } catch (err) {
-      alert(err.message);
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Get button configuration for transitors
   const getButtonConfig = (transitorId) => {
     const status = connectionRequests[transitorId];
     switch (status) {
@@ -352,223 +287,144 @@ export default function Search() {
   return (
     <div className="search-container">
       <h1 className="search-title">Global Search</h1>
-      <p className="search-subtitle">
-        Find professionals and services across the network.
-      </p>
+      <p className="search-subtitle">Find professionals and services across the network.</p>
 
-      <div className="search-box-wrapper">
-        <div className="search-controls">
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="instructors">Instructors</option>
-            <option value="tax_workers">Tax Workers</option>
-            <option value="transitors">Transitors</option>
-            <option value="store">Store Items</option>
-          </select>
+      <div className="search-controls">
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <option value="instructors">Instructors</option>
+          <option value="tax_workers">Tax Workers</option>
+          <option value="transitors">Transitors</option>
+          <option value="store">Store Items</option>
+        </select>
 
-          <select
-            value={filter}
-            onChange={(e) =>
-              category === "store"
-                ? setFilter(Number(e.target.value))
-                : setFilter(e.target.value)
-            }
-          >
-            <option value="">
-              {category === "store" ? "Select Price Range" : "Select Role"}
-            </option>
+        <select
+          value={filter}
+          onChange={(e) => (category === "store" ? setFilter(Number(e.target.value)) : setFilter(e.target.value))}
+        >
+          <option value="">{category === "store" ? "Select Price Range" : "Select Role"}</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
 
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-
-          <button
-            className="search-btn"
-            onClick={handleSearch}
-            disabled={loading}
-          >
-            {loading ? "..." : "Search"}
-          </button>
-        </div>
+        <button className="search-btn" onClick={handleSearch} disabled={loading}>
+          {loading ? "..." : "Search"}
+        </button>
       </div>
 
       <div className="results-grid">
-        {results.map((item, idx) => {
+        {results.map((item) => {
           const displayName = item.username || item.name || "?";
           const firstLetter = displayName.charAt(0).toUpperCase();
-          const isPurchased = category === "instructors" && 
-            purchasedCourses.some(c => c.instructor_email === item.email);
+          const isPurchased = category === "instructors" && purchasedCourses.some(c => c.instructor_email === item.email);
 
-          return (
-            <div className="result-card" key={idx}>
-              <div className="result-header">
-                
-                <img
-    src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"}
-    alt={displayName}
-    className="item-card-image"
-    onError={(e) => {
-      e.target.onerror = null;
-      e.target.src = "/fallback.png";
-    }}
-  />
-
-                
+          if (category === "store") {
+            return (
+              <div className="result-card" key={item.id}>
+                <img src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"} alt={displayName} />
+                <h3>{displayName}</h3>
+                <p>{item.description}</p>
+                <p>Price: ${item.price}</p>
+                <button onClick={() => alert("Add to cart")}>Add to Cart</button>
               </div>
+            );
+          }
 
-              <div className="result-body">
-                {category === "store" ? (
-                  <>
-                  <div className="result-header-info">
-                  <h3>{displayName}</h3>
-                  <p className="result-sub-text">
-                    {item.job_title || item.location || "Verified Member"}
-                  </p>
-                  {item.rating && (
+          if (category === "instructors") {
+            return (
+              <div className="course-card" key={item.email}>
+                <div className="course-header">
+                  {item.photo ? <img src={`${API_BASE}${item.photo}`} alt={displayName} /> : <div className="fallback">{firstLetter}</div>}
+                  <div>
+                    <h2>{displayName}</h2>
+                    <p>{item.email}</p>
                     <div className="rating">
-                      {"★".repeat(Math.round(item.rating))}
-                      {"☆".repeat(5 - Math.round(item.rating))}
+                      {"★".repeat(item.rating || 0)}
+                      {"☆".repeat(5 - (item.rating || 0))}
                     </div>
-                  )}
+                  </div>
                 </div>
-                    <div className="info-row">
-                      <span className="label">Price:</span>
-                      <span className="val price-text">${item.price}</span>
-                    </div>
-                    <p className="desc-text">{item.description}</p>
-                    
-                    <div className="result-actions">
-                      <button 
-                        className="item-action-btn"
-                        onClick={() => addToCartHandler(item)}
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                  </>
-                ) : category === "instructors" ? (
-                  <>
-                    {item.course_title && (
-                      <div className="info-row">
-                        <span className="label">Course:</span>
-                        <span className="val">{item.course_title}</span>
-                      </div>
-                    )}
-                    <div className="info-row">
-                      <span className="label">Price:</span>
-                      <span className="val">$50.00</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Experience:</span>
-                      <span className="val">
-                        {item.years_of_experience || 0} yrs
-                      </span>
-                    </div>
-                    
-                    <div className="result-actions">
-                      <button
-                        className={`buy-btn ${isPurchased ? "purchased-btn" : ""}`}
-                        disabled={isPurchased}
-                        onClick={() => handleBuyCourse(item.email)}
-                      >
-                        {isPurchased ? "Purchased" : "Buy Course - $50"}
-                      </button>
-                    </div>
-                  </>
-                ) : category === "transitors" ? (
-                  <>
-                    <div className="info-row">
-                      <span className="label">Job Title:</span>
-                      <span className="val">{item.job_title || "N/A"}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Organization:</span>
-                      <span className="val">{item.organization_name || "N/A"}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Experience:</span>
-                      <span className="val">{item.years_of_experience || 0} yrs</span>
-                    </div>
-                    
-                    <div className="result-actions">
-                      {(() => {
-                        const transitorId = item.email;
-                        const btn = getButtonConfig(transitorId);
-                        return (
-                          <button
-                            className={`btn-action ${btn.className}`}
-                            disabled={btn.disabled}
-                            onClick={() => handleSendRequest(item.email, transitorId)}
-                          >
-                            {btn.text}
-                          </button>
-                        );
-                      })()}
-                    </div>
-                  </>
-                ) : category === "tax_workers" ? (
-                  <>
-                    <div className="info-row">
-                      <span className="label">Job Title:</span>
-                      <span className="val">{item.job_title || "N/A"}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Organization:</span>
-                      <span className="val">{item.organization_name || "N/A"}</span>
-                    </div>
-                    <div className="info-row">
-                      <span className="label">Experience:</span>
-                      <span className="val">{item.years_of_experience || 0} yrs</span>
-                    </div>
-                    {item.fee && (
-                      <div className="info-row">
-                        <span className="label">Fee:</span>
-                        <span className="val">${item.fee}</span>
-                      </div>
-                    )}
-                    
-                    <div className="result-actions">
-                      {openBox === item.email ? (
-                        <div className="taxworker-ask-box">
-                          <input
-                            type="file"
-                            accept="*/*"
-                            onChange={(e) => setFile(e.target.files[0])}
-                          />
-                          <textarea
-                            placeholder="Type your message here..."
-                            value={messageText}
-                            onChange={(e) => setMessageText(e.target.value)}
-                          />
-                          <button className="btn submit-btn" onClick={() => handleSubmit(item.email)}>
-                            Submit
-                          </button>
-                          <button className="btn cancel-btn" onClick={() => setOpenBox(null)}>
-                            Cancel
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="taxworker-receipt-box" onClick={() => handleOpenBox(item.email)}>
-                          📎 Add your paid receipt & send a message to this worker
-                        </div>
-                      )}
-                    </div>
-                  </>
-                ) : null}
+                <div className="course-body-content">
+                  <div>Course: {item.course_title || "Professional Training"}</div>
+                  <div>Price: $50</div>
+                  <div>Experience: {item.years_of_experience || 0} yrs</div>
+                </div>
+                <button
+                  disabled={isPurchased}
+                  onClick={() => handleBuyCourse(item.email)}
+                >
+                  {isPurchased ? "Purchased" : "Buy Course - $50"}
+                </button>
               </div>
-            </div>
-          );
+            );
+          }
+
+          if (category === "transitors") {
+            const btn = getButtonConfig(item.email);
+            return (
+              <div className="transitor-card" key={item.email}>
+                <div className="transitor-header">
+                  {item.photo ? <img src={`${API_BASE}${item.photo}`} alt={displayName} /> : <div className="fallback">{firstLetter}</div>}
+                  <div>
+                    <h2>{displayName}</h2>
+                    <p>{item.email}</p>
+                    <div className="rating">
+                      {"★".repeat(item.rating || 0)}
+                      {"☆".repeat(5 - (item.rating || 0))}
+                    </div>
+                  </div>
+                </div>
+                <div>Job Title: {item.job_title || "N/A"}</div>
+                <div>Organization: {item.organization_name || "N/A"}</div>
+                <button
+                  className={btn.className}
+                  disabled={btn.disabled}
+                  onClick={() => handleSendRequest(item.email, item.email)}
+                >
+                  {btn.text}
+                </button>
+              </div>
+            );
+          }
+
+          if (category === "tax_workers") {
+            return (
+              <div className="taxworker-card" key={item.email}>
+                <div className="taxworker-header">
+                  {item.photo ? <img src={`${API_BASE}${item.photo}`} alt={displayName} /> : <div className="fallback">{firstLetter}</div>}
+                  <div>
+                    <h2>{displayName}</h2>
+                    <p>{item.email}</p>
+                    <div className="rating">
+                      {"★".repeat(item.rating || 0)}
+                      {"☆".repeat(5 - (item.rating || 0))}
+                    </div>
+                  </div>
+                </div>
+                <div>Job Title: {item.job_title || "N/A"}</div>
+                <div>Organization: {item.organization_name || "N/A"}</div>
+                <div>Experience: {item.years_of_experience || 0} yrs</div>
+                {openBox === item.email ? (
+                  <div className="taxworker-ask-box">
+                    <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+                    <textarea value={messageText} onChange={(e) => setMessageText(e.target.value)} />
+                    <button onClick={() => handleSubmit(item.email)}>Submit</button>
+                    <button onClick={() => setOpenBox(null)}>Cancel</button>
+                  </div>
+                ) : (
+                  <div onClick={() => handleOpenBox(item.email)}>
+                    📎 Add your paid receipt & send a message to this worker
+                  </div>
+                )}
+              </div>
+            );
+          }
+
+          return null;
         })}
       </div>
 
-      {results.length === 0 && !loading && (
-        <p className="no-results">No results found for this selection.</p>
-      )}
+      {results.length === 0 && !loading && <p>No results found for this selection.</p>}
     </div>
   );
 }
