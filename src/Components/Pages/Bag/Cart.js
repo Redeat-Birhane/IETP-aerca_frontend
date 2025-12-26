@@ -168,13 +168,17 @@ function Cart() {
                       >
                         {submitting ? "..." : "Checkout"}
                       </button>
-                      <button
-                        type="button"
-                        className="btn-remove"
-                        onClick={() => removeItem(c.id)}
-                      >
-                        Remove
-                      </button>
+                     <button
+                      type="button"
+                      className="btn-remove"
+                      onClick={(e) => {
+                        e.stopPropagation();  
+                        removeItem(c.id);
+                      }}
+                    >
+                      Remove
+                    </button>
+
                     </div>
                   </form>
                 </div>
