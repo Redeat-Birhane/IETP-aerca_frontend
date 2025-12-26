@@ -21,10 +21,6 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
-    // Optimistic UI update
-    const oldItems = [...cartItems];
-    setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
-
     try {
       const res = await fetch(`${API_BASE}/users/remove/`, {
         method: "POST",
@@ -34,11 +30,15 @@ export const CartProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to remove item");
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to remove item");
+      }
+
+      // Remove from frontend only after backend confirms deletion
+      setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
     } catch (err) {
-      // Rollback if removal fails
-      setCartItems(oldItems);
-      alert(err.message || "Network error while removing item");
+      alert(err.message || "Failed to remove item. Please try again.");
     }
   };
 
