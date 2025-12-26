@@ -175,20 +175,18 @@ export default function Header() {
         {/* Search */}
         <li style={{ position: "relative" }}>
           <a onClick={() => navigate("/Search")}>
-            <img src={cartIcon} alt="Cart" style={{ width: "30px" }} />
             {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
           </a>
           <div className="Vision_dropdown">
             <div className="Vision_one">
               <Link to="/Search">
-                <p>Cart</p>
+                <p>Search</p>
               </Link>
             </div>
             <br />
             <div className="Discrip6">
               <p>
-                Quick search {totalItems} item
-                {totalItems !== 1 ? "s" : ""}.
+                Quick search
               </p>
             </div>
           </div>
