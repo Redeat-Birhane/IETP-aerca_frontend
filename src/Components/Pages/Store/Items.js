@@ -16,66 +16,74 @@ export default function Items() {
   // New state for filters
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
+ const fetchItems = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/users/items/`, {
+      credentials: "include", // send cookies for backend session auth
+    });
 
-  const fetchItems = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${API_BASE}/users/items/`);
-      if (!res.ok) throw new Error("Failed to fetch items");
-      const data = await res.json();
-      setItems(data);
-      setLoading(false);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load items");
-      setLoading(false);
+    if (!res.ok) {
+      if (res.status === 401) {
+        setError("You are not authenticated. Please log in.");
+        navigate("/Signin", { state: { from: location.pathname } });
+        return;
+      }
+      throw new Error("Failed to fetch items");
     }
-  };
 
-  useEffect(() => {
-    const isAuth = localStorage.getItem("isAuthenticated");
-    if (!isAuth) {
-      navigate("/Signin", { state: { from: location.pathname } });
-      return;
-    }
-    fetchItems();
-  }, [navigate, location]);
+    const data = await res.json();
+    setItems(data);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to fetch items");
+  }
+};
 
-  // Update items when filters change
-  useEffect(() => {
-    fetchItems();
-  }, [sizeFilter, enhancementFilter]);
+useEffect(() => {
+  const isAuth = localStorage.getItem("isAuthenticated");
+  if (!isAuth) {
+    navigate("/Signin", { state: { from: location.pathname } });
+    return;
+  }
+  fetchItems();
+}, [navigate, location]);
+
+// Update items when filters change
+useEffect(() => {
+  fetchItems();
+}, [sizeFilter, enhancementFilter]);
+
 
   // In Items.js, update the addToCartHandler function:
-  const addToCartHandler = async (item) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/add/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
-      });
+const addToCartHandler = async (item) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/add/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ item_id: item.id, quantity: 1 }),
+    });
 
-      const data = await res.json();
-      if (res.ok) {
-        addItem({ 
-          id: item.id, 
-          quantity: 1, 
-          name: item.name, 
-          price: item.price, 
-          photo: item.photo,
-          location: item.location,
-          size: item.size,
-          enhancement: item.enhancement
-        });
-        alert(data.message || "Unit added to deployment");
-      } else {
-        alert(data.message || "Failed to add unit");
-      }
-    } catch (err) {
-      alert("Network error");
+    const data = await res.json();
+    if (res.ok) {
+      addItem({ 
+        id: item.id, 
+        quantity: 1, 
+        name: item.name, 
+        price: item.price, 
+        photo: item.photo,
+        location: item.location,
+        size: item.size,
+        enhancement: item.enhancement
+      });
+      alert(data.message || "Unit added to deployment");
+    } else {
+      alert(data.message || "Failed to add unit");
     }
-  };
+  } catch (err) {
+    alert("Network error");
+  }
+};
 
   if (loading) return <div className="item-container">✨ Loading System Data...</div>;
   if (error) return <div className="item-container error-text">{error}</div>;
