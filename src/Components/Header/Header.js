@@ -160,7 +160,6 @@ export default function Header() {
         {/* Support */}
         <li>
           <a href="#">Support</a>
-          <div className="iphone_dropdown">
           <div className="Support_dropdown">
             <div className="Support_one">
               <Link to="/Community">
@@ -170,20 +169,27 @@ export default function Header() {
                 <p>Contact Center</p>
               </Link>
             </div>
-            </div>
           </div>
         </li>
 
         {/* Search */}
-        <li>
-          <a href="#">
-            <img src={search} alt="Search" />
+        <li style={{ position: "relative" }}>
+          <a onClick={() => navigate("/Search")}>
+            <img src={cartIcon} alt="Cart" style={{ width: "30px" }} />
+            {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
           </a>
-          <div className="Search_dropdown">
-            <div className="Search_one">
+          <div className="Vision_dropdown">
+            <div className="Vision_one">
               <Link to="/Search">
-                <p>Quick Search</p>
+                <p>Cart</p>
               </Link>
+            </div>
+            <br />
+            <div className="Discrip6">
+              <p>
+                Quick search {totalItems} item
+                {totalItems !== 1 ? "s" : ""}.
+              </p>
             </div>
           </div>
         </li>
