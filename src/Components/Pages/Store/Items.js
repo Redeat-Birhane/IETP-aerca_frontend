@@ -134,9 +134,24 @@ export default function Items() {
                 <p className="item-summary">{it.description}</p>
 
                 <div className="item-card-footer">
-                  <span className="item-category-tag">📍 {it.location}</span>
-                  <span className="item-category-tag">📏 {it.size}</span>
-                  <span className="item-category-tag">✨ {it.enhancement}</span>
+                  {/* Location with label */}
+                  <div className="item-tag-with-label">
+                    <span className="item-tag-label">Location:</span>
+                    <span className="item-category-tag">📍 {it.location || "N/A"}</span>
+                  </div>
+                  
+                  {/* Size with label */}
+                  <div className="item-tag-with-label">
+                    <span className="item-tag-label">Size:</span>
+                    <span className="item-category-tag">📏 {it.size || "N/A"}</span>
+                  </div>
+                  
+                  {/* Enhancement with label */}
+                  <div className="item-tag-with-label">
+                    <span className="item-tag-label">Enhancement:</span>
+                    <span className="item-category-tag">✨ {it.enhancement || "N/A"}</span>
+                  </div>
+                  
                   <button className="item-action-btn" onClick={() => addToCartHandler(it)}>
                     Add to cart
                   </button>
