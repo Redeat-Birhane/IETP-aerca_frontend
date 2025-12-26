@@ -183,3 +183,17 @@
   height: 350px; /* Slimmer image */
   object-fit: cover;
 }
+/* Add this to your Search.css file */
+.item-no-photo {
+  width: 100%;
+  height: 150px;
+  background: #f0f0f0;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}

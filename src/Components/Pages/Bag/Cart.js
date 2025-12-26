@@ -43,14 +43,6 @@ function Cart() {
     }
   };
 
-  
-  const handleImageError = (e) => {
-    e.target.onerror = null;
-    e.target.src = "/fallback.png";
-  };
-
-
-
   if (cartItems.length === 0) {
     return (
       <div className="cart-empty-container">
@@ -85,11 +77,16 @@ function Cart() {
                   src={`${API_BASE}${c.photo}`}
                   alt={c.name}
                   className="item-card-image"
-                  onError={handleImageError}
+                  onError={(e) => {
+                    // Apply the same style from Items.js
+                    e.target.onerror = null;
+                    e.target.src = "/fallback.png";
+                  }}
                 />
               ) : (
+                // For items without photo, use the same style as Items.js
                 <div className="cart-photo-fallback-rect">
-                  {c.name ? c.name.charAt(0).toUpperCase() : "?"}
+                  NO IMAGE
                 </div>
               )}
             </div>

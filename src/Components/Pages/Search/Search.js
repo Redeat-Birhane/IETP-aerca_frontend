@@ -612,30 +612,21 @@ export default function Search() {
                     alt={displayName}
                     className="result-photo"
                     onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "flex";
+                      // Apply the same style from Items.js
+                      e.target.onerror = null;
+                      e.target.src = "/fallback.png";
                     }}
                   />
-                ) : null}
-                
-                {!item.photo && category !== "store" && (
+                ) : category === "store" ? (
+                  // For store items without photo, use the same style as Items.js
+                  <div className="item-no-photo">NO IMAGE</div>
+                ) : (
+                  // For other categories (instructors, tax_workers, transitors)
                   <div className="result-photo-letter">
                     {firstLetter}
                   </div>
                 )}
                 
-                {category === "store" && !item.photo && (
-                  <img
-                    src="/fallback.png"
-                    alt={displayName}
-                    className="result-photo"
-                  />
-                )}
-                
-                <div className="result-photo-fallback" style={{ display: "none" }}>
-                  {firstLetter}
-                </div>
-
                 <div className="result-header-info">
                   <h3>{displayName}</h3>
                   <p className="result-sub-text">
