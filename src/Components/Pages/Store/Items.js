@@ -16,7 +16,16 @@ export default function Items() {
   // New state for filters
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
-
+ const fetchItems = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/users/items/`);
+      if (!res.ok) throw new Error("Failed to fetch items");
+      const data = await res.json();
+      setItems(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
