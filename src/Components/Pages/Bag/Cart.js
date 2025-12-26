@@ -43,24 +43,26 @@ function Cart() {
     }
   };
 
-  // Handle image error
-  const handleImageError = (e) => {
-    e.target.style.display = 'none';
-    
-    // Check if fallback container exists
-    const photoContainer = e.target.parentElement;
-    const fallbackContainer = photoContainer.querySelector('.cart-photo-fallback-rect');
-    
-    if (!fallbackContainer) {
-      // Create fallback if it doesn't exist
-      const fallbackDiv = document.createElement('div');
-      fallbackDiv.className = 'cart-photo-fallback-rect';
-      fallbackDiv.textContent = e.target.alt ? e.target.alt.charAt(0).toUpperCase() : '?';
-      photoContainer.appendChild(fallbackDiv);
-    } else {
-      fallbackContainer.style.display = 'flex';
-    }
-  };
+  <div className="cart-photo-container">
+  {c.photo ? (
+    <>
+      <img
+        src={`${API_BASE}${c.photo}`}
+        alt={c.name}
+        className="cart-full-photo"
+        onError={handleImageError}
+      />
+      <div className="cart-photo-fallback-rect" style={{ display: 'none' }}>
+        {c.name ? c.name.charAt(0).toUpperCase() : "?"}
+      </div>
+    </>
+  ) : (
+    <div className="cart-photo-fallback-rect">
+      {c.name ? c.name.charAt(0).toUpperCase() : "?"}
+    </div>
+  )}
+</div>
+
 
   if (cartItems.length === 0) {
     return (

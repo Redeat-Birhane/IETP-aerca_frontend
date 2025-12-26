@@ -17,24 +17,6 @@ export default function Items() {
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
 
-  // 🔹 Fetch function with filters
-  const fetchItems = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      let url = `${API_BASE}/users/search/?category=store`;
-      if (sizeFilter) url += `&size=${encodeURIComponent(sizeFilter)}`;
-      if (enhancementFilter) url += `&enhancement=${encodeURIComponent(enhancementFilter)}`;
-
-      const res = await fetch(url, { credentials: "include" });
-      const data = await res.json();
-      setItems(data.results || []);
-    } catch (err) {
-      setError("Failed to synchronize inventory");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
