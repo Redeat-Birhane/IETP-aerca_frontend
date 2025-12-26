@@ -1338,86 +1338,117 @@ const Profile = () => {
     fetchUserProfile();
   }, [fetchUserProfile]);
 
-  const handleLogout = async () => {
-    console.log("Logging out...");
-    try {
-      const res = await fetch(
-        `${API_BASE}/users/logout/`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-      console.log("Logout response:", res);
+ const handleLogout = async () => {
+  console.log("Logging out...");
+  try {
+    const res = await fetch(`${API_BASE}/users/logout/`, {
+      method: "POST",
+      credentials: "include",
+    });
+    console.log("Logout response:", res);
 
-      if (!res.ok) throw new Error("Logout failed.");
+    if (!res.ok) throw new Error("Logout failed.");
 
-      localStorage.clear();
-      setUserData(null);
-      alert("You have been logged out successfully.");
-      navigate("/");
-    } catch (err) {
-      console.error("Logout error:", err);
-      alert("Error logging out: " + err.message);
-    }
-  };
+    localStorage.clear();
+    setUserData(null);
+    alert("You have been logged out successfully.");
+    navigate("/");
+  } catch (err) {
+    console.error("Logout error:", err);
+    alert("Error logging out: " + err.message);
+  }
+};
 
-  if (loading) return <p>Loading...</p>;
-  if (!userData) return null;
+const handleDeleteAccount = async () => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete your account? This action cannot be undone."
+  );
+  if (!confirmDelete) return;
 
-  console.log("Rendering profile page for user:", userData.username);
+  try {
+    const res = await fetch(`${API_BASE}/users/delete-account/`, {
+      method: "POST",
+      credentials: "include",
+    });
 
-  return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <div className="welcome-banner">
-          <h1>Welcome back, {userData.username}!</h1>
-          
-          <p>
-            <h3>Refund Policy:</h3>
-The paid amount will be refunded to the payer if the request is not accepted or if the submitted questions are not answered within three (3) days. In such cases, the amount will be deducted from the individual who accepted the request or received the question.</p>
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message || "Failed to delete account.");
+
+    localStorage.clear();
+    setUserData(null);
+    alert(data.message || "Account deleted successfully.");
+    navigate("/");
+  } catch (err) {
+    console.error("Delete account error:", err);
+    alert("Error deleting account: " + err.message);
+  }
+};
+
+if (loading) return <p>Loading...</p>;
+if (!userData) return null;
+
+console.log("Rendering profile page for user:", userData.username);
+
+return (
+  <div className="profile-container">
+    <div className="profile-card">
+      <div className="welcome-banner">
+        <h1>Welcome back, {userData.username}!</h1>
+        <p>
+          <h3>Refund Policy:</h3>
+          The paid amount will be refunded to the payer if the request is not accepted or if the submitted questions are not answered within three (3) days. In such cases, the amount will be deducted from the individual who accepted the request or received the question.
+        </p>
+      </div>
+
+      <div className="profile-content">
+        <div className="profile-sidebar">
+          <div className="profile-avatar">
+            {userData.photo ? (
+              <img src={userData.photo} alt="Profile" />
+            ) : (
+              <div className="avatar-placeholder">
+                {userData.username.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+          <h2>{userData.username}</h2>
+          <p>{userData.email}</p>
+
+          <button
+            onClick={handleLogout}
+            className="logout-btn"
+            style={{ marginTop: "10px" }}
+          >
+            Logout
+          </button>
+
+          {/* Delete Account Button */}
+          <button
+            onClick={handleDeleteAccount}
+            className="logout-btn"
+            style={{ marginTop: "10px", backgroundColor: "#ff4d4f" }}
+          >
+            Delete Account
+          </button>
         </div>
 
-        <div className="profile-content">
-          <div className="profile-sidebar">
-            <div className="profile-avatar">
-              {userData.photo ? (
-                <img src={userData.photo} alt="Profile" />
-              ) : (
-                <div className="avatar-placeholder">
-                  {userData.username.charAt(0).toUpperCase()}
-                </div>
-              )}
-            </div>
-            <h2>{userData.username}</h2>
-            <p>{userData.email}</p>
-            <button onClick={handleLogout} className="logout-btn" style={{ marginTop: "10px" }}>
-              Logout
-            </button>
-          </div>
-
-          <div className="profile-main">
-            {userData.role === "tax_worker" && (
-              <TaxWorkerProfile data={userData} />
-            )}
-            {userData.role === "instructor" && (
-              <InstructorProfile data={userData} />
-            )}
-            {userData.role === "transitor" && (
-              <TransitorProfile data={userData} />
-            )}
-            {userData.role === "normal" && (
-              <NormalUserProfile 
-                data={userData} 
-                userData={userData} 
-                setUserData={setUserData} 
-              />
-            )}
-          </div>
+        <div className="profile-main">
+          {userData.role === "tax_worker" && <TaxWorkerProfile data={userData} />}
+          {userData.role === "instructor" && <InstructorProfile data={userData} />}
+          {userData.role === "transitor" && <TransitorProfile data={userData} />}
+          {userData.role === "normal" && (
+            <NormalUserProfile
+              data={userData}
+              userData={userData}
+              setUserData={setUserData}
+            />
+          )}
         </div>
       </div>
     </div>
-  );
-};
+  </div>
+);
+}
 
 export default Profile;

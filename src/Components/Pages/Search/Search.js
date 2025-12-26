@@ -40,6 +40,9 @@ export default function Search() {
   // Store-specific filters
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
+  const [priceOptions, setPriceOptions] = useState([]);
+  const [sizeOptions, setSizeOptions] = useState([]);
+  const [enhancementOptions, setEnhancementOptions] = useState([]);
 
   const userEmail = localStorage.getItem("userEmail");
   const STORAGE_KEY = userEmail ? `transitorRequests_${userEmail}` : null;
@@ -79,7 +82,6 @@ export default function Search() {
     fetchProfileData();
   }, [STORAGE_KEY]);
 
-  // Persist connection requests
   const persistConnections = (data) => {
     setConnectionRequests(data);
     if (STORAGE_KEY) localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -90,6 +92,9 @@ export default function Search() {
     setFilter("");
     setResults([]);
     setOptions([]);
+    setPriceOptions([]);
+    setSizeOptions([]);
+    setEnhancementOptions([]);
 
     const fetchOptions = async () => {
       try {
@@ -105,12 +110,16 @@ export default function Search() {
         const data = await res.json();
 
         if (category === "store") {
-          const ranges = [
-            { label: "0 - 100", value: 100 },
-            { label: "100 - 500", value: 500 },
-            { label: "500 - 1000", value: 1000 },
-          ];
-          setOptions(ranges);
+          const itemsList = data.items || [];
+
+          // Extract unique prices, sizes, enhancements dynamically
+          const prices = [...new Set(itemsList.map((i) => i.price).filter(Boolean))].sort((a, b) => a - b);
+          const sizes = [...new Set(itemsList.map((i) => i.size).filter(Boolean))];
+          const enhancements = [...new Set(itemsList.map((i) => i.enhancement).filter(Boolean))];
+
+          setPriceOptions(prices);
+          setSizeOptions(sizes);
+          setEnhancementOptions(enhancements);
           return;
         }
 
@@ -326,31 +335,28 @@ export default function Search() {
             }
           >
             <option value="">
-              {category === "store" ? "Select Price Range" : "Select Role"}
+              {category === "store" ? "Select Price" : "Select Role"}
             </option>
-            {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
+            {priceOptions.map((price) => (
+              <option key={price} value={price}>${price}</option>
             ))}
           </select>
 
           {category === "store" && (
             <>
-              <input
-                type="text"
-                placeholder="Filter by Size"
-                value={sizeFilter}
-                onChange={(e) => setSizeFilter(e.target.value)}
-                className="item-filter-input"
-              />
-              <input
-                type="text"
-                placeholder="Filter by Enhancement"
-                value={enhancementFilter}
-                onChange={(e) => setEnhancementFilter(e.target.value)}
-                className="item-filter-input"
-              />
+              <select value={sizeFilter} onChange={(e) => setSizeFilter(e.target.value)}>
+                <option value="">Select Size</option>
+                {sizeOptions.map((size) => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+
+              <select value={enhancementFilter} onChange={(e) => setEnhancementFilter(e.target.value)}>
+                <option value="">Select Enhancement</option>
+                {enhancementOptions.map((enh) => (
+                  <option key={enh} value={enh}>{enh}</option>
+                ))}
+              </select>
             </>
           )}
 
