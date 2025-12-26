@@ -179,3 +179,20 @@
 }
 
 /* ... (Remaining card styles for info-row, labels, and price) ... */
+.buy-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.buy-btn:hover {
+  background-color: #27ae60;
+}
+
+.purchased-btn {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.purchased-btn:hover {
+  background-color: #95a5a6;
+}

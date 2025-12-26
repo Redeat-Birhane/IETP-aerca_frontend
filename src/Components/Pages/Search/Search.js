@@ -453,7 +453,7 @@ export default function Search() {
                     
                     <div className="result-actions">
                       <button 
-                        className="add-to-cart-btn"
+                        className="item-action-btn"
                         onClick={() => addToCartHandler(item)}
                       >
                         Add to Cart
