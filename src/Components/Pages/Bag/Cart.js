@@ -43,11 +43,12 @@ function Cart() {
     }
   };
 
-  className="item-card-image"
+  
   const handleImageError = (e) => {
     e.target.onerror = null;
     e.target.src = "/fallback.png";
   };
+
 
 
   if (cartItems.length === 0) {
@@ -83,7 +84,7 @@ function Cart() {
                 <img
                   src={`${API_BASE}${c.photo}`}
                   alt={c.name}
-                  className="cart-full-photo"
+                  className="item-card-image"
                   onError={handleImageError}
                 />
               ) : (
