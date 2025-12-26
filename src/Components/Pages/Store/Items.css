@@ -74,7 +74,7 @@ background: #ffffff;
 
 .item-card-image {
   width: 100%;
-  height: 140px; /* Slimmer image */
+  height: 350px; /* Slimmer image */
   object-fit: cover;
 }
 
