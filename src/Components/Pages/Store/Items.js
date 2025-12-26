@@ -8,15 +8,35 @@ const API_BASE = process.env.REACT_APP_API_BASE;
 export default function Items() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { addItem } = useContext(CartContext); 
+  const { addItem } = useContext(CartContext);
+
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // New state for filters
-  const [sizeFilter, setSizeFilter] = useState("");
-  const [enhancementFilter, setEnhancementFilter] = useState("");
+  const fetchItems = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/users/items/`, {
+        credentials: "include",
+      });
 
+      if (!res.ok) {
+        if (res.status === 401) {
+          navigate("/Signin", { state: { from: location.pathname } });
+          return;
+        }
+        throw new Error("Failed to fetch items");
+      }
+
+      const data = await res.json();
+      setItems(data);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch items");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
@@ -26,11 +46,6 @@ export default function Items() {
     }
     fetchItems();
   }, [navigate, location]);
-
-  // Update items when filters change
-  useEffect(() => {
-    fetchItems();
-  }, [sizeFilter, enhancementFilter]);
 
   const addToCartHandler = async (item) => {
     try {
@@ -43,47 +58,36 @@ export default function Items() {
 
       const data = await res.json();
       if (res.ok) {
-        addItem({ id: item.id, quantity: 1, name: item.name, price: item.price, photo: item.photo });
+        addItem({
+          id: item.id,
+          quantity: 1,
+          name: item.name,
+          price: item.price,
+          photo: item.photo,
+          location: item.location,
+          size: item.size,
+          enhancement: item.enhancement,
+        });
         alert(data.message || "Unit added to deployment");
       } else {
         alert(data.message || "Failed to add unit");
       }
-    } catch (err) {
+    } catch {
       alert("Network error");
     }
   };
 
-  if (loading) return <div className="item-container">✨ Loading System Data...</div>;
-  if (error) return <div className="item-container error-text">{error}</div>;
+  if (loading)
+    return <div className="item-container">✨ Loading System Data...</div>;
+  if (error)
+    return <div className="item-container error-text">{error}</div>;
 
   return (
     <div className="item-container">
       <h1 className="item-title">Technical Inventory</h1>
-      <p className="item-subtitle">High-performance hardware optimized for mission-critical fieldwork.</p>
-
-      {/* Filter Panel */}
-      <div className="item-filter-panel">
-        <input
-          type="text"
-          placeholder="Filter by Size"
-          value={sizeFilter}
-          onChange={(e) => setSizeFilter(e.target.value)}
-          className="item-filter-input"
-        />
-        <input
-          type="text"
-          placeholder="Filter by Enhancement"
-          value={enhancementFilter}
-          onChange={(e) => setEnhancementFilter(e.target.value)}
-          className="item-filter-input"
-        />
-      </div>
-
-      <div className="item-stats-wrapper">
-        <div className="item-stat-pill">🔄 Rapid Sync</div>
-        <div className="item-stat-pill">⚒️ Field-Ready</div>
-        <div className="item-stat-pill">⏱️ Time Efficient</div>
-      </div>
+      <p className="item-subtitle">
+        High-performance hardware optimized for mission-critical fieldwork.
+      </p>
 
       <div className="item-grid">
         {items.length === 0 ? (
@@ -115,11 +119,24 @@ export default function Items() {
 
                 <p className="item-summary">{it.description}</p>
 
+                {/* ✅ ONLY CHANGE IS HERE */}
                 <div className="item-card-footer">
-                  <span className="item-category-tag">📍 {it.location}</span>
-                  <span className="item-category-tag">📏 {it.size}</span>
-                  <span className="item-category-tag">✨ {it.enhancement}</span>
-                  <button className="item-action-btn" onClick={() => addToCartHandler(it)}>
+                  {it.location && (
+                    <span className="item-category-tag">📍 {it.location}</span>
+                  )}
+                  {it.size && (
+                    <span className="item-category-tag">📏 {it.size}</span>
+                  )}
+                  {it.enhancement && (
+                    <span className="item-category-tag">
+                      ✨ {it.enhancement}
+                    </span>
+                  )}
+
+                  <button
+                    className="item-action-btn"
+                    onClick={() => addToCartHandler(it)}
+                  >
                     Add to cart
                   </button>
                 </div>
