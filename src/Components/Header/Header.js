@@ -174,12 +174,13 @@ export default function Header() {
 
         {/* Search */}
         <li style={{ position: "relative" }}>
-           <button className="header-btn" onClick={() => navigate("/Search")}>
+           <button onClick={() => navigate("/Search")}>
     Search
   </button>
           <div className="Vision_dropdown">
             <div className="Vision_one">
               <Link to="/Search">
+          
                 <p>Search</p>
               </Link>
             </div>
