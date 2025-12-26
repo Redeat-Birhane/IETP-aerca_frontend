@@ -609,20 +609,7 @@ export default function Search() {
                 {item.photo ? (
                   <img
                     src={`${API_BASE}${item.photo}`}
-                    alt={displayName}
-                    className="result-photo"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "flex";
-                    }}
-                  />
-                ) : null}
-                
-                <div className="item-card-header">
-                {it.photo ? (
-                  <img
-                    src={`${API_BASE}${it.photo}`}
-                    alt={it.name}
+                    alt={displayName} 
                     className="item-card-image"
                     onError={(e) => {
                       e.target.onerror = null;
@@ -630,9 +617,12 @@ export default function Search() {
                     }}
                   />
                 ) : (
-                  <div className="item-no-photo">NO IMAGE</div>
+                  <img
+                    src="/fallback.png"
+                    alt={displayName}
+                    className="result-photo"
+                  />
                 )}
-              </div>
 
                 <div className="result-header-info">
                   <h3>{displayName}</h3>

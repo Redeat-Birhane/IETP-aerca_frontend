@@ -43,11 +43,12 @@ function Cart() {
     }
   };
 
-  // ✅ SIMPLE image fallback (NO DOM manipulation)
+  className="item-card-image"
   const handleImageError = (e) => {
     e.target.onerror = null;
     e.target.src = "/fallback.png";
   };
+
 
   if (cartItems.length === 0) {
     return (
