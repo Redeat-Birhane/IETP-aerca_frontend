@@ -178,4 +178,8 @@
   margin: 0 auto;
 }
 
-/* ... (Remaining card styles for info-row, labels, and price) ... */
+.item-card-image {
+  width: 100%;
+  height: 350px; /* Slimmer image */
+  object-fit: cover;
+}
