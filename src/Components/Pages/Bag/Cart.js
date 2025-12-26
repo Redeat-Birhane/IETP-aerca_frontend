@@ -43,26 +43,11 @@ function Cart() {
     }
   };
 
-  <div className="cart-photo-container">
-  {c.photo ? (
-    <>
-      <img
-        src={`${API_BASE}${c.photo}`}
-        alt={c.name}
-        className="cart-full-photo"
-        onError={handleImageError}
-      />
-      <div className="cart-photo-fallback-rect" style={{ display: 'none' }}>
-        {c.name ? c.name.charAt(0).toUpperCase() : "?"}
-      </div>
-    </>
-  ) : (
-    <div className="cart-photo-fallback-rect">
-      {c.name ? c.name.charAt(0).toUpperCase() : "?"}
-    </div>
-  )}
-</div>
-
+  // ✅ SIMPLE image fallback (NO DOM manipulation)
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = "/fallback.png";
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -87,22 +72,19 @@ function Cart() {
           <div
             className={`cart-item-card ${expandedId === c.id ? "expanded" : ""}`}
             key={c.id}
-            onClick={() => setExpandedId(expandedId === c.id ? null : c.id)}
+            onClick={() =>
+              setExpandedId(expandedId === c.id ? null : c.id)
+            }
           >
             {/* FULL WIDTH TOP PHOTO */}
             <div className="cart-photo-container">
               {c.photo ? (
-                <>
-                  <img
-                    src={`${API_BASE}${c.photo}`}
-                    alt={c.name}
-                    className="cart-full-photo"
-                    onError={handleImageError}
-                  />
-                  <div className="cart-photo-fallback-rect" style={{ display: 'none' }}>
-                    {c.name ? c.name.charAt(0).toUpperCase() : "?"}
-                  </div>
-                </>
+                <img
+                  src={`${API_BASE}${c.photo}`}
+                  alt={c.name}
+                  className="cart-full-photo"
+                  onError={handleImageError}
+                />
               ) : (
                 <div className="cart-photo-fallback-rect">
                   {c.name ? c.name.charAt(0).toUpperCase() : "?"}
@@ -121,24 +103,26 @@ function Cart() {
                   <span className="info-label">Quantity:</span>
                   <span className="info-value">{c.quantity}</span>
                 </div>
+
                 <div className="info-row">
                   <span className="info-label">Status:</span>
                   <span className="info-value">Pending Checkout</span>
                 </div>
-                
-                {/* Added location, size, and enhancement info */}
+
                 {c.location && (
                   <div className="info-row">
                     <span className="info-label">Location:</span>
                     <span className="info-value">{c.location}</span>
                   </div>
                 )}
+
                 {c.size && (
                   <div className="info-row">
                     <span className="info-label">Size:</span>
                     <span className="info-value">{c.size}</span>
                   </div>
                 )}
+
                 {c.enhancement && (
                   <div className="info-row">
                     <span className="info-label">Enhancement:</span>
@@ -148,7 +132,10 @@ function Cart() {
               </div>
 
               {expandedId === c.id ? (
-                <div className="cart-expanded-area" onClick={(e) => e.stopPropagation()}>
+                <div
+                  className="cart-expanded-area"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <form
                     className="checkout-form"
                     onSubmit={(e) => handleCheckout(e, c.id)}
@@ -161,17 +148,25 @@ function Cart() {
                         onChange={(e) => setReceipt(e.target.files[0])}
                       />
                     </label>
+
                     <label>
                       Delivery location (optional):
                       <input
                         type="text"
                         placeholder="Enter address..."
                         value={deliveryLocation}
-                        onChange={(e) => setDeliveryLocation(e.target.value)}
+                        onChange={(e) =>
+                          setDeliveryLocation(e.target.value)
+                        }
                       />
                     </label>
+
                     <div className="cart-actions-row">
-                      <button type="submit" className="btn-submit" disabled={submitting}>
+                      <button
+                        type="submit"
+                        className="btn-submit"
+                        disabled={submitting}
+                      >
                         {submitting ? "..." : "Checkout"}
                       </button>
                       <button
