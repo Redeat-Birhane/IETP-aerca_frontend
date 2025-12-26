@@ -43,6 +43,25 @@ function Cart() {
     }
   };
 
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.style.display = 'none';
+    
+    // Check if fallback container exists
+    const photoContainer = e.target.parentElement;
+    const fallbackContainer = photoContainer.querySelector('.cart-photo-fallback-rect');
+    
+    if (!fallbackContainer) {
+      // Create fallback if it doesn't exist
+      const fallbackDiv = document.createElement('div');
+      fallbackDiv.className = 'cart-photo-fallback-rect';
+      fallbackDiv.textContent = e.target.alt ? e.target.alt.charAt(0).toUpperCase() : '?';
+      photoContainer.appendChild(fallbackDiv);
+    } else {
+      fallbackContainer.style.display = 'flex';
+    }
+  };
+
   if (cartItems.length === 0) {
     return (
       <div className="cart-empty-container">
@@ -71,15 +90,17 @@ function Cart() {
             {/* FULL WIDTH TOP PHOTO */}
             <div className="cart-photo-container">
               {c.photo ? (
-                <img
-                  src={`${API_BASE}${c.photo}`}
-                  alt={c.name}
-                  className="cart-full-photo"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/fallback.png";
-                  }}
-                />
+                <>
+                  <img
+                    src={`${API_BASE}${c.photo}`}
+                    alt={c.name}
+                    className="cart-full-photo"
+                    onError={handleImageError}
+                  />
+                  <div className="cart-photo-fallback-rect" style={{ display: 'none' }}>
+                    {c.name ? c.name.charAt(0).toUpperCase() : "?"}
+                  </div>
+                </>
               ) : (
                 <div className="cart-photo-fallback-rect">
                   {c.name ? c.name.charAt(0).toUpperCase() : "?"}
@@ -90,7 +111,7 @@ function Cart() {
             <div className="cart-content-wrapper">
               <div className="cart-item-header-info">
                 <h2>{c.name}</h2>
-                <p className="cart-price-text">Price: {c.price}</p>
+                <p className="cart-price-text">Price: ${c.price}</p>
               </div>
 
               <div className="cart-item-body-content">
@@ -102,6 +123,26 @@ function Cart() {
                   <span className="info-label">Status:</span>
                   <span className="info-value">Pending Checkout</span>
                 </div>
+                
+                {/* Added location, size, and enhancement info */}
+                {c.location && (
+                  <div className="info-row">
+                    <span className="info-label">Location:</span>
+                    <span className="info-value">{c.location}</span>
+                  </div>
+                )}
+                {c.size && (
+                  <div className="info-row">
+                    <span className="info-label">Size:</span>
+                    <span className="info-value">{c.size}</span>
+                  </div>
+                )}
+                {c.enhancement && (
+                  <div className="info-row">
+                    <span className="info-label">Enhancement:</span>
+                    <span className="info-value">{c.enhancement}</span>
+                  </div>
+                )}
               </div>
 
               {expandedId === c.id ? (
@@ -119,7 +160,7 @@ function Cart() {
                       />
                     </label>
                     <label>
-                      Delivery location(optional):
+                      Delivery location (optional):
                       <input
                         type="text"
                         placeholder="Enter address..."

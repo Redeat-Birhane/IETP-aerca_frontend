@@ -152,12 +152,15 @@ export default function Search() {
               ];
             }
             
-            // Only update if category is store
+            // Store price ranges in options
+            const priceOptions = priceRanges.map(range => ({ 
+              label: range.label, 
+              value: `${range.min}_${range.max || 'max'}` 
+            }));
+            
+            // Update options if category is store
             if (category === "store") {
-              setOptions(priceRanges.map(range => ({ 
-                label: range.label, 
-                value: `${range.min}_${range.max || 'max'}` 
-              })));
+              setOptions(priceOptions);
             }
           }
         }
@@ -180,7 +183,54 @@ export default function Search() {
     const fetchOptions = async () => {
       try {
         if (category === "store") {
-          // Use the pre-fetched store items data
+          // For store category, we need to fetch items again to get price ranges
+          const res = await fetch(`${API_BASE}${CATEGORY_ENDPOINTS.store}`, {
+            method: "GET",
+            credentials: "include",
+          });
+          
+          if (!res.ok) throw new Error("Failed to fetch store items");
+          const data = await res.json();
+          const items = data.store_items || [];
+          
+          // Create price ranges based on actual item prices
+          if (items.length > 0) {
+            const prices = items.map(item => parseFloat(item.price)).filter(price => !isNaN(price));
+            const maxPrice = Math.max(...prices);
+            
+            // Create dynamic price ranges
+            let priceRanges = [];
+            
+            if (maxPrice <= 100) {
+              priceRanges = [
+                { label: "0 - 50", min: 0, max: 50 },
+                { label: "50 - 100", min: 50, max: 100 }
+              ];
+            } else if (maxPrice <= 500) {
+              priceRanges = [
+                { label: "0 - 100", min: 0, max: 100 },
+                { label: "100 - 250", min: 100, max: 250 },
+                { label: "250 - 500", min: 250, max: 500 }
+              ];
+            } else if (maxPrice <= 1000) {
+              priceRanges = [
+                { label: "0 - 100", min: 0, max: 100 },
+                { label: "100 - 500", min: 100, max: 500 },
+                { label: "500 - 1000", min: 500, max: 1000 }
+              ];
+            } else {
+              priceRanges = [
+                { label: "0 - 500", min: 0, max: 500 },
+                { label: "500 - 1000", min: 500, max: 1000 },
+                { label: "1000+", min: 1000, max: null }
+              ];
+            }
+            
+            setOptions(priceRanges.map(range => ({ 
+              label: range.label, 
+              value: `${range.min}_${range.max || 'max'}` 
+            })));
+          }
           return;
         }
 

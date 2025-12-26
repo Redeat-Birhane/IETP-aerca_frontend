@@ -17,24 +17,6 @@ export default function Items() {
   const [sizeFilter, setSizeFilter] = useState("");
   const [enhancementFilter, setEnhancementFilter] = useState("");
 
-  // 🔹 Fetch function with filters
-  const fetchItems = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      let url = `${API_BASE}/users/search/?category=store`;
-      if (sizeFilter) url += `&size=${encodeURIComponent(sizeFilter)}`;
-      if (enhancementFilter) url += `&enhancement=${encodeURIComponent(enhancementFilter)}`;
-
-      const res = await fetch(url, { credentials: "include" });
-      const data = await res.json();
-      setItems(data.results || []);
-    } catch (err) {
-      setError("Failed to synchronize inventory");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const isAuth = localStorage.getItem("isAuthenticated");
@@ -50,26 +32,36 @@ export default function Items() {
     fetchItems();
   }, [sizeFilter, enhancementFilter]);
 
-  const addToCartHandler = async (item) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/add/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
-      });
+  // In Items.js, update the addToCartHandler function:
+const addToCartHandler = async (item) => {
+  try {
+    const res = await fetch(`${API_BASE}/users/add/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ item_id: item.id, quantity: 1 }),
+    });
 
-      const data = await res.json();
-      if (res.ok) {
-        addItem({ id: item.id, quantity: 1, name: item.name, price: item.price, photo: item.photo });
-        alert(data.message || "Unit added to deployment");
-      } else {
-        alert(data.message || "Failed to add unit");
-      }
-    } catch (err) {
-      alert("Network error");
+    const data = await res.json();
+    if (res.ok) {
+      addItem({ 
+        id: item.id, 
+        quantity: 1, 
+        name: item.name, 
+        price: item.price, 
+        photo: item.photo,
+        location: item.location,
+        size: item.size,
+        enhancement: item.enhancement
+      });
+      alert(data.message || "Unit added to deployment");
+    } else {
+      alert(data.message || "Failed to add unit");
     }
-  };
+  } catch (err) {
+    alert("Network error");
+  }
+};
 
   if (loading) return <div className="item-container">✨ Loading System Data...</div>;
   if (error) return <div className="item-container error-text">{error}</div>;

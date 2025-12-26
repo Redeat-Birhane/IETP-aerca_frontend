@@ -172,4 +172,54 @@ background: #ffffff;
   .item-container {
     padding: 2rem 0.5rem;
   }
+}/* Add these styles to your existing Items.css */
+
+.item-tag-with-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 0.3rem;
+}
+
+.item-tag-label {
+  font-size: 0.6rem;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+  text-transform: uppercase;
+}
+
+/* Update the existing .item-card-footer to accommodate the new structure */
+.item-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: auto;
+  gap: 0.3rem;
+}
+
+/* Make the button take full width */
+.item-action-btn {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+/* Adjust the item-category-tag to work better with labels */
+.item-category-tag {
+  color: #6366f1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
 }
