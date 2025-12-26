@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 const API_BASE = process.env.REACT_APP_API_BASE;
+
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -20,24 +21,26 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
-  try {
-    const res = await fetch(`${API_BASE}/users/remove/`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cart_item_id }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Failed to remove item");
-
-    // Update context state
+    // Optimistic UI update
+    const oldItems = [...cartItems];
     setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
-  } catch (err) {
-    alert(err.message || "Network error while removing item");
-  }
-};
 
+    try {
+      const res = await fetch(`${API_BASE}/users/remove/`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart_item_id }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to remove item");
+    } catch (err) {
+      // Rollback if removal fails
+      setCartItems(oldItems);
+      alert(err.message || "Network error while removing item");
+    }
+  };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
