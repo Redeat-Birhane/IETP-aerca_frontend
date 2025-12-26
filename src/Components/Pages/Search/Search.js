@@ -407,26 +407,15 @@ export default function Search() {
           return (
             <div className="result-card" key={idx}>
               <div className="result-header">
-                {item.photo ? (
-                  <img
-                    src={`${API_BASE}${item.photo}`}
-                    alt={displayName}
-                    className="result-photo"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextSibling.style.display = "flex";
-                    }}
-                  />
-                ) : null}
-                
-                {!item.photo && (
-                  <div className="result-photo-letter">
-                    {firstLetter}
-                  </div>
-                )}
-                <div className="result-photo-fallback" style={{ display: "none" }}>
-                  {firstLetter}
-                </div>
+                <img
+    src={item.photo ? `${API_BASE}${item.photo}` : "/fallback.png"}
+    alt={displayName}
+    className="result-photo"
+    onError={(e) => {
+      e.target.onerror = null;
+      e.target.src = "/fallback.png";
+    }}
+  />
 
                 <div className="result-header-info">
                   <h3>{displayName}</h3>
