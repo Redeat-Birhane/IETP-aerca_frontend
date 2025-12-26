@@ -618,14 +618,21 @@ export default function Search() {
                   />
                 ) : null}
                 
-                {!item.photo && (
-                  <div className="result-photo-letter">
-                    {firstLetter}
-                  </div>
+                <div className="item-card-header">
+                {it.photo ? (
+                  <img
+                    src={`${API_BASE}${it.photo}`}
+                    alt={it.name}
+                    className="item-card-image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/fallback.png";
+                    }}
+                  />
+                ) : (
+                  <div className="item-no-photo">NO IMAGE</div>
                 )}
-                <div className="result-photo-fallback" style={{ display: "none" }}>
-                  {firstLetter}
-                </div>
+              </div>
 
                 <div className="result-header-info">
                   <h3>{displayName}</h3>

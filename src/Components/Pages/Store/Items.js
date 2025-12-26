@@ -14,25 +14,18 @@ export default function Items() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Fetch items
   const fetchItems = async () => {
+    setLoading(true);
+    setError("");
     try {
-      const res = await fetch(`${API_BASE}/users/items/`, {
+      const res = await fetch(`${API_BASE}/users/search/?category=store`, {
         credentials: "include",
       });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          navigate("/Signin", { state: { from: location.pathname } });
-          return;
-        }
-        throw new Error("Failed to fetch items");
-      }
-
       const data = await res.json();
-      setItems(data);
+      setItems(data.results || []);
     } catch (err) {
-      console.error(err);
-      setError("Failed to fetch items");
+      setError("Failed to synchronize inventory");
     } finally {
       setLoading(false);
     }
@@ -64,23 +57,18 @@ export default function Items() {
           name: item.name,
           price: item.price,
           photo: item.photo,
-          location: item.location,
-          size: item.size,
-          enhancement: item.enhancement,
         });
         alert(data.message || "Unit added to deployment");
       } else {
         alert(data.message || "Failed to add unit");
       }
-    } catch {
+    } catch (err) {
       alert("Network error");
     }
   };
 
-  if (loading)
-    return <div className="item-container">✨ Loading System Data...</div>;
-  if (error)
-    return <div className="item-container error-text">{error}</div>;
+  if (loading) return <div className="item-container">✨ Loading System Data...</div>;
+  if (error) return <div className="item-container error-text">{error}</div>;
 
   return (
     <div className="item-container">
@@ -88,6 +76,12 @@ export default function Items() {
       <p className="item-subtitle">
         High-performance hardware optimized for mission-critical fieldwork.
       </p>
+
+      <div className="item-stats-wrapper">
+        <div className="item-stat-pill">🔄 Rapid Sync</div>
+        <div className="item-stat-pill">⚒️ Field-Ready</div>
+        <div className="item-stat-pill">⏱️ Time Efficient</div>
+      </div>
 
       <div className="item-grid">
         {items.length === 0 ? (
@@ -112,34 +106,20 @@ export default function Items() {
               </div>
 
               <div className="item-card-body">
-                <div className="item-info-top">
-                  <h2>{it.name}</h2>
-                  <span className="item-price-tag">${it.price}</span>
-                </div>
+                <h2 className="item-name">{it.name}</h2>
+                <p className="item-description">{it.description}</p>
 
-                <p className="item-summary">{it.description}</p>
+                <p className="item-detail"><strong>Location:</strong> {it.location}</p>
+                <p className="item-detail"><strong>Size:</strong> {it.size}</p>
+                <p className="item-detail"><strong>Enhancement:</strong> {it.enhancement}</p>
+                <p className="item-price-tag"><strong>Price:</strong> ${it.price}</p>
 
-                {/* ✅ ONLY CHANGE IS HERE */}
-                <div className="item-card-footer">
-                  {it.location && (
-                    <span className="item-category-tag">📍 {it.location}</span>
-                  )}
-                  {it.size && (
-                    <span className="item-category-tag">📏 {it.size}</span>
-                  )}
-                  {it.enhancement && (
-                    <span className="item-category-tag">
-                      ✨ {it.enhancement}
-                    </span>
-                  )}
-
-                  <button
-                    className="item-action-btn"
-                    onClick={() => addToCartHandler(it)}
-                  >
-                    Add to cart
-                  </button>
-                </div>
+                <button
+                  className="item-action-btn"
+                  onClick={() => addToCartHandler(it)}
+                >
+                  Add to cart
+                </button>
               </div>
             </div>
           ))
