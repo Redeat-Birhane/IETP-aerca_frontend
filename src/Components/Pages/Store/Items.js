@@ -50,7 +50,7 @@ useEffect(() => {
 
 // Update items when filters change
 useEffect(() => {
-  fetchItems();
+  if (!loading) fetchItems();
 }, [sizeFilter, enhancementFilter]);
 
 
