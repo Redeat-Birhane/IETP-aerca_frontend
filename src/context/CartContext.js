@@ -20,44 +20,37 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
-    // Prevent duplicate removals
-    if (pendingRemovals.has(cart_item_id)) return;
+  if (pendingRemovals.has(cart_item_id)) return;
 
-    setPendingRemovals((prev) => new Set(prev).add(cart_item_id));
+  setPendingRemovals((prev) => new Set(prev).add(cart_item_id));
 
-    let removedItem = null;
-    setCartItems((prev) => {
-      const newCart = prev.filter((item) => {
-        if (item.id === cart_item_id) removedItem = item;
-        return item.id !== cart_item_id;
-      });
-      return newCart;
+  try {
+    const res = await fetch(`${API_BASE}/users/remove/`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cart_item_id }),
     });
 
-    try {
-      const res = await fetch(`${API_BASE}/users/remove/`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart_item_id }),
-      });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to remove item");
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to remove item");
-    } catch (err) {
-      // Restore only the removed item if request fails
-      if (removedItem) {
-        setCartItems((prev) => [...prev, removedItem]);
-      }
-      alert(err.message || "Failed to remove item. Please try again.");
-    } finally {
-      setPendingRemovals((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(cart_item_id);
-        return newSet;
-      });
-    }
-  };
+    // Remove from state only after backend confirms
+    setCartItems((prev) =>
+      prev.filter((item) => item.id !== cart_item_id)
+    );
+
+  } catch (err) {
+    alert(err.message || "Failed to remove item. Please try again.");
+  } finally {
+    setPendingRemovals((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(cart_item_id);
+      return newSet;
+    });
+  }
+};
+
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
