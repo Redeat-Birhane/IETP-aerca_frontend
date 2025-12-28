@@ -32,7 +32,11 @@ export const CartProvider = ({ children }) => {
       body: JSON.stringify({ cart_item_id }),
     });
 
+    // Log response for debugging
+    console.log("Remove item response status:", res.status);
     const data = await res.json();
+    console.log("Remove item response data:", data);
+
     if (!res.ok) throw new Error(data.message || "Failed to remove item");
 
     // Remove from state only after backend confirms
@@ -50,6 +54,7 @@ export const CartProvider = ({ children }) => {
     });
   }
 };
+
 
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
