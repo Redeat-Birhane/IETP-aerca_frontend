@@ -1,39 +1,35 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 
 export const CartContext = createContext();
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
-  const [pendingRemovals, setPendingRemovals] = useState(new Set());
+  const [loading, setLoading] = useState(false);
 
-  // Fetch cart items when app loads
-  useEffect(() => {
-    fetch(`${API_BASE}/users/view/`, { credentials: "include" })
-      .then((res) => res.json())
-      .then((data) => setCartItems(data.cart_items || []))
-      .catch(() => setCartItems([]));
+ 
+  const fetchCart = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/users/view/`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      setCartItems(data.cart_items || []);
+    } catch {
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const addItem = (item) => {
-    setCartItems((prev) => [...prev, item]);
-  };
 
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
+  // REMOVE item (server authoritative)
   const removeItem = async (cart_item_id) => {
-    // Prevent duplicate removals
-    if (pendingRemovals.has(cart_item_id)) return;
-
-    setPendingRemovals((prev) => new Set(prev).add(cart_item_id));
-
-    let removedItem = null;
-    setCartItems((prev) => {
-      const newCart = prev.filter((item) => {
-        if (item.id === cart_item_id) removedItem = item;
-        return item.id !== cart_item_id;
-      });
-      return newCart;
-    });
-
     try {
       const res = await fetch(`${API_BASE}/users/remove/`, {
         method: "POST",
@@ -43,27 +39,29 @@ export const CartProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to remove item");
+      if (!res.ok) throw new Error(data.message || "Remove failed");
+
+      // Re-sync cart from backend
+      fetchCart();
     } catch (err) {
-      // Restore only the removed item if request fails
-      if (removedItem) {
-        setCartItems((prev) => [...prev, removedItem]);
-      }
-      alert(err.message || "Failed to remove item. Please try again.");
-    } finally {
-      setPendingRemovals((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(cart_item_id);
-        return newSet;
-      });
+      alert(err.message || "Failed to remove item");
     }
   };
 
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, addItem, removeItem, totalItems }}
+      value={{
+        cartItems,
+        fetchCart,
+        removeItem,
+        totalItems,
+        loading,
+      }}
     >
       {children}
     </CartContext.Provider>
