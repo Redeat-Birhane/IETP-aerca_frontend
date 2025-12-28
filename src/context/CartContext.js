@@ -15,34 +15,9 @@ export const CartProvider = ({ children }) => {
       .catch(() => setCartItems([]));
   }, []);
 
-const addItem = async (item) => {
-  // Optimistically add to UI
-  setCartItems((prev) => [...prev, item]);
-
-  try {
-    const res = await fetch(`${API_BASE}/users/add/`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ item_id: item.id, quantity: item.quantity }),
-    });
-
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Failed to add item");
-
-    // Optionally, sync quantity returned from backend
-    setCartItems((prev) =>
-      prev.map((c) =>
-        c.id === item.id ? { ...c, quantity: data.quantity } : c
-      )
-    );
-  } catch (err) {
-    // Rollback if add fails
-    setCartItems((prev) => prev.filter((c) => c.id !== item.id));
-    alert(err.message || "Failed to add item. Please try again.");
-  }
-};
-
+  const addItem = (item) => {
+    setCartItems((prev) => [...prev, item]);
+  };
 
   const removeItem = async (cart_item_id) => {
     // Prevent duplicate removals
