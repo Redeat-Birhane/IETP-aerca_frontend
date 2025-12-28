@@ -7,6 +7,7 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Fetch cart items from backend
   const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
@@ -26,9 +27,32 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [fetchCart]);
 
-  // REMOVE item with optimistic UI update
+  // Add item to cart (optimistic UI)
+  const addItem = async (item_id, quantity = 1) => {
+    try {
+      const res = await fetch(`${API_BASE}/users/add/`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ item_id, quantity }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Add to cart failed");
+
+     
+      if (data.cart_item) {
+        setCartItems((prev) => [...prev, data.cart_item]);
+      } else {
+  
+        fetchCart();
+      }
+    } catch (err) {
+      alert(err.message || "Failed to add item to cart");
+    }
+  };
+
+  // Remove item from cart (optimistic UI)
   const removeItem = async (cart_item_id) => {
-    // Optimistically remove from UI first
     const prevCart = [...cartItems];
     setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
 
@@ -39,11 +63,10 @@ export const CartProvider = ({ children }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart_item_id }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Remove failed");
     } catch (err) {
-      // Rollback if remove fails
+      // rollback UI if remove fails
       setCartItems(prevCart);
       alert(err.message || "Failed to remove item");
     }
@@ -56,6 +79,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         fetchCart,
+        addItem,
         removeItem,
         totalItems,
         loading,
