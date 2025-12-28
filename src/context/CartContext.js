@@ -6,74 +6,43 @@ const API_BASE = process.env.REACT_APP_API_BASE;
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [pendingRemovals, setPendingRemovals] = useState(new Set());
-  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch cart items when app loads
   useEffect(() => {
-    fetchCartItems();
+    fetch(`${API_BASE}/users/view/`, { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => setCartItems(data.cart_items || []))
+      .catch(() => setCartItems([]));
   }, []);
 
-  const fetchCartItems = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch(`${API_BASE}/users/view/`, { 
-        credentials: "include" 
-      });
-      
-      if (!res.ok) throw new Error("Failed to fetch cart");
-      
-      const data = await res.json();
-      // Ensure we have a proper array and normalize IDs
-      const items = Array.isArray(data.cart_items) ? data.cart_items : [];
-      setCartItems(items.map(item => ({
-        ...item,
-        // Normalize the ID - use cart_item_id as the primary ID for removal
-        id: item.cart_item_id || item.id
-      })));
-    } catch (err) {
-      console.error("Error fetching cart:", err);
-      setCartItems([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const addItem = async (item) => {
+  // Optimistically add to UI
+  setCartItems((prev) => [...prev, item]);
 
-  const addItem = (item) => {
-    // For optimistic UI, add item immediately
-    // The ID will be temporary until we sync with server
-    const tempId = `temp-${Date.now()}-${Math.random()}`;
-    const newItem = {
-      ...item,
-      id: tempId, // Temporary ID for optimistic UI
-      cart_item_id: tempId // Also set as cart_item_id for consistency
-    };
-    
-    setCartItems((prev) => [...prev, newItem]);
-    
-    // Sync with server in background
-    syncAddItemToServer(newItem).catch(console.error);
-  };
+  try {
+    const res = await fetch(`${API_BASE}/users/add/`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item_id: item.id, quantity: item.quantity }),
+    });
 
-  const syncAddItemToServer = async (item) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/add-to-cart/`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          product_id: item.product_id,
-          quantity: item.quantity || 1 
-        }),
-      });
-      
-      if (res.ok) {
-        // Refresh cart to get proper server IDs
-        await fetchCartItems();
-      }
-    } catch (err) {
-      console.error("Failed to sync with server:", err);
-    }
-  };
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to add item");
+
+    // Optionally, sync quantity returned from backend
+    setCartItems((prev) =>
+      prev.map((c) =>
+        c.id === item.id ? { ...c, quantity: data.quantity } : c
+      )
+    );
+  } catch (err) {
+    // Rollback if add fails
+    setCartItems((prev) => prev.filter((c) => c.id !== item.id));
+    alert(err.message || "Failed to add item. Please try again.");
+  }
+};
+
 
   const removeItem = async (cart_item_id) => {
     // Prevent duplicate removals
@@ -84,10 +53,8 @@ export const CartProvider = ({ children }) => {
     let removedItem = null;
     setCartItems((prev) => {
       const newCart = prev.filter((item) => {
-        // Check both id and cart_item_id for matching
-        const itemId = item.cart_item_id || item.id;
-        if (itemId === cart_item_id) removedItem = item;
-        return itemId !== cart_item_id;
+        if (item.id === cart_item_id) removedItem = item;
+        return item.id !== cart_item_id;
       });
       return newCart;
     });
@@ -101,40 +68,13 @@ export const CartProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      
-      if (!res.ok) {
-        // If item not found on server but we removed it locally, that's okay
-        if (res.status === 404 || data.message?.includes("not found")) {
-          console.log("Item already removed on server");
-          return;
-        }
-        throw new Error(data.message || "Failed to remove item");
-      }
-      
-      // If successful and we removed a temporary item, refresh to get clean state
-      if (cart_item_id.startsWith('temp-')) {
-        await fetchCartItems();
-      }
-      
+      if (!res.ok) throw new Error(data.message || "Failed to remove item");
     } catch (err) {
-      console.error("Remove error:", err);
-      
-      // Only restore if it's not a "not found" error
-      if (removedItem && !err.message?.includes("not found")) {
-        setCartItems((prev) => {
-          // Check if item already exists to avoid duplicates
-          const exists = prev.some(item => {
-            const itemId = item.cart_item_id || item.id;
-            return itemId === cart_item_id;
-          });
-          
-          if (!exists) {
-            return [...prev, removedItem];
-          }
-          return prev;
-        });
-        alert(err.message || "Failed to remove item. Please try again.");
+      // Restore only the removed item if request fails
+      if (removedItem) {
+        setCartItems((prev) => [...prev, removedItem]);
       }
+      alert(err.message || "Failed to remove item. Please try again.");
     } finally {
       setPendingRemovals((prev) => {
         const newSet = new Set(prev);
@@ -144,20 +84,11 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
-      value={{ 
-        cartItems, 
-        setCartItems, 
-        addItem, 
-        removeItem, 
-        totalItems,
-        pendingRemovals,
-        isLoading,
-        refreshCart: fetchCartItems
-      }}
+      value={{ cartItems, setCartItems, addItem, removeItem, totalItems }}
     >
       {children}
     </CartContext.Provider>
