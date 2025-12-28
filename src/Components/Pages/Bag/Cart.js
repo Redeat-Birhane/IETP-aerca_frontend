@@ -6,7 +6,7 @@ import "./Cart.css";
 const API_BASE = process.env.REACT_APP_API_BASE;
 
 function Cart() {
-  const { cartItems, setCartItems, removeItem } = useContext(CartContext);
+  const { cartItems, setCartItems, removeItem, pendingRemovals} = useContext(CartContext);
   const [expandedId, setExpandedId] = useState(null);
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [receipt, setReceipt] = useState(null);
@@ -169,15 +169,17 @@ function Cart() {
                         {submitting ? "..." : "Checkout"}
                       </button>
                      <button
-                      type="button"
-                      className="btn-remove"
-                      onClick={(e) => {
-                        e.stopPropagation();  
-                        removeItem(c.id);
-                      }}
-                    >
-                      Remove
-                    </button>
+                          type="button"
+                          className="btn-remove"
+                          onClick={(e) => {
+                            e.stopPropagation();  
+                            removeItem(c.id);
+                          }}
+                          disabled={pendingRemovals.has(c.id)} // disable while removing
+                        >
+                          {pendingRemovals.has(c.id) ? "Removing..." : "Remove"}
+                        </button>
+
 
                     </div>
                   </form>

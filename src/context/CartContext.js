@@ -20,9 +20,9 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
-  if (pendingRemovals.has(cart_item_id)) return;
+  if (pendingRemovals.has(cart_item_id)) return; // prevent duplicate clicks
 
-  setPendingRemovals((prev) => new Set(prev).add(cart_item_id));
+  setPendingRemovals(prev => new Set(prev).add(cart_item_id));
 
   try {
     const res = await fetch(`${API_BASE}/users/remove/`, {
@@ -32,30 +32,25 @@ export const CartProvider = ({ children }) => {
       body: JSON.stringify({ cart_item_id }),
     });
 
-    // Log response for debugging
     console.log("Remove item response status:", res.status);
     const data = await res.json();
     console.log("Remove item response data:", data);
 
     if (!res.ok) throw new Error(data.message || "Failed to remove item");
 
-    // Remove from state only after backend confirms
-    setCartItems((prev) =>
-      prev.filter((item) => item.id !== cart_item_id)
-    );
+    // Remove from state after backend confirms
+    setCartItems(prev => prev.filter(item => item.id !== cart_item_id));
 
   } catch (err) {
     alert(err.message || "Failed to remove item. Please try again.");
   } finally {
-    setPendingRemovals((prev) => {
+    setPendingRemovals(prev => {
       const newSet = new Set(prev);
       newSet.delete(cart_item_id);
       return newSet;
     });
   }
 };
-
-
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
