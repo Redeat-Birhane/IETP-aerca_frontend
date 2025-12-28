@@ -7,7 +7,6 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
- 
   const fetchCart = useCallback(async () => {
     setLoading(true);
     try {
@@ -23,13 +22,16 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
 
-  // REMOVE item (server authoritative)
+  // REMOVE item with optimistic UI update
   const removeItem = async (cart_item_id) => {
+    // Optimistically remove from UI first
+    const prevCart = [...cartItems];
+    setCartItems((prev) => prev.filter((item) => item.id !== cart_item_id));
+
     try {
       const res = await fetch(`${API_BASE}/users/remove/`, {
         method: "POST",
@@ -40,18 +42,14 @@ export const CartProvider = ({ children }) => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Remove failed");
-
-      // Re-sync cart from backend
-      fetchCart();
     } catch (err) {
+      // Rollback if remove fails
+      setCartItems(prevCart);
       alert(err.message || "Failed to remove item");
     }
   };
 
-  const totalItems = cartItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <CartContext.Provider
