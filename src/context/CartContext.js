@@ -15,9 +15,15 @@ export const CartProvider = ({ children }) => {
       .catch(() => setCartItems([]));
   }, []);
 
-  const addItem = (item) => {
-    setCartItems((prev) => [...prev, item]);
-  };
+  const addItem = async (item) => {
+  setCartItems(prev => [...prev, item]); // optimistic update
+
+
+  const res = await fetch(`${API_BASE}/users/view/`, { credentials: "include" });
+  const data = await res.json();
+  setCartItems(data.cart_items || []);
+};
+
 
   const removeItem = async (cart_item_id) => {
   if (pendingRemovals.has(cart_item_id)) return;
