@@ -169,16 +169,16 @@ function Cart() {
                         {submitting ? "..." : "Checkout"}
                       </button>
                      <button
-                          type="button"
-                          className="btn-remove"
-                          onClick={(e) => {
-                            e.stopPropagation();  
-                            removeItem(c.id);
-                          }}
-                          disabled={pendingRemovals.has(c.id)} // disable while removing
-                        >
-                          {pendingRemovals.has(c.id) ? "Removing..." : "Remove"}
-                        </button>
+                      type="button"
+                      className="btn-remove"
+                      onClick={(e) => {
+                        e.stopPropagation();  
+                        removeItem(c.id);
+                      }}
+                      disabled={pendingRemovals.has(c.id)} // disable while removing
+                    >
+                      {pendingRemovals.has(c.id) ? "Removing..." : "Remove"}
+                    </button>
 
 
                     </div>

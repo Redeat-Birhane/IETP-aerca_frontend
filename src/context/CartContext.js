@@ -20,11 +20,19 @@ export const CartProvider = ({ children }) => {
   };
 
   const removeItem = async (cart_item_id) => {
-  if (pendingRemovals.has(cart_item_id)) return; // prevent duplicate clicks
+  // Prevent duplicate removals
+  if (pendingRemovals.has(cart_item_id)) return;
 
   setPendingRemovals(prev => new Set(prev).add(cart_item_id));
 
   try {
+    // Ensure session is valid by checking localStorage
+    const isAuth = localStorage.getItem("isAuthenticated");
+    if (!isAuth) {
+      alert("Please log in first.");
+      return;
+    }
+
     const res = await fetch(`${API_BASE}/users/remove/`, {
       method: "POST",
       credentials: "include",
@@ -32,13 +40,11 @@ export const CartProvider = ({ children }) => {
       body: JSON.stringify({ cart_item_id }),
     });
 
-    console.log("Remove item response status:", res.status);
     const data = await res.json();
-    console.log("Remove item response data:", data);
 
     if (!res.ok) throw new Error(data.message || "Failed to remove item");
 
-    // Remove from state after backend confirms
+    // Remove from state only after backend confirms
     setCartItems(prev => prev.filter(item => item.id !== cart_item_id));
 
   } catch (err) {
@@ -51,6 +57,8 @@ export const CartProvider = ({ children }) => {
     });
   }
 };
+
+
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
