@@ -1,52 +1,124 @@
-.Online-courses {
-  background-image: url("./images-2/1214.jpg");
-  background-size: cover; /* make the image cover the whole area */
-  background-position: center; /* center the image */
-  background-repeat: no-repeat; /* prevent repeating */
-  height: 100vh; /* full viewport height */
-  color: black; /* make text visible over dark image */
-  text-align: center; /* center text horizontally */
-  display: flex; /* center text vertically */
-  flex-direction: column;
-  align-items: center; /* center the image */
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+/* Body / whole page background */
+.coursePage {
+  background: #f0f4f8; /* light soft gray/blue for body */
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  padding: 40px 20px;
 }
-.Online-courses h3 {
-  font-size: 60px;
-  margin-top: 30px;
+
+/* Intro Section */
+.introSection {
+  max-width: 900px;
+  margin: 0 auto 60px auto;
+  text-align: center;
+  background: #ffffff; /* white background for cards */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
-.Online-courses p {
-  font-size: 30px;
+
+.introSection h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #1a237e; /* dark blue */
 }
-.Online-courses .button2 button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border-radius: 20px;
-  font-size: 20px;
+
+.introSection p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #555;
+}
+
+.introSection h2 {
+  margin-top: 20px;
+  font-size: 1.8rem;
+  color: #ff6f00; /* orange accent */
+}
+
+.introSection ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  max-width: 700px;
+  margin: 20px auto 0 auto;
+}
+
+.introSection li {
+  background: #e3f2fd; /* light blue for list items */
+  margin-bottom: 12px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Course Section */
+.courseSection h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  color: #1a237e;
+}
+
+.courseList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* Individual course cards */
+.courseCard {
+  background: #ffffff; /* white card background */
+  padding: 25px;
+  width: 280px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.courseCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.courseCard h3 {
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: #1a237e;
+}
+
+.courseCard p {
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+  color: #555;
+}
+
+/* Buy button */
+.courseCard a p {
+  display: inline-block;
+  padding: 10px 22px;
+  background: #ff6f00; /* orange button */
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
-}
-.Online-courses .button2 button:hover {
-  background-color: #0d79e6;
-  color: #fff;
-}
-.but3 {
-  border: none;
-  background-color: #0071e3;
-  color: #fff;
-  
-}
-.but4 {
-  color: #0071e3;
-  border-color: #0071e3;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.no-underline2 {
-  text-decoration: none;   /* removes underline */
-  color: inherit;           /* keeps text same color as surrounding text */
+.courseCard a p:hover {
+  background: #ff8f00;
+  transform: scale(1.05);
 }
 
-.no-underline2:hover {
-  text-decoration: none;    /* make sure hover doesn't add underline */
+/* Responsive */
+@media (max-width: 900px) {
+  .courseList {
+    flex-direction: column;
+    align-items: center;
+  }
 }
