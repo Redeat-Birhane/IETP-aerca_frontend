@@ -89,7 +89,7 @@ const Instructions = () => {
           <div className="courseCard">
             <h3>Arduino Sketch</h3>
             <p>Download the .ino file for your board.</p>
-            <a href="/code/arduino_program.ino" download style={{ textDecoration: 'none' }}>
+            <a href="/arduino_program/arduino_program.ino" download style={{ textDecoration: 'none' }}>
                <p>Download</p>
             </a>
           </div>
