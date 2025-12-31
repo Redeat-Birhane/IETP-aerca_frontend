@@ -1,5 +1,5 @@
 import React from "react";
-import "./Course.css"; // Reuse the Course.css for consistent styling
+import "./Instruction.css"; 
 
 const Instructions = () => {
   return (
