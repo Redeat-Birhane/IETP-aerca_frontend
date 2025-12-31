@@ -34,7 +34,7 @@ import Courses from "./Components/Pages/Trading-Courses/Courses";
 import Community from "./Components/Pages/Community-Questions/Community";
 import Center from "./Components/Pages/Contact-Center/Center";
 import Search from "./Components/Pages/Search/Search";
-import  Instructions from "./Components/Pages/Instructions/";
+import  Instructions from "./Components/Pages/Instructions/Instructions";
 
 import { CartProvider } from "./context/CartContext";
 
