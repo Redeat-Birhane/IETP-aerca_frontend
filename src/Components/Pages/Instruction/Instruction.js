@@ -81,7 +81,7 @@ const Instructions = () => {
           <div className="courseCard">
             <h3>Python Script</h3>
             <p>Download the main.py execution file.</p>
-            <a href="/main.py" download style={{ textDecoration: 'none' }}>
+            <a href="/code/main.py" download style={{ textDecoration: 'none' }}>
                <p>Download</p>
             </a>
           </div>
@@ -89,7 +89,7 @@ const Instructions = () => {
           <div className="courseCard">
             <h3>Arduino Sketch</h3>
             <p>Download the .ino file for your board.</p>
-            <a href="/arduino_program.ino" download style={{ textDecoration: 'none' }}>
+            <a href="/code/arduino_program.ino" download style={{ textDecoration: 'none' }}>
                <p>Download</p>
             </a>
           </div>
@@ -97,7 +97,7 @@ const Instructions = () => {
           <div className="courseCard">
             <h3>Full Project</h3>
             <p>Get all files and the README in a ZIP.</p>
-            <a href="/AERCA_Code.zip" download style={{ textDecoration: 'none' }}>
+            <a href="/code/AERCA_Code.zip" download style={{ textDecoration: 'none' }}>
                <p>Download</p>
             </a>
           </div>
