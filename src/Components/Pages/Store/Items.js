@@ -83,6 +83,17 @@ export default function Items() {
         <div className="item-stat-pill">⏱️ Time Efficient</div>
       </div>
 
+      {/* New Button Section */}
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <button 
+          className="item-action-btn" 
+          style={{ maxWidth: '300px' }}
+          onClick={() => navigate("/instructions")}
+        >
+          Material Usage Instructions
+        </button>
+      </div>
+
       <div className="item-grid">
         {items.length === 0 ? (
           <p className="no-results">No technical assets found.</p>

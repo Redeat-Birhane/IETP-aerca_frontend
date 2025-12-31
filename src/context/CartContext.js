@@ -31,7 +31,7 @@ export const CartProvider = ({ children }) => {
   setPendingRemovals((prev) => new Set(prev).add(cart_item_id));
 
   try {
-    const res = await fetch(`${API_BASE}/users/remove/`, {
+    const res = await fetch(`${API_BASE}/users/remove/`, { 
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
