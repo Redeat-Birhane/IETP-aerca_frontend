@@ -88,7 +88,7 @@ export default function Items() {
         <button 
           className="item-action-btn" 
           style={{ maxWidth: '300px' }}
-          onClick={() => navigate("/instructions")}
+          onClick={() => navigate("/Instructions")}
         >
           Material Usage Instructions
         </button>

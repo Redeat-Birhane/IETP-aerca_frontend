@@ -34,6 +34,7 @@ import Courses from "./Components/Pages/Trading-Courses/Courses";
 import Community from "./Components/Pages/Community-Questions/Community";
 import Center from "./Components/Pages/Contact-Center/Center";
 import Search from "./Components/Pages/Search/Search";
+import  Instructions from "./Components/Pages/Instructions/";
 
 import { CartProvider } from "./context/CartContext";
 
@@ -77,6 +78,7 @@ function Layout() {
         <Route path="/Community" element={<Community />} />
         <Route path="/Center" element={<Center />} />
         <Route path="/Search" element={<Search />} />
+        <Route path="/Instructions" element={<Instructions />} />
       </Routes>
       {!hideHeaderFooter && <Footer />}
     </>
