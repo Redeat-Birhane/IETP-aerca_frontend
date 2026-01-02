@@ -94,13 +94,6 @@ const Instructions = () => {
             </a>
           </div>
 
-          <div className="courseCard">
-            <h3>Full Project</h3>
-            <p>Get all files and the README in a ZIP.</p>
-            <a href="/code/AERCA_Code.zip" download style={{ textDecoration: 'none' }}>
-               <p>Download</p>
-            </a>
-          </div>
         </div>
       </section>
 
