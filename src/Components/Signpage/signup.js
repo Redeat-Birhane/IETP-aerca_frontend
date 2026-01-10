@@ -21,6 +21,7 @@ function getCookie(name) {
 
 const Signup = () => {
   const [role, setRole] = useState("normal");
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     role: "normal",
     username: "",
