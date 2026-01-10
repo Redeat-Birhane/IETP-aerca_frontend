@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Search.css";
+import { CartContext } from "../../../context/CartContext";
 
 const API_BASE = process.env.REACT_APP_API_BASE;
 
@@ -33,6 +34,7 @@ export default function Search() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
+  const { addItem } = useContext(CartContext);
   const [sizeOptions, setSizeOptions] = useState([]);
   const [enhancementOptions, setEnhancementOptions] = useState([]);
   const [storeItems, setStoreItems] = useState([]);
