@@ -273,24 +273,49 @@ export default function Search() {
 
   // Add item to cart functionality (for store items)
   const addToCartHandler = async (item) => {
-    try {
-      const res = await fetch(`${API_BASE}/users/add/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ item_id: item.id, quantity: 1 }),
+  try {
+    const res = await fetch(`${API_BASE}/users/add/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ item_id: item.id, quantity: 1 }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // Update frontend state
+      addItem((prevCart) => {
+        const existingItem = prevCart.find((i) => i.id === item.id);
+        if (existingItem) {
+          // Increment quantity if already in cart
+          return prevCart.map((i) =>
+            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          );
+        } else {
+          // Add new item
+          return [
+            ...prevCart,
+            {
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              photo: item.photo,
+              quantity: 1,
+            },
+          ];
+        }
       });
 
-      const data = await res.json();
-      if (res.ok) {
-        alert(data.message || "Item added to cart");
-      } else {
-        alert(data.message || "Failed to add item");
-      }
-    } catch (err) {
-      alert("Network error");
+      alert(data.message || "Item added to cart");
+    } else {
+      alert(data.message || "Failed to add item");
     }
-  };
+  } catch (err) {
+    alert("Network error");
+  }
+};
+
 
   // Buy course functionality (for instructors)
   const handleBuyCourse = (instructorEmail) => {
