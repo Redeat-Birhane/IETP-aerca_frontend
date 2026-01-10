@@ -99,6 +99,7 @@ const Signup = () => {
       }
 
       alert("Signup successful! Role: " + result.role);
+      navigate("/");
       setIsSubmitting(false);
 
     } catch (err) {
